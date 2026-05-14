@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Frank Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #F7F4EE;
+  --white:      #FFFFFF;
+  --ink:        #111111;
+  --smoke:      #555555;
+  --dust:       #999999;
+  --border:     #DDD8CC;
+  --mustard:    #C8840A;
+  --mustard-bg: #FFF6DC;
+  --ketchup:    #B82918;
+  --ketchup-bg: #FDECEA;
+  --relish:     #1A6B3C;
+  --relish-bg:  #E4F4EC;
+}
+
+body {
+  font-family: 'Barlow', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  padding: 20px 24px 32px;
+  max-width: 1080px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  border-top: 5px solid var(--mustard);
+  padding: 16px 0 14px;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+}
+.site-name {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 54px;
+  line-height: 1;
+  letter-spacing: 1px;
+  color: var(--ink);
+}
+.site-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--dust);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.site-tagline {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: var(--smoke);
+  margin-top: 5px;
+}
+.masthead-right { text-align: right; flex-shrink: 0; }
+.live-badge {
+  background: var(--ketchup);
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 3px 9px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.meta-count {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  color: var(--dust);
+  margin-top: 6px;
+  letter-spacing: 0.3px;
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 12px 14px 11px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 38px;
+  line-height: 1;
+  color: var(--ink);
+}
+.stat-num.green  { color: var(--relish); }
+.stat-num.amber  { color: var(--mustard); }
+.stat-num.red    { color: var(--ketchup); }
+.stat-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--dust);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-top: 3px;
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--dust);
+  text-transform: uppercase;
+  margin-bottom: 11px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── MAIN GRID ── */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 268px;
+  gap: 22px;
+  margin-bottom: 24px;
+}
+
+/* ── DOG CARD ── */
+.dog-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.dog-card.featured {
+  border-color: var(--relish);
+  border-top-width: 3px;
+}
+.featured-flag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--relish);
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.dog-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.dog-meta {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  color: var(--dust);
+  margin-top: 2px;
+}
+.score-bubble {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 30px;
+  line-height: 1;
+  padding: 4px 12px 3px;
+  min-width: 62px;
+  text-align: center;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+.score-hi  { background: var(--relish-bg);  color: var(--relish);  }
+.score-mid { background: var(--mustard-bg); color: var(--mustard); }
+.score-lo  { background: var(--ketchup-bg); color: var(--ketchup); }
+
+.dog-photo {
+  width: 100%;
+  height: auto;
+  max-height: 340px;
+  object-fit: cover;
+  display: block;
+  border-radius: 1px;
+  margin-bottom: 10px;
+  background: #ece8e0;
+}
+.dog-review {
+  font-family: 'Barlow', Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  color: #444;
+  border-left: 3px solid var(--border);
+  padding-left: 10px;
+  margin-bottom: 10px;
+  line-height: 1.55;
+}
+.dog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+.tag-yes    { background: var(--relish-bg);  color: var(--relish);  }
+.tag-no     { background: var(--ketchup-bg); color: var(--ketchup); }
+.tag-maybe  { background: var(--mustard-bg); color: var(--mustard); }
+.tag-top    { background: #EBF1FE; color: #1A56A8; }
+.tag-type   { background: #F0EFE7; color: #555; }
+
+/* ── LEADERBOARD ── */
+.leaderboard {
+  background: var(--white);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+  border-bottom: 1px solid #F2EEE6;
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-row.lb-top { background: var(--mustard-bg); }
+.lb-rank {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: #ccc;
+  width: 16px;
+  text-align: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.lb-rank.gold { color: var(--mustard); }
+.lb-info { flex: 1; min-width: 0; }
+.lb-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  color: var(--dust);
+}
+.lb-avg {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── HALL OF FAME / SHAME ── */
+.hall-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.hall {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-top-width: 4px;
+  padding: 13px 14px;
+}
+.hall-fame  { border-top-color: var(--relish); }
+.hall-shame { border-top-color: var(--ketchup); }
+.hall-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 11px;
+}
+.hall-fame  .hall-title { color: var(--relish); }
+.hall-shame .hall-title { color: var(--ketchup); }
+.hall-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid #F2EEE6;
+}
+.hall-entry:last-child { border-bottom: none; }
+.hall-dog-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.hall-dog-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  color: var(--dust);
+}
+.hall-score {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.hall-fame  .hall-score { color: var(--relish); }
+.hall-shame .hall-score { color: var(--ketchup); }
+
+/* ── FOOTER ── */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  color: #bbb;
+  letter-spacing: 0.5px;
+}
+
+/* ── UTILITY ── */
+.loading-state {
+  text-align: center;
+  padding: 48px 20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  color: var(--dust);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.empty-card {
+  border: 1px dashed var(--border);
+  padding: 22px;
+  text-align: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  color: var(--dust);
+  letter-spacing: 0.5px;
+  background: var(--white);
+}
+
+/* ── RESPONSIVE ── */
+
+/* Tablet: 540–720px — collapse sidebar, 2-col stats */
+@media (max-width: 720px) {
+  body { padding: 14px 16px 28px; }
+  .site-name { font-size: 44px; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .main-grid { grid-template-columns: 1fr; }
+  .hall-grid { grid-template-columns: 1fr; }
+  .masthead { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .masthead-right { text-align: left; }
+}
+
+/* Large phone: 400–540px */
+@media (max-width: 540px) {
+  body { padding: 10px 12px 24px; font-size: 13px; }
+  .site-name { font-size: 38px; }
+  .site-tagline { font-size: 11px; }
+  .stat-num { font-size: 30px; }
+  .dog-photo { max-height: 260px; }
+  .score-bubble { font-size: 26px; min-width: 52px; padding: 3px 10px; }
+  .dog-name { font-size: 15px; }
+}
+
+/* Small phone: ≤400px — single-col stats, tightest spacing */
+@media (max-width: 400px) {
+  body { padding: 8px 10px 20px; }
+  .site-name { font-size: 32px; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+  .stat-card { padding: 9px 10px; }
+  .stat-num { font-size: 26px; }
+  .stat-label { font-size: 9px; }
+  .dog-card { padding: 11px 12px; }
+  .card-header { gap: 7px; }
+  .score-bubble { font-size: 22px; min-width: 46px; padding: 3px 8px; }
+  .dog-name { font-size: 14px; }
+  .dog-review { font-size: 12px; }
+  .lb-row { padding: 8px 10px; }
+  .lb-name { font-size: 13px; }
+  .site-footer { flex-direction: column; gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div>
+    <div class="site-eyebrow">We got that dog in us.</div>
+    <div class="site-name">The Frank Report</div>
+    <div class="site-tagline">Not a hot dog eating contest, just a nice dog watch, so just keep your pace.</div>
+  </div>
+  <div class="masthead-right">
+    <span class="live-badge">&#9679; Live</span>
+    <span class="meta-count" id="meta-count">Loading&hellip;</span>
+  </div>
+</header>
+
+<!-- DYNAMIC APP -->
+<div id="app">
+  <div class="loading-state">Consulting the committee&hellip;</div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — update SUBMISSIONS_CSV if your published sheet URL
+   ever changes. To get a fresh URL:
+     1. Open the Google Sheet
+     2. File > Share > Publish to web
+     3. Select the correct tab, set format to CSV
+     4. Click Publish and paste the new URL below
+   ============================================================ */
+
+const SUBMISSIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOI4ODSx0JTqCqFzgmKiUbXuiBAzqj95FmDc2MTcdgAOqVb2UXjwYijRUWKPaNB8GidmhkoqfknYWx/pub?gid=1407390795&single=true&output=csv';
+
+/* ============================================================
+   COLUMN MAP — must match your Google Form question text exactly.
+   These become the column headers in the Sheet automatically.
+   If you rename a Form question, update it here too.
+   ============================================================ */
+const C = {
+  SCOUT:    'Name',
+  PHOTO:    'Photo',
+  VENDOR:   'Vendor/Home',
+  CITY:     'City',
+  STATE:    'State',
+  DESCRIBE: 'Describe Dat Dog',
+  EAT_AGAIN:'Would you consume this dog again?',
+  SCORE:    "How the f*ck was it?",
+  REVIEW:   'Review',
+};
+
+/* ── CSV Parser (handles quoted fields with embedded commas/newlines) ── */
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"' && text[i+1] === '"') { cell += '"'; i++; }
+      else if (c === '"') { q = false; }
+      else { cell += c; }
+    } else {
+      if (c === '"')  { q = true; }
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+      else if (c === '\r') { /* skip */ }
+      else { cell += c; }
+    }
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+function csvToObjects(text) {
+  const rows = parseCSV(text);
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.trim());
+  return rows.slice(1)
+    .filter(r => r.some(c => c.trim()))
+    .map(row => {
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = (row[i] || '').trim(); });
+      return obj;
+    });
+}
+
+/* ── Helpers ── */
+function driveThumb(url) {
+  if (!url || !url.includes('drive.google')) return null;
+  const m1 = url.match(/[?&]id=([^&\s]+)/);
+  const m2 = url.match(/\/d\/([^/\s]+)/);
+  const id  = (m1 && m1[1]) || (m2 && m2[1]);
+  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w600` : null;
+}
+
+function scoreClass(s) {
+  const n = parseFloat(s);
+  if (isNaN(n)) return 'score-mid';
+  if (n >= 8)  return 'score-hi';
+  if (n >= 5)  return 'score-mid';
+  return 'score-lo';
+}
+
+function eatLabel(v) {
+  const l = (v || '').toLowerCase();
+  if (l.includes('yes') || l.includes('absolutely')) return ['tag-yes', '&#10003; Would consume again'];
+  if (l.includes('no')  || l.includes('never'))      return ['tag-no',  '&#10007; Never again'];
+  return ['tag-maybe', '~ Maybe, if desperate'];
+}
+
+function esc(str) {
+  return (str || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function fmt(n) {
+  const v = parseFloat(n);
+  return isNaN(v) ? '—' : v.toFixed(1);
+}
+
+/* ── Fetch & render cycle ── */
+async function load() {
+  try {
+    const resp = await fetch(SUBMISSIONS_CSV + '&nocache=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = await resp.text();
+    const subs = csvToObjects(text).reverse();
+    render(subs);
+  } catch (e) {
+    document.getElementById('app').innerHTML =
+      `<div class="loading-state">&#9888;&nbsp; Could not load data. Check that the Google Sheet is still published as CSV and the URL above is current.</div>`;
+    document.getElementById('meta-count').textContent = 'Offline';
+  }
+}
+
+function render(subs) {
+  /* ── Derived stats ── */
+  const total  = subs.length;
+  const scores = subs.map(d => parseFloat(d[C.SCORE])).filter(n => !isNaN(n));
+  const avg    = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+  const avgNum = parseFloat(avg);
+  const avgClass = avgNum >= 7 ? 'green' : avgNum >= 5 ? 'amber' : 'red';
+  const states = new Set(subs.map(d=>d[C.STATE]).filter(Boolean));
+  const wouldYes = subs.filter(d => eatLabel(d[C.EAT_AGAIN])[0] === 'tag-yes').length;
+  const wouldPct = total ? Math.round(wouldYes/total*100)+'%' : '—';
+
+  /* ── Leaderboard ── */
+  const scoutMap = {};
+  subs.forEach(d => {
+    const n = d[C.SCOUT]; if (!n) return;
+    if (!scoutMap[n]) scoutMap[n] = { count:0, total:0 };
+    scoutMap[n].count++;
+    const s = parseFloat(d[C.SCORE]);
+    if (!isNaN(s)) scoutMap[n].total += s;
+  });
+  const scouts = Object.entries(scoutMap)
+    .map(([name,s]) => ({ name, count:s.count, avg: s.count ? (s.total/s.count).toFixed(1) : '0.0' }))
+    .sort((a,b) => parseFloat(b.avg) - parseFloat(a.avg));
+
+  /* ── Hall of Fame / Shame ── */
+  const scored = subs.filter(d => !isNaN(parseFloat(d[C.SCORE])));
+  const sorted = [...scored].sort((a,b) => parseFloat(b[C.SCORE]) - parseFloat(a[C.SCORE]));
+  const fame   = sorted.slice(0,3);
+  const shame  = sorted.slice(-3).reverse();
+
+  /* ── Update meta ── */
+  document.getElementById('meta-count').textContent =
+    `${total} dog${total !== 1?'s':''} tracked \u00b7 ${scouts.length} glizzy muncher${scouts.length!==1?'s':''}`;
+
+  /* ── Render ── */
+  document.getElementById('app').innerHTML = `
+    ${renderStats(total, avg, avgClass, states.size, wouldPct)}
+    <div class="main-grid">
+      <div>
+        <div class="section-label">Latest submissions</div>
+        ${subs.length
+          ? subs.slice(0,5).map((d,i) => renderCard(d, i===0 && subs.length>1)).join('')
+          : '<div class="empty-card">No dogs yet. Someone eat something.</div>'}
+      </div>
+      <div>
+        <div class="section-label">Glizzy Muncher leaderboard</div>
+        ${renderLeaderboard(scouts)}
+      </div>
+    </div>
+    <div class="hall-grid">
+      ${renderHall('fame',  fame)}
+      ${renderHall('shame', shame)}
+    </div>
+    <footer class="site-footer">
+      <span>The Frank Report &middot; For investigative purposes only</span>
+      <span>Updated ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
+    </footer>
+  `;
+}
+
+/* ── Render helpers ── */
+
+function renderStats(total, avg, avgClass, states, wouldPct) {
+  return `<div class="stats-bar">
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Dogs consumed</div></div>
+    <div class="stat-card"><div class="stat-num ${avgClass}">${avg}</div><div class="stat-label">Group avg rating</div></div>
+    <div class="stat-card"><div class="stat-num">${states}</div><div class="stat-label">States hit</div></div>
+    <div class="stat-card"><div class="stat-num green">${wouldPct}</div><div class="stat-label">Would eat again</div></div>
+  </div>`;
+}
+
+function renderCard(d, newest) {
+  const thumb = driveThumb(d[C.PHOTO]);
+  const [eatCls, eatTxt] = eatLabel(d[C.EAT_AGAIN]);
+  const review = d[C.REVIEW]
+    ? `<div class="dog-review">"${esc(d[C.REVIEW])}"</div>`
+    : '';
+  const describe = d[C.DESCRIBE]
+    ? `<span class="tag tag-top">${esc(d[C.DESCRIBE]).substring(0,80)}</span>`
+    : '';
+  return `
+    <div class="dog-card${newest?' featured':''}">
+      ${newest ? '<div class="featured-flag">Latest submission</div>' : ''}
+      ${thumb ? `<img class="dog-photo" src="${thumb}" alt="${esc(d[C.VENDOR])}" loading="lazy" onerror="this.remove()">` : ''}
+      <div class="card-header">
+        <div>
+          <div class="dog-name">${esc(d[C.VENDOR])}</div>
+          <div class="dog-meta">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div>
+        </div>
+        <div class="score-bubble ${scoreClass(d[C.SCORE])}">${fmt(d[C.SCORE])}</div>
+      </div>
+      ${review}
+      <div class="dog-tags">
+        <span class="tag ${eatCls}">${eatTxt}</span>
+        ${describe}
+      </div>
+    </div>`;
+}
+
+function renderLeaderboard(scouts) {
+  if (!scouts.length) return '<div class="empty-card">No glizzy munchers yet.</div>';
+  return `<div class="leaderboard">
+    ${scouts.slice(0,8).map((s,i) => `
+      <div class="lb-row${i===0?' lb-top':''}">
+        <div class="lb-rank${i===0?' gold':''}">${i+1}</div>
+        <div class="lb-info">
+          <div class="lb-name">${esc(s.name)}</div>
+          <div class="lb-sub">${s.count} dog${s.count!==1?'s':''}</div>
+        </div>
+        <div class="lb-avg ${scoreClass(s.avg)}">${s.avg}</div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderHall(type, entries) {
+  const isFame = type === 'fame';
+  return `<div class="hall hall-${type}">
+    <div class="hall-title">${isFame ? 'Hall of fame &mdash; all-time greats' : 'Hall of shame &mdash; we will not forget'}</div>
+    ${entries.length
+      ? entries.map(d => `
+          <div class="hall-entry">
+            <div>
+              <div class="hall-dog-name">${esc(d[C.VENDOR])}</div>
+              <div class="hall-dog-sub">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div>
+            </div>
+            <div class="hall-score">${fmt(d[C.SCORE])}</div>
+          </div>`).join('')
+      : `<div style="font-size:12px;color:#bbb;text-align:center;padding:14px">${isFame?'Submit some dogs first.':'Nothing bad enough yet. Give it time.'}</div>`}
+  </div>`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  load();
+  setInterval(load, 5 * 60 * 1000); // auto-refresh every 5 minutes
+});
+</script>
+</body>
+</html>
