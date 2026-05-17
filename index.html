@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Frank Report</title>
+<title>The Frank Report 🌭</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@ body {
 .submit-banner {
   background: var(--mustard);
   padding: 11px 18px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,6 +79,63 @@ body {
 }
 .submit-btn:hover { opacity: 0.85; }
 
+/* ── STREAK CALLOUT ── */
+.streak-bar {
+  background: var(--ketchup);
+  padding: 8px 18px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.streak-bar.hidden { display: none; }
+.streak-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.3px;
+}
+
+/* ── ACTION BAR ── */
+.action-bar {
+  background: var(--ink);
+  padding: 8px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.action-bar-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #666;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+.action-btn {
+  background: transparent;
+  color: #ccc;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border: 1px solid #444;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.action-btn:hover {
+  background: var(--mustard);
+  border-color: var(--mustard);
+  color: var(--white);
+}
+
 /* ── MASTHEAD ── */
 .masthead {
   border-top: 5px solid var(--mustard);
@@ -114,25 +171,24 @@ body {
   color: var(--smoke);
   margin-top: 5px;
 }
-.masthead-right { text-align: right; flex-shrink: 0; }
-.live-badge {
-  background: var(--ketchup);
-  color: white;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 3px 9px;
-  border-radius: 2px;
-  text-transform: uppercase;
-  display: inline-block;
+.site-quote {
+  font-family: 'Barlow', Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--dust);
+  margin-top: 5px;
+  line-height: 1.4;
 }
+.site-quote strong {
+  font-style: normal;
+  font-weight: 500;
+}
+.masthead-right { text-align: right; flex-shrink: 0; }
 .meta-count {
   display: block;
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 11px;
   color: var(--dust);
-  margin-top: 6px;
   letter-spacing: 0.3px;
 }
 
@@ -246,12 +302,9 @@ body {
 .dog-photo {
   width: 100%;
   height: auto;
-  max-height: 340px;
-  object-fit: cover;
   display: block;
   border-radius: 1px;
   margin-bottom: 10px;
-  background: #ece8e0;
 }
 .dog-review {
   font-family: 'Barlow', Georgia, serif;
@@ -289,7 +342,7 @@ body {
   background: var(--white);
   border: 1px solid var(--border);
   margin-bottom: 16px;
-  overflow: hidden;
+  overflow: visible;
 }
 .lb-row {
   display: flex;
@@ -297,6 +350,7 @@ body {
   gap: 9px;
   padding: 9px 12px;
   border-bottom: 1px solid #F2EEE6;
+  position: relative;
 }
 .lb-row:last-child { border-bottom: none; }
 .lb-row.lb-top { background: var(--mustard-bg); }
@@ -324,13 +378,69 @@ body {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 11px;
   color: var(--dust);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
-.lb-avg {
+.lb-last-dog {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mustard);
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.lb-last-dog:hover { color: var(--ketchup); }
+.lb-week {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--relish);
+  letter-spacing: 0.3px;
+}
+.lb-count {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 22px;
   line-height: 1;
   flex-shrink: 0;
+  color: var(--ink);
 }
+
+/* ── Hover preview tooltip ── */
+.lb-tooltip {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 50;
+  background: var(--ink);
+  color: #ddd;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  padding: 8px 12px;
+  border-radius: 2px;
+  white-space: nowrap;
+  line-height: 1.6;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+.lb-tooltip .tt-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 2px;
+}
+.lb-tooltip .tt-best  { color: #6dda8e; }
+.lb-tooltip .tt-worst { color: #f08070; }
+.lb-row:hover .lb-tooltip { display: block; }
 
 /* ── HALL OF FAME / SHAME ── */
 .hall-grid {
@@ -387,6 +497,90 @@ body {
 .hall-fame  .hall-score { color: var(--relish); }
 .hall-shame .hall-score { color: var(--ketchup); }
 
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: background 0.2s ease;
+  pointer-events: none;
+}
+.modal-overlay.visible {
+  background: rgba(0,0,0,0.65);
+  pointer-events: auto;
+}
+.modal-box {
+  background: var(--bg);
+  border: 2px solid var(--ink);
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  transform: translateY(20px) scale(0.96);
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+.modal-overlay.visible .modal-box {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+.modal-header {
+  background: var(--ink);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #aaa;
+  text-transform: uppercase;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+}
+.modal-close:hover { color: white; }
+.modal-body { padding: 14px; }
+.modal-body .dog-card {
+  margin-bottom: 0;
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+.modal-reroll {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  background: var(--mustard);
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 9px;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: opacity 0.15s;
+}
+.modal-reroll:hover { opacity: 0.85; }
+
 /* ── FOOTER ── */
 .site-footer {
   border-top: 1px solid var(--border);
@@ -431,6 +625,7 @@ body {
   .masthead-right { text-align: left; }
   .submit-banner { flex-direction: column; align-items: flex-start; gap: 10px; }
   .submit-btn { width: 100%; text-align: center; }
+  .lb-tooltip { right: auto; left: 12px; }
 }
 
 @media (max-width: 540px) {
@@ -438,7 +633,6 @@ body {
   .site-name { font-size: 38px; }
   .site-tagline { font-size: 11px; }
   .stat-num { font-size: 30px; }
-  .dog-photo { max-height: 260px; }
   .score-bubble { font-size: 26px; min-width: 52px; padding: 3px 10px; }
   .dog-name { font-size: 15px; }
 }
@@ -467,11 +661,11 @@ body {
 <header class="masthead">
   <div>
     <div class="site-eyebrow">We got that dog in us.</div>
-    <div class="site-name">The Frank Report</div>
+    <div class="site-name">The Frank Report &#127789;</div>
     <div class="site-tagline">Not a hot dog eating contest, just a nice dog watch, so just keep your pace.</div>
+    <div class="site-quote" id="site-quote"></div>
   </div>
   <div class="masthead-right">
-    <span class="live-badge">&#9679; Live</span>
     <span class="meta-count" id="meta-count">Loading&hellip;</span>
   </div>
 </header>
@@ -487,22 +681,38 @@ body {
   </a>
 </div>
 
+<!-- STREAK CALLOUT -->
+<div class="streak-bar hidden" id="streak-bar">
+  <span class="streak-text" id="streak-text"></span>
+</div>
+
+<!-- ACTION BAR -->
+<div class="action-bar">
+  <span class="action-bar-label">Quick actions</span>
+  <button class="action-btn" id="random-dog-btn">&#127922; Random Dog</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Random Dog</span>
+      <button class="modal-close" id="modal-close">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
 <!-- DYNAMIC APP -->
 <div id="app">
   <div class="loading-state">Consulting the committee&hellip;</div>
 </div>
 
 <script>
-/* ============================================================
-   CONFIG
-   ============================================================ */
 const SUBMISSIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOI4ODSx0JTqCqFzgmKiUbXuiBAzqj95FmDc2MTcdgAOqVb2UXjwYijRUWKPaNB8GidmhkoqfknYWx/pub?gid=1407390795&single=true&output=csv';
 
-/* ============================================================
-   COLUMN MAP
-   QUANTITY must match your new Form question text exactly.
-   ============================================================ */
 const C = {
+  TIMESTAMP:'Timestamp',
   SCOUT:    'Name',
   PHOTO:    'Photo',
   VENDOR:   'Vendor/Home',
@@ -512,16 +722,82 @@ const C = {
   EAT_AGAIN:'Would you consume this dog again?',
   SCORE:    "How the f*ck was it?",
   REVIEW:   'Review',
-  QUANTITY: 'How many dogs did you consume?',  // ← must match your new Form question exactly
+  QUANTITY: 'How many dogs did you put in you?',
 };
 
-/* ── Returns the dog count for a submission; defaults to 1 if blank/invalid ── */
-function dogCount(d) {
-  const n = parseInt(d[C.QUANTITY], 10);
-  return (isNaN(n) || n < 1) ? 1 : n;
+let ALL_SUBS = [];
+let LOAD_TIME = null;
+
+const QUOTES = [
+  { text: "A hot dog at the game beats roast beef at the Ritz.", attr: "Humphrey Bogart" },
+  { text: "You can learn a lot about a person by how they top their hot dog.", attr: "Unknown" },
+  { text: "I think about hot dogs a lot. Probably more than I should.", attr: "Jennifer Garner" },
+  { text: "There are few things more American than eating a hot dog at a ballpark.", attr: "Nolan Ryan" },
+  { text: "Hot dogs are a beautiful thing. No utensils, no plates, just pure democracy.", attr: "Anthony Bourdain" },
+  { text: "Give me a hot dog and a cold beer, and I will fear no evil.", attr: "American proverb" },
+  { text: "I can eat a hot dog any time of year. But the 4th of July one hits different.", attr: "Guy Fieri" },
+  { text: "A hot dog is the perfect food. It fits in your hand. The bun is edible packaging.", attr: "Julia Child" },
+  { text: "I've eaten hot dogs on six continents. The seventh will have to wait.", attr: "Rick Steves" },
+  { text: "In New York, we judge character by your hot dog order.", attr: "Ed Koch" },
+  { text: "Nobody who eats hot dogs can be all bad.", attr: "Attributed to Will Rogers" },
+  { text: "My mother always said life is like a box of chocolates. But I prefer a good hot dog.", attr: "Anonymous" },
+  { text: "Every hot dog tells a story. Most of them are delicious.", attr: "Rachael Ray" },
+  { text: "The noblest of all dogs is the hot dog; it feeds the hand that bites it.", attr: "Laurence J. Peter" },
+  { text: "When you're eating a hot dog, nothing else matters. That's the power of the frank.", attr: "Unknown" },
+  { text: "A man who won't eat a hot dog has something wrong with his soul.", attr: "Texas proverb" },
+  { text: "I served hot dogs to the King and Queen of England. They asked for seconds.", attr: "Franklin D. Roosevelt" },
+  { text: "Some people dream of success. I dream of hot dogs.", attr: "Anonymous" },
+  { text: "I've made a lot of money in my life, and I still get excited about a $2 hot dog.", attr: "Warren Buffett" },
+  { text: "The only time to eat diet food is while waiting for the steak or hot dog to cook.", attr: "Julia Child" },
+  { text: "There is no sincerer love than the love of a good hot dog.", attr: "After George Bernard Shaw" },
+  { text: "Anything is good if it's made of chocolate or it's a hot dog.", attr: "Jo Brand" },
+  { text: "I think the biggest misconception about me is that I'm fancy. I eat hot dogs like three times a week.", attr: "Chrissy Teigen" },
+  { text: "A hot dog is a meal. A great hot dog is an experience.", attr: "Unknown" },
+  { text: "If I had to eat one food for the rest of my life, it would be hot dogs. No hesitation.", attr: "Joey Chestnut" },
+];
+
+function showQuote() {
+  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  document.getElementById('site-quote').innerHTML =
+    `"${q.text}" &mdash; <strong>${q.attr}</strong>`;
 }
 
-/* ── CSV Parser ── */
+function animateCounter(el, target, suffix, duration) {
+  if (isNaN(target)) { el.textContent = target; return; }
+  const start = performance.now();
+  const isFloat = String(target).includes('.');
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const current = ease * target;
+    el.textContent = (isFloat ? current.toFixed(1) : Math.round(current)) + (suffix || '');
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function animateAllCounters() {
+  document.querySelectorAll('[data-counter]').forEach(el => {
+    const raw = el.dataset.counter;
+    const suffix = el.dataset.suffix || '';
+    const val = parseFloat(raw);
+    if (!isNaN(val)) animateCounter(el, val, suffix, 900);
+    else el.textContent = raw;
+  });
+}
+
+function updateAgo() {
+  if (!LOAD_TIME) return;
+  const el = document.getElementById('footer-updated');
+  if (!el) return;
+  const diff = Math.floor((Date.now() - LOAD_TIME) / 1000);
+  if (diff < 10)       el.textContent = 'Updated just now';
+  else if (diff < 60)  el.textContent = `Updated ${diff}s ago`;
+  else if (diff < 3600) el.textContent = `Updated ${Math.floor(diff/60)}m ago`;
+  else                  el.textContent = `Updated ${Math.floor(diff/3600)}h ago`;
+}
+
 function parseCSV(text) {
   const rows = [];
   let row = [], cell = '', q = false;
@@ -556,13 +832,43 @@ function csvToObjects(text) {
     });
 }
 
-/* ── Helpers ── */
+function dogCount(d) {
+  let raw = d[C.QUANTITY];
+  if (raw === undefined || raw === '') {
+    const keys = Object.keys(d);
+    const qKey = keys.find(k =>
+      /how many/i.test(k) || /quantity/i.test(k) || /# of dogs/i.test(k) || /number of dogs/i.test(k)
+    );
+    if (qKey) raw = d[qKey];
+  }
+  const n = parseInt(raw, 10);
+  return (isNaN(n) || n < 1) ? 1 : n;
+}
+
+function getTimestamp(d) {
+  let raw = d[C.TIMESTAMP];
+  if (!raw) {
+    const keys = Object.keys(d);
+    const tKey = keys.find(k => /timestamp/i.test(k));
+    if (tKey) raw = d[tKey];
+  }
+  if (!raw) return null;
+  const t = new Date(raw);
+  return isNaN(t.getTime()) ? null : t;
+}
+
+function isWithinDays(d, days) {
+  const t = getTimestamp(d);
+  if (!t) return false;
+  return (Date.now() - t.getTime()) < days * 24 * 60 * 60 * 1000;
+}
+
 function driveThumb(url) {
   if (!url || !url.includes('drive.google')) return null;
   const m1 = url.match(/[?&]id=([^&\s]+)/);
   const m2 = url.match(/\/d\/([^/\s]+)/);
   const id  = (m1 && m1[1]) || (m2 && m2[1]);
-  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w600` : null;
+  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w800` : null;
 }
 
 function scoreClass(s) {
@@ -591,61 +897,119 @@ function fmt(n) {
   return isNaN(v) ? '—' : v.toFixed(1);
 }
 
-/* ── Fetch & render ── */
+function openModal(titleText, cardHTML, showReroll) {
+  document.getElementById('modal-title').textContent = titleText;
+  document.getElementById('modal-body').innerHTML = cardHTML +
+    (showReroll ? `<button class="modal-reroll" id="modal-reroll-btn">&#127922; Roll another dog</button>` : '');
+  const overlay = document.getElementById('modal-overlay');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => overlay.classList.add('visible'));
+  if (showReroll) {
+    document.getElementById('modal-reroll-btn').addEventListener('click', showRandomDog);
+  }
+}
+
+function closeModal() {
+  const overlay = document.getElementById('modal-overlay');
+  overlay.classList.remove('visible');
+  setTimeout(() => { overlay.style.display = 'none'; }, 250);
+}
+
+function showRandomDog() {
+  if (!ALL_SUBS.length) return;
+  const d = ALL_SUBS[Math.floor(Math.random() * ALL_SUBS.length)];
+  openModal('🎲 Random Dog', `<div class="dog-card">${dogCardInner(d, false)}</div>`, true);
+}
+
+function showLastDog(scoutName) {
+  const match = ALL_SUBS.find(d => d[C.SCOUT] === scoutName);
+  if (!match) return;
+  openModal(`${scoutName}'s Last Dog`, `<div class="dog-card">${dogCardInner(match, false)}</div>`, false);
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.getElementById('random-dog-btn').addEventListener('click', showRandomDog);
+
 async function load() {
   try {
     const resp = await fetch(SUBMISSIONS_CSV + '&nocache=' + Date.now());
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const text = await resp.text();
-    const subs = csvToObjects(text).reverse();
-    render(subs);
+    ALL_SUBS = csvToObjects(text).reverse();
+    LOAD_TIME = Date.now();
+    render(ALL_SUBS);
   } catch (e) {
     document.getElementById('app').innerHTML =
-      `<div class="loading-state">&#9888;&nbsp; Could not load data. Check that the Google Sheet is still published as CSV and the URL above is current.</div>`;
+      `<div class="loading-state">&#9888;&nbsp; Could not load data. Check that the Google Sheet is still published as CSV and the URL is current.</div>`;
     document.getElementById('meta-count').textContent = 'Offline';
   }
 }
 
 function render(subs) {
-  /* ── Total dogs = sum of quantities, not count of submissions ── */
   const totalDogs    = subs.reduce((sum, d) => sum + dogCount(d), 0);
   const totalReports = subs.length;
 
-  const scores = subs.map(d => parseFloat(d[C.SCORE])).filter(n => !isNaN(n));
-  const avg    = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
-  const avgNum = parseFloat(avg);
+  const scores   = subs.map(d => parseFloat(d[C.SCORE])).filter(n => !isNaN(n));
+  const avg      = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+  const avgNum   = parseFloat(avg);
   const avgClass = avgNum >= 7 ? 'green' : avgNum >= 5 ? 'amber' : 'red';
-  const states = new Set(subs.map(d=>d[C.STATE]).filter(Boolean));
+  const states   = new Set(subs.map(d=>d[C.STATE]).filter(Boolean));
   const wouldYes = subs.filter(d => eatLabel(d[C.EAT_AGAIN])[0] === 'tag-yes').length;
   const wouldPct = totalReports ? Math.round(wouldYes/totalReports*100)+'%' : '—';
 
-  /* ── Leaderboard: ranked by avg score; shows true dog count ── */
   const scoutMap = {};
   subs.forEach(d => {
     const n = d[C.SCOUT]; if (!n) return;
-    if (!scoutMap[n]) scoutMap[n] = { reports: 0, dogs: 0, scoreTotal: 0, scoreCount: 0 };
+    if (!scoutMap[n]) scoutMap[n] = { reports:0, dogs:0, weekDogs:0, scoreTotal:0, scoreCount:0, allScored:[] };
     scoutMap[n].reports++;
     scoutMap[n].dogs += dogCount(d);
+    if (isWithinDays(d, 7)) scoutMap[n].weekDogs += dogCount(d);
     const s = parseFloat(d[C.SCORE]);
-    if (!isNaN(s)) { scoutMap[n].scoreTotal += s; scoutMap[n].scoreCount++; }
+    if (!isNaN(s)) {
+      scoutMap[n].scoreTotal += s;
+      scoutMap[n].scoreCount++;
+      scoutMap[n].allScored.push({ vendor: d[C.VENDOR] || '?', score: s });
+    }
   });
   const scouts = Object.entries(scoutMap)
-    .map(([name, s]) => ({
-      name,
-      dogs:    s.dogs,
-      reports: s.reports,
-      avg:     s.scoreCount ? (s.scoreTotal / s.scoreCount).toFixed(1) : '0.0'
-    }))
-    .sort((a,b) => parseFloat(b.avg) - parseFloat(a.avg));
+    .map(([name, s]) => {
+      const sorted = [...s.allScored].sort((a,b) => b.score - a.score);
+      return {
+        name,
+        dogs:     s.dogs,
+        reports:  s.reports,
+        weekDogs: s.weekDogs,
+        avg:      s.scoreCount ? (s.scoreTotal / s.scoreCount).toFixed(1) : '—',
+        best:     sorted[0] || null,
+        worst:    sorted[sorted.length-1] || null,
+      };
+    })
+    .sort((a,b) => b.dogs - a.dogs);
 
-  /* ── Hall of Fame / Shame ── */
-  const scored = subs.filter(d => !isNaN(parseFloat(d[C.SCORE])));
-  const sorted = [...scored].sort((a,b) => parseFloat(b[C.SCORE]) - parseFloat(a[C.SCORE]));
-  const fame   = sorted.slice(0,3);
-  const shame  = sorted.slice(-3).reverse();
+  const streakBar  = document.getElementById('streak-bar');
+  const streakText = document.getElementById('streak-text');
+  const recentSub  = subs.find(d => isWithinDays(d, 2));
+  if (recentSub && recentSub[C.SCOUT]) {
+    const name   = recentSub[C.SCOUT];
+    const qty    = dogCount(recentSub);
+    const vendor = recentSub[C.VENDOR] || 'somewhere';
+    streakText.innerHTML = `&#128293; ${esc(name)} is on a tear &mdash; just logged ${qty > 1 ? qty + ' dogs' : 'a dog'} from ${esc(vendor)}`;
+    streakBar.classList.remove('hidden');
+  } else {
+    streakBar.classList.add('hidden');
+  }
+
+  const scored   = subs.filter(d => !isNaN(parseFloat(d[C.SCORE])));
+  const sortedAll = [...scored].sort((a,b) => parseFloat(b[C.SCORE]) - parseFloat(a[C.SCORE]));
+  const fame     = sortedAll.slice(0,3);
+  const shame    = sortedAll.slice(-3).reverse();
 
   document.getElementById('meta-count').textContent =
-    `${totalDogs} dog${totalDogs !== 1?'s':''} consumed \u00b7 ${scouts.length} glizzy muncher${scouts.length!==1?'s':''}`;
+    `${totalDogs} dog${totalDogs!==1?'s':''} consumed \u00b7 ${scouts.length} glizzy muncher${scouts.length!==1?'s':''}`;
 
   document.getElementById('app').innerHTML = `
     ${renderStats(totalDogs, avg, avgClass, states.size, wouldPct)}
@@ -657,7 +1021,7 @@ function render(subs) {
           : '<div class="empty-card">No dogs yet. Someone eat something.</div>'}
       </div>
       <div>
-        <div class="section-label">Glizzy Muncher leaderboard</div>
+        <div class="section-label">Glizzy Muncher leaderboard &mdash; by consumption</div>
         ${renderLeaderboard(scouts)}
       </div>
     </div>
@@ -667,23 +1031,28 @@ function render(subs) {
     </div>
     <footer class="site-footer">
       <span>The Frank Report &middot; For investigative purposes only</span>
-      <span>Updated ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>
+      <span id="footer-updated">Updated just now</span>
     </footer>
   `;
+
+  animateAllCounters();
+
+  document.querySelectorAll('.lb-last-dog').forEach(btn => {
+    btn.addEventListener('click', () => showLastDog(btn.dataset.scout));
+  });
 }
 
-/* ── Render helpers ── */
-
 function renderStats(totalDogs, avg, avgClass, states, wouldPct) {
+  const wouldNum = parseInt(wouldPct) || 0;
   return `<div class="stats-bar">
-    <div class="stat-card"><div class="stat-num">${totalDogs}</div><div class="stat-label">Dogs consumed</div></div>
-    <div class="stat-card"><div class="stat-num ${avgClass}">${avg}</div><div class="stat-label">Group avg rating</div></div>
-    <div class="stat-card"><div class="stat-num">${states}</div><div class="stat-label">States hit</div></div>
-    <div class="stat-card"><div class="stat-num green">${wouldPct}</div><div class="stat-label">Would eat again</div></div>
+    <div class="stat-card"><div class="stat-num" data-counter="${totalDogs}">0</div><div class="stat-label">Dogs consumed</div></div>
+    <div class="stat-card"><div class="stat-num ${avgClass}" data-counter="${avg}">0</div><div class="stat-label">Group avg rating</div></div>
+    <div class="stat-card"><div class="stat-num" data-counter="${states}">0</div><div class="stat-label">States hit</div></div>
+    <div class="stat-card"><div class="stat-num green" data-counter="${wouldNum}" data-suffix="%">0</div><div class="stat-label">Would eat again</div></div>
   </div>`;
 }
 
-function renderCard(d, newest) {
+function dogCardInner(d, newest) {
   const thumb = driveThumb(d[C.PHOTO]);
   const [eatCls, eatTxt] = eatLabel(d[C.EAT_AGAIN]);
   const qty = dogCount(d);
@@ -697,37 +1066,65 @@ function renderCard(d, newest) {
     ? `<span class="tag tag-qty">&#127789; &times;${qty}</span>`
     : '';
   return `
-    <div class="dog-card${newest?' featured':''}">
-      ${newest ? '<div class="featured-flag">Latest submission</div>' : ''}
-      ${thumb ? `<img class="dog-photo" src="${thumb}" alt="${esc(d[C.VENDOR])}" loading="lazy" onerror="this.remove()">` : ''}
-      <div class="card-header">
-        <div>
-          <div class="dog-name">${esc(d[C.VENDOR])}</div>
-          <div class="dog-meta">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div>
-        </div>
-        <div class="score-bubble ${scoreClass(d[C.SCORE])}">${fmt(d[C.SCORE])}</div>
+    ${newest ? '<div class="featured-flag">Latest submission</div>' : ''}
+    ${thumb ? `<img class="dog-photo" src="${thumb}" alt="${esc(d[C.VENDOR])}" loading="lazy" onerror="this.remove()">` : ''}
+    <div class="card-header">
+      <div>
+        <div class="dog-name">${esc(d[C.VENDOR])}</div>
+        <div class="dog-meta">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div>
       </div>
-      ${review}
-      <div class="dog-tags">
-        <span class="tag ${eatCls}">${eatTxt}</span>
-        ${qtyTag}
-        ${describe}
-      </div>
+      <div class="score-bubble ${scoreClass(d[C.SCORE])}">${fmt(d[C.SCORE])}</div>
+    </div>
+    ${review}
+    <div class="dog-tags">
+      <span class="tag ${eatCls}">${eatTxt}</span>
+      ${qtyTag}
+      ${describe}
     </div>`;
+}
+
+function renderCard(d, newest) {
+  return `<div class="dog-card${newest?' featured':''}">${dogCardInner(d, newest)}</div>`;
 }
 
 function renderLeaderboard(scouts) {
   if (!scouts.length) return '<div class="empty-card">No glizzy munchers yet.</div>';
   return `<div class="leaderboard">
-    ${scouts.slice(0,8).map((s,i) => `
+    ${scouts.slice(0,8).map((s,i) => {
+      let ttHTML = '';
+      if (s.best && s.worst && s.best !== s.worst) {
+        ttHTML = `
+          <div class="lb-tooltip">
+            <div class="tt-label">Best</div>
+            <div class="tt-best">${esc(s.best.vendor)} &mdash; ${s.best.score.toFixed(1)}</div>
+            <div class="tt-label" style="margin-top:4px">Worst</div>
+            <div class="tt-worst">${esc(s.worst.vendor)} &mdash; ${s.worst.score.toFixed(1)}</div>
+          </div>`;
+      } else if (s.best) {
+        ttHTML = `
+          <div class="lb-tooltip">
+            <div class="tt-label">Only rated</div>
+            <div class="tt-best">${esc(s.best.vendor)} &mdash; ${s.best.score.toFixed(1)}</div>
+          </div>`;
+      }
+      const weekBadge = s.weekDogs > 0
+        ? `<span class="lb-week">&#128293; ${s.weekDogs} this week</span>`
+        : '';
+      return `
       <div class="lb-row${i===0?' lb-top':''}">
         <div class="lb-rank${i===0?' gold':''}">${i+1}</div>
         <div class="lb-info">
           <div class="lb-name">${esc(s.name)}</div>
-          <div class="lb-sub">${s.dogs} dog${s.dogs!==1?'s':''} &middot; ${s.reports} report${s.reports!==1?'s':''}</div>
+          <div class="lb-sub">
+            <span>${s.reports} report${s.reports!==1?'s':''} &middot; avg ${s.avg}</span>
+            ${weekBadge}
+            <button class="lb-last-dog" data-scout="${esc(s.name)}">Show their last dog</button>
+          </div>
         </div>
-        <div class="lb-avg ${scoreClass(s.avg)}">${s.avg}</div>
-      </div>`).join('')}
+        <div class="lb-count">${s.dogs}</div>
+        ${ttHTML}
+      </div>`;
+    }).join('')}
   </div>`;
 }
 
@@ -749,8 +1146,11 @@ function renderHall(type, entries) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  showQuote();
+  document.getElementById('modal-overlay').style.display = 'none';
   load();
   setInterval(load, 5 * 60 * 1000);
+  setInterval(updateAgo, 10 * 1000);
 });
 </script>
 </body>
