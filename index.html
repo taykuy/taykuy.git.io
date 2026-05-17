@@ -37,6 +37,48 @@ body {
   font-size: 14px;
 }
 
+/* ── SUBMIT BANNER ── */
+.submit-banner {
+  background: var(--mustard);
+  padding: 11px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.submit-banner-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.3px;
+}
+.submit-banner-text span {
+  font-weight: 400;
+  opacity: 0.88;
+  margin-left: 6px;
+}
+.submit-btn {
+  background: var(--white);
+  color: var(--mustard);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-block;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+.submit-btn:hover { opacity: 0.85; }
+
 /* ── MASTHEAD ── */
 .masthead {
   border-top: 5px solid var(--mustard);
@@ -240,6 +282,7 @@ body {
 .tag-maybe  { background: var(--mustard-bg); color: var(--mustard); }
 .tag-top    { background: #EBF1FE; color: #1A56A8; }
 .tag-type   { background: #F0EFE7; color: #555; }
+.tag-qty    { background: #F0EFE7; color: #444; }
 
 /* ── LEADERBOARD ── */
 .leaderboard {
@@ -378,8 +421,6 @@ body {
 }
 
 /* ── RESPONSIVE ── */
-
-/* Tablet: 540–720px — collapse sidebar, 2-col stats */
 @media (max-width: 720px) {
   body { padding: 14px 16px 28px; }
   .site-name { font-size: 44px; }
@@ -388,9 +429,10 @@ body {
   .hall-grid { grid-template-columns: 1fr; }
   .masthead { flex-direction: column; align-items: flex-start; gap: 8px; }
   .masthead-right { text-align: left; }
+  .submit-banner { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .submit-btn { width: 100%; text-align: center; }
 }
 
-/* Large phone: 400–540px */
 @media (max-width: 540px) {
   body { padding: 10px 12px 24px; font-size: 13px; }
   .site-name { font-size: 38px; }
@@ -401,7 +443,6 @@ body {
   .dog-name { font-size: 15px; }
 }
 
-/* Small phone: ≤400px — single-col stats, tightest spacing */
 @media (max-width: 400px) {
   body { padding: 8px 10px 20px; }
   .site-name { font-size: 32px; }
@@ -435,6 +476,17 @@ body {
   </div>
 </header>
 
+<!-- SUBMIT BANNER -->
+<div class="submit-banner">
+  <div class="submit-banner-text">
+    &#127789; Ate a dog recently?
+    <span>Log your report and get on the board.</span>
+  </div>
+  <a class="submit-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdvlRjDFzuYz4IvhmL4Soc6-7vWu034YfmI1rO-rg2tskMnuw/viewform" target="_blank" rel="noopener">
+    Submit a dog &rarr;
+  </a>
+</div>
+
 <!-- DYNAMIC APP -->
 <div id="app">
   <div class="loading-state">Consulting the committee&hellip;</div>
@@ -442,20 +494,13 @@ body {
 
 <script>
 /* ============================================================
-   CONFIG — update SUBMISSIONS_CSV if your published sheet URL
-   ever changes. To get a fresh URL:
-     1. Open the Google Sheet
-     2. File > Share > Publish to web
-     3. Select the correct tab, set format to CSV
-     4. Click Publish and paste the new URL below
+   CONFIG
    ============================================================ */
-
 const SUBMISSIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOI4ODSx0JTqCqFzgmKiUbXuiBAzqj95FmDc2MTcdgAOqVb2UXjwYijRUWKPaNB8GidmhkoqfknYWx/pub?gid=1407390795&single=true&output=csv';
 
 /* ============================================================
-   COLUMN MAP — must match your Google Form question text exactly.
-   These become the column headers in the Sheet automatically.
-   If you rename a Form question, update it here too.
+   COLUMN MAP
+   QUANTITY must match your new Form question text exactly.
    ============================================================ */
 const C = {
   SCOUT:    'Name',
@@ -467,9 +512,16 @@ const C = {
   EAT_AGAIN:'Would you consume this dog again?',
   SCORE:    "How the f*ck was it?",
   REVIEW:   'Review',
+  QUANTITY: 'How many dogs did you consume?',  // ← must match your new Form question exactly
 };
 
-/* ── CSV Parser (handles quoted fields with embedded commas/newlines) ── */
+/* ── Returns the dog count for a submission; defaults to 1 if blank/invalid ── */
+function dogCount(d) {
+  const n = parseInt(d[C.QUANTITY], 10);
+  return (isNaN(n) || n < 1) ? 1 : n;
+}
+
+/* ── CSV Parser ── */
 function parseCSV(text) {
   const rows = [];
   let row = [], cell = '', q = false;
@@ -539,7 +591,7 @@ function fmt(n) {
   return isNaN(v) ? '—' : v.toFixed(1);
 }
 
-/* ── Fetch & render cycle ── */
+/* ── Fetch & render ── */
 async function load() {
   try {
     const resp = await fetch(SUBMISSIONS_CSV + '&nocache=' + Date.now());
@@ -555,27 +607,35 @@ async function load() {
 }
 
 function render(subs) {
-  /* ── Derived stats ── */
-  const total  = subs.length;
+  /* ── Total dogs = sum of quantities, not count of submissions ── */
+  const totalDogs    = subs.reduce((sum, d) => sum + dogCount(d), 0);
+  const totalReports = subs.length;
+
   const scores = subs.map(d => parseFloat(d[C.SCORE])).filter(n => !isNaN(n));
   const avg    = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
   const avgNum = parseFloat(avg);
   const avgClass = avgNum >= 7 ? 'green' : avgNum >= 5 ? 'amber' : 'red';
   const states = new Set(subs.map(d=>d[C.STATE]).filter(Boolean));
   const wouldYes = subs.filter(d => eatLabel(d[C.EAT_AGAIN])[0] === 'tag-yes').length;
-  const wouldPct = total ? Math.round(wouldYes/total*100)+'%' : '—';
+  const wouldPct = totalReports ? Math.round(wouldYes/totalReports*100)+'%' : '—';
 
-  /* ── Leaderboard ── */
+  /* ── Leaderboard: ranked by avg score; shows true dog count ── */
   const scoutMap = {};
   subs.forEach(d => {
     const n = d[C.SCOUT]; if (!n) return;
-    if (!scoutMap[n]) scoutMap[n] = { count:0, total:0 };
-    scoutMap[n].count++;
+    if (!scoutMap[n]) scoutMap[n] = { reports: 0, dogs: 0, scoreTotal: 0, scoreCount: 0 };
+    scoutMap[n].reports++;
+    scoutMap[n].dogs += dogCount(d);
     const s = parseFloat(d[C.SCORE]);
-    if (!isNaN(s)) scoutMap[n].total += s;
+    if (!isNaN(s)) { scoutMap[n].scoreTotal += s; scoutMap[n].scoreCount++; }
   });
   const scouts = Object.entries(scoutMap)
-    .map(([name,s]) => ({ name, count:s.count, avg: s.count ? (s.total/s.count).toFixed(1) : '0.0' }))
+    .map(([name, s]) => ({
+      name,
+      dogs:    s.dogs,
+      reports: s.reports,
+      avg:     s.scoreCount ? (s.scoreTotal / s.scoreCount).toFixed(1) : '0.0'
+    }))
     .sort((a,b) => parseFloat(b.avg) - parseFloat(a.avg));
 
   /* ── Hall of Fame / Shame ── */
@@ -584,13 +644,11 @@ function render(subs) {
   const fame   = sorted.slice(0,3);
   const shame  = sorted.slice(-3).reverse();
 
-  /* ── Update meta ── */
   document.getElementById('meta-count').textContent =
-    `${total} dog${total !== 1?'s':''} tracked \u00b7 ${scouts.length} glizzy muncher${scouts.length!==1?'s':''}`;
+    `${totalDogs} dog${totalDogs !== 1?'s':''} consumed \u00b7 ${scouts.length} glizzy muncher${scouts.length!==1?'s':''}`;
 
-  /* ── Render ── */
   document.getElementById('app').innerHTML = `
-    ${renderStats(total, avg, avgClass, states.size, wouldPct)}
+    ${renderStats(totalDogs, avg, avgClass, states.size, wouldPct)}
     <div class="main-grid">
       <div>
         <div class="section-label">Latest submissions</div>
@@ -616,9 +674,9 @@ function render(subs) {
 
 /* ── Render helpers ── */
 
-function renderStats(total, avg, avgClass, states, wouldPct) {
+function renderStats(totalDogs, avg, avgClass, states, wouldPct) {
   return `<div class="stats-bar">
-    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Dogs consumed</div></div>
+    <div class="stat-card"><div class="stat-num">${totalDogs}</div><div class="stat-label">Dogs consumed</div></div>
     <div class="stat-card"><div class="stat-num ${avgClass}">${avg}</div><div class="stat-label">Group avg rating</div></div>
     <div class="stat-card"><div class="stat-num">${states}</div><div class="stat-label">States hit</div></div>
     <div class="stat-card"><div class="stat-num green">${wouldPct}</div><div class="stat-label">Would eat again</div></div>
@@ -628,11 +686,15 @@ function renderStats(total, avg, avgClass, states, wouldPct) {
 function renderCard(d, newest) {
   const thumb = driveThumb(d[C.PHOTO]);
   const [eatCls, eatTxt] = eatLabel(d[C.EAT_AGAIN]);
+  const qty = dogCount(d);
   const review = d[C.REVIEW]
     ? `<div class="dog-review">"${esc(d[C.REVIEW])}"</div>`
     : '';
   const describe = d[C.DESCRIBE]
     ? `<span class="tag tag-top">${esc(d[C.DESCRIBE]).substring(0,80)}</span>`
+    : '';
+  const qtyTag = qty > 1
+    ? `<span class="tag tag-qty">&#127789; &times;${qty}</span>`
     : '';
   return `
     <div class="dog-card${newest?' featured':''}">
@@ -648,6 +710,7 @@ function renderCard(d, newest) {
       ${review}
       <div class="dog-tags">
         <span class="tag ${eatCls}">${eatTxt}</span>
+        ${qtyTag}
         ${describe}
       </div>
     </div>`;
@@ -661,7 +724,7 @@ function renderLeaderboard(scouts) {
         <div class="lb-rank${i===0?' gold':''}">${i+1}</div>
         <div class="lb-info">
           <div class="lb-name">${esc(s.name)}</div>
-          <div class="lb-sub">${s.count} dog${s.count!==1?'s':''}</div>
+          <div class="lb-sub">${s.dogs} dog${s.dogs!==1?'s':''} &middot; ${s.reports} report${s.reports!==1?'s':''}</div>
         </div>
         <div class="lb-avg ${scoreClass(s.avg)}">${s.avg}</div>
       </div>`).join('')}
@@ -687,7 +750,7 @@ function renderHall(type, entries) {
 
 document.addEventListener('DOMContentLoaded', () => {
   load();
-  setInterval(load, 5 * 60 * 1000); // auto-refresh every 5 minutes
+  setInterval(load, 5 * 60 * 1000);
 });
 </script>
 </body>
