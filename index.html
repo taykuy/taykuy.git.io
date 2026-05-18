@@ -27,9 +27,16 @@
   --relish-bg:  #E4F4EC;
 }
 
+/* ── AMBIENT WALLPAPER ── */
+html {
+  background-color: var(--bg);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'><g opacity='0.07'><text x='20' y='45' font-size='28' transform='rotate(15 20 45)'>%F0%9F%8C%AD</text><text x='160' y='30' font-size='22' transform='rotate(-25 160 30)'>%F0%9F%8C%AD</text><text x='90' y='110' font-size='32' transform='rotate(40 90 110)'>%F0%9F%8C%AD</text><text x='210' y='130' font-size='24' transform='rotate(-10 210 130)'>%F0%9F%8C%AD</text><text x='30' y='180' font-size='26' transform='rotate(-45 30 180)'>%F0%9F%8C%AD</text><text x='140' y='210' font-size='20' transform='rotate(20 140 210)'>%F0%9F%8C%AD</text><text x='220' y='230' font-size='28' transform='rotate(60 220 230)'>%F0%9F%8C%AD</text><text x='70' y='240' font-size='22' transform='rotate(-15 70 240)'>%F0%9F%8C%AD</text></g></svg>");
+  background-repeat: repeat;
+}
+
 body {
   font-family: 'Barlow', system-ui, sans-serif;
-  background: var(--bg);
+  background: transparent;
   color: var(--ink);
   line-height: 1.5;
   padding: 20px 24px 32px;
@@ -40,665 +47,227 @@ body {
 
 /* ── SUBMIT BANNER ── */
 .submit-banner {
-  background: var(--mustard);
-  padding: 11px 18px;
-  margin-bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
+  background: var(--mustard); padding: 11px 18px; margin-bottom: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
 }
-.submit-banner-text {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: 0.3px;
-}
-.submit-banner-text span {
-  font-weight: 400;
-  opacity: 0.88;
-  margin-left: 6px;
-}
+.submit-banner-text { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; color: var(--white); letter-spacing: 0.3px; }
+.submit-banner-text span { font-weight: 400; opacity: 0.88; margin-left: 6px; }
 .submit-btn {
-  background: var(--white);
-  color: var(--mustard);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 7px 16px;
-  border: none;
-  border-radius: 2px;
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  display: inline-block;
-  transition: opacity 0.15s;
-  flex-shrink: 0;
+  background: var(--white); color: var(--mustard);
+  font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 16px;
+  border: none; border-radius: 2px; cursor: pointer; text-decoration: none;
+  white-space: nowrap; display: inline-block; transition: opacity 0.15s; flex-shrink: 0;
 }
 .submit-btn:hover { opacity: 0.85; }
 
 /* ── STREAK CALLOUT ── */
-.streak-bar {
-  background: var(--ketchup);
-  padding: 8px 18px;
-  margin-bottom: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.streak-bar { background: var(--ketchup); padding: 8px 18px; margin-bottom: 0; display: flex; align-items: center; gap: 8px; }
 .streak-bar.hidden { display: none; }
-.streak-text {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: 0.3px;
-}
+.streak-text { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--white); letter-spacing: 0.3px; }
 
 /* ── ACTION BAR ── */
-.action-bar {
-  background: var(--ink);
-  padding: 8px 18px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.action-bar-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #666;
-  text-transform: uppercase;
-  margin-right: 4px;
-}
+.action-bar { background: var(--ink); padding: 8px 18px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+.action-bar-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; color: #666; text-transform: uppercase; margin-right: 4px; }
 .action-btn {
-  background: transparent;
-  color: #ccc;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 5px 12px;
-  border: 1px solid #444;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
+  background: transparent; color: #ccc;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px;
+  border: 1px solid #444; border-radius: 2px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
 }
-.action-btn:hover {
-  background: var(--mustard);
-  border-color: var(--mustard);
-  color: var(--white);
-}
+.action-btn:hover { background: var(--mustard); border-color: var(--mustard); color: var(--white); }
+
+/* ── SEVEN-DAY SUMMARY ── */
+.seven-day { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--relish); padding: 12px 16px; margin-bottom: 12px; }
+.seven-day.hidden { display: none; }
+.seven-day-label { font-family: 'Barlow Condensed', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 2px; color: var(--relish); text-transform: uppercase; margin-bottom: 5px; }
+.seven-day-text { font-family: 'Barlow', Georgia, serif; font-size: 14px; line-height: 1.55; color: #333; }
+.seven-day-text strong { color: var(--ink); font-weight: 600; }
+
+/* ── REVIEW TICKER ── */
+.review-ticker { background: var(--ink); padding: 9px 0; margin-bottom: 16px; overflow: hidden; position: relative; }
+.review-ticker.hidden { display: none; }
+.review-ticker-track { display: flex; gap: 40px; animation: tickerScroll 80s linear infinite; white-space: nowrap; width: max-content; }
+.review-ticker:hover .review-ticker-track { animation-play-state: paused; }
+@keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.ticker-item { font-family: 'Barlow', Georgia, serif; font-style: italic; font-size: 13px; color: #ccc; cursor: pointer; transition: color 0.15s; background: none; border: none; padding: 0; }
+.ticker-item:hover { color: var(--mustard); }
+.ticker-item .ti-attr { font-style: normal; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; color: #888; margin-left: 8px; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; }
+.ticker-item:hover .ti-attr { color: var(--mustard); }
 
 /* ── MASTHEAD ── */
 .masthead {
-  border-top: 5px solid var(--mustard);
-  padding: 16px 0 14px;
-  border-bottom: 2px solid var(--ink);
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 12px;
+  border-top: 5px solid var(--mustard); padding: 16px 0 14px;
+  border-bottom: 2px solid var(--ink); margin-bottom: 20px;
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 12px;
 }
-.site-name {
-  font-family: 'Bebas Neue', Impact, sans-serif;
-  font-size: 54px;
-  line-height: 1;
-  letter-spacing: 1px;
-  color: var(--ink);
-}
-.site-eyebrow {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  color: var(--dust);
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.site-tagline {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.5px;
-  color: var(--smoke);
-  margin-top: 5px;
-}
-.site-quote {
-  font-family: 'Barlow', Georgia, serif;
-  font-style: italic;
-  font-size: 11px;
-  color: var(--dust);
-  margin-top: 5px;
-  line-height: 1.4;
-}
-.site-quote strong {
-  font-style: normal;
-  font-weight: 500;
-}
+.site-name { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 54px; line-height: 1; letter-spacing: 1px; color: var(--ink); }
+.site-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2.5px; color: var(--dust); text-transform: uppercase; margin-bottom: 4px; }
+.site-tagline { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.5px; color: var(--smoke); margin-top: 5px; }
+.site-quote { font-family: 'Barlow', Georgia, serif; font-style: italic; font-size: 11px; color: var(--dust); margin-top: 5px; line-height: 1.4; }
+.site-quote strong { font-style: normal; font-weight: 500; }
 .masthead-right { text-align: right; flex-shrink: 0; }
-.meta-count {
-  display: block;
+.meta-count { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dust); letter-spacing: 0.3px; margin-bottom: 8px; }
+
+/* ── HOT DOG CLOCK ── */
+.hd-clock {
+  background: transparent;
+  padding: 8px 0 8px 12px;
+  display: inline-block;
+  text-align: right;
+}
+.hd-clock-label {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px;
-  color: var(--dust);
-  letter-spacing: 0.3px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 2px; color: var(--dust);
+  text-transform: uppercase; margin-bottom: 3px;
+}
+.hd-clock-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px; line-height: 1;
+  color: var(--mustard); letter-spacing: 0.5px;
+}
+.hd-clock-value.fresh { color: var(--relish); }
+.hd-clock-value.cold  { color: var(--ketchup); }
+.hd-clock-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; color: var(--dust);
+  margin-top: 3px; letter-spacing: 0.3px;
 }
 
 /* ── STICKY STATS WRAPPER ── */
 .stats-wrap {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: var(--bg);
-  padding: 10px 0;
-  margin: 0 -24px 14px;  /* extend bg to edges of body padding */
-  padding-left: 24px;
-  padding-right: 24px;
+  position: sticky; top: 0; z-index: 40; background: var(--bg);
+  padding: 10px 0; margin: 0 -24px 14px; padding-left: 24px; padding-right: 24px;
   transition: box-shadow 0.2s ease, padding 0.2s ease;
 }
-.stats-wrap.stuck {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  border-bottom: 1px solid var(--border);
-}
-.stats-bar {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-.stat-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  padding: 12px 14px 11px;
-  text-align: center;
-  transition: padding 0.2s ease;
-}
-.stats-wrap.stuck .stat-card {
-  padding: 8px 14px 7px;
-}
-.stat-num {
-  font-family: 'Bebas Neue', Impact, sans-serif;
-  font-size: 38px;
-  line-height: 1;
-  color: var(--ink);
-  transition: font-size 0.2s ease;
-}
-.stats-wrap.stuck .stat-num {
-  font-size: 28px;
-}
-.stat-num.green  { color: var(--relish); }
-.stat-num.amber  { color: var(--mustard); }
-.stat-num.red    { color: var(--ketchup); }
-.stat-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--dust);
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  margin-top: 3px;
-}
+.stats-wrap.stuck { box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-bottom: 1px solid var(--border); }
+.stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.stat-card { background: var(--white); border: 1px solid var(--border); padding: 12px 14px 11px; text-align: center; transition: padding 0.2s ease; }
+.stats-wrap.stuck .stat-card { padding: 8px 14px 7px; }
+.stat-num { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 38px; line-height: 1; color: var(--ink); transition: font-size 0.2s ease; }
+.stats-wrap.stuck .stat-num { font-size: 28px; }
+.stat-num.green { color: var(--relish); }
+.stat-num.amber { color: var(--mustard); }
+.stat-num.red   { color: var(--ketchup); }
+.stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; color: var(--dust); text-transform: uppercase; letter-spacing: 1.2px; margin-top: 3px; }
 
 /* ── SECTION LABEL ── */
-.section-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--dust);
-  text-transform: uppercase;
-  margin-bottom: 11px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--border);
-}
+.section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--dust); text-transform: uppercase; margin-bottom: 11px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
 
 /* ── MAIN GRID ── */
-.main-grid {
-  display: grid;
-  grid-template-columns: 1fr 268px;
-  gap: 22px;
-  margin-bottom: 24px;
-}
+.main-grid { display: grid; grid-template-columns: 1fr 268px; gap: 22px; margin-bottom: 24px; }
 
 /* ── DOG CARD ── */
-.dog-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  padding: 14px 16px;
-  margin-bottom: 10px;
-}
-.dog-card.featured {
-  border-color: var(--relish);
-  border-top-width: 3px;
-}
-.featured-flag {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--relish);
-  text-transform: uppercase;
-  margin-bottom: 7px;
-}
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.dog-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.2;
-}
-.dog-meta {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  color: var(--dust);
-  margin-top: 2px;
-}
-.score-bubble {
-  font-family: 'Bebas Neue', Impact, sans-serif;
-  font-size: 30px;
-  line-height: 1;
-  padding: 4px 12px 3px;
-  min-width: 62px;
-  text-align: center;
-  flex-shrink: 0;
-  border-radius: 2px;
-}
+.dog-card { background: var(--white); border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 10px; scroll-margin-top: 140px; }
+.dog-card.featured { border-color: var(--relish); border-top-width: 3px; }
+.dog-card.highlight { box-shadow: 0 0 0 3px var(--mustard); transition: box-shadow 1.5s ease; }
+.featured-flag { font-family: 'Barlow Condensed', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--relish); text-transform: uppercase; margin-bottom: 7px; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.dog-name { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.dog-meta { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--dust); margin-top: 2px; }
+.score-bubble { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 30px; line-height: 1; padding: 4px 12px 3px; min-width: 62px; text-align: center; flex-shrink: 0; border-radius: 2px; }
 .score-hi  { background: var(--relish-bg);  color: var(--relish);  }
 .score-mid { background: var(--mustard-bg); color: var(--mustard); }
 .score-lo  { background: var(--ketchup-bg); color: var(--ketchup); }
+.dog-photo { width: 100%; height: auto; display: block; border-radius: 1px; margin-bottom: 10px; }
+.dog-review { font-family: 'Barlow', Georgia, serif; font-style: italic; font-size: 13px; color: #444; border-left: 3px solid var(--border); padding-left: 10px; margin-bottom: 10px; line-height: 1.55; }
+.dog-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 2px; letter-spacing: 0.2px; white-space: nowrap; }
+.tag-yes { background: var(--relish-bg); color: var(--relish); }
+.tag-no  { background: var(--ketchup-bg); color: var(--ketchup); }
+.tag-maybe { background: var(--mustard-bg); color: var(--mustard); }
+.tag-top { background: #EBF1FE; color: #1A56A8; }
+.tag-qty { background: #F0EFE7; color: #444; }
 
-.dog-photo {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 1px;
-  margin-bottom: 10px;
-}
-.dog-review {
-  font-family: 'Barlow', Georgia, serif;
-  font-style: italic;
-  font-size: 13px;
-  color: #444;
-  border-left: 3px solid var(--border);
-  padding-left: 10px;
-  margin-bottom: 10px;
-  line-height: 1.55;
-}
-.dog-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-.tag {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 2px;
-  letter-spacing: 0.2px;
-  white-space: nowrap;
-}
-.tag-yes    { background: var(--relish-bg);  color: var(--relish);  }
-.tag-no     { background: var(--ketchup-bg); color: var(--ketchup); }
-.tag-maybe  { background: var(--mustard-bg); color: var(--mustard); }
-.tag-top    { background: #EBF1FE; color: #1A56A8; }
-.tag-type   { background: #F0EFE7; color: #555; }
-.tag-qty    { background: #F0EFE7; color: #444; }
+/* ── INFINITE SCROLL ── */
+.load-sentinel { height: 1px; }
+.load-spinner { text-align: center; padding: 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--dust); letter-spacing: 1.5px; text-transform: uppercase; display: none; }
+.load-spinner.visible { display: block; }
+.load-spinner::after { content: ''; display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--mustard); border-radius: 50%; animation: spin 0.7s linear infinite; margin-left: 8px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.load-end { text-align: center; padding: 16px; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dust); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 4px; display: none; }
+.load-end.visible { display: block; }
+
+/* ── SIDEBAR WIDGETS ── */
+.widget { background: var(--white); border: 1px solid var(--border); padding: 12px 14px; margin-bottom: 12px; }
+.widget-forecast { border-top: 3px solid var(--mustard); }
+.widget-math     { border-top: 3px solid var(--relish); }
+.widget-title { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.widget-forecast .widget-title { color: var(--mustard); }
+.widget-math .widget-title     { color: var(--relish); }
+.widget-body { font-family: 'Barlow', Georgia, serif; font-size: 13px; line-height: 1.5; color: #333; }
+.widget-body strong { color: var(--ink); font-weight: 600; }
+.widget-body .big { font-family: 'Bebas Neue', sans-serif; font-size: 24px; line-height: 1.1; display: block; margin: 4px 0; color: var(--ink); letter-spacing: 0.5px; }
+.widget-method { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: var(--dust); margin-top: 8px; padding-top: 8px; border-top: 1px solid #F2EEE6; letter-spacing: 0.3px; font-style: italic; }
+.widget-reroll { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--relish); background: none; border: none; cursor: pointer; padding: 0; margin-top: 6px; text-decoration: underline; text-underline-offset: 2px; }
+.widget-reroll:hover { color: var(--mustard); }
 
 /* ── LEADERBOARD ── */
-.leaderboard {
-  background: var(--white);
-  border: 1px solid var(--border);
-  margin-bottom: 16px;
-  overflow: visible;
-}
-.lb-row {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 9px 12px;
-  border-bottom: 1px solid #F2EEE6;
-  position: relative;
-}
+.leaderboard { background: var(--white); border: 1px solid var(--border); margin-bottom: 16px; overflow: visible; }
+.lb-row { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-bottom: 1px solid #F2EEE6; position: relative; }
 .lb-row:last-child { border-bottom: none; }
 .lb-row.lb-top { background: var(--mustard-bg); }
-.lb-rank {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  color: #ccc;
-  width: 16px;
-  text-align: center;
-  line-height: 1;
-  flex-shrink: 0;
-}
+.lb-rank { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #ccc; width: 16px; text-align: center; line-height: 1; flex-shrink: 0; }
 .lb-rank.gold { color: var(--mustard); }
 .lb-info { flex: 1; min-width: 0; }
-.lb-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.lb-sub {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px;
-  color: var(--dust);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.lb-last-dog {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--mustard);
-  letter-spacing: 0.3px;
-  cursor: pointer;
-  border: none;
-  background: none;
-  padding: 0;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
+.lb-name { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lb-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dust); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.lb-last-dog { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; color: var(--mustard); letter-spacing: 0.3px; cursor: pointer; border: none; background: none; padding: 0; text-decoration: underline; text-underline-offset: 2px; }
 .lb-last-dog:hover { color: var(--ketchup); }
-.lb-week {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--relish);
-  letter-spacing: 0.3px;
-}
-.lb-count {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  line-height: 1;
-  flex-shrink: 0;
-  color: var(--ink);
-}
-
-/* ── Hover preview tooltip ── */
-.lb-tooltip {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 50;
-  background: var(--ink);
-  color: #ddd;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px;
-  padding: 8px 12px;
-  border-radius: 2px;
-  white-space: nowrap;
-  line-height: 1.6;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  pointer-events: none;
-}
-.lb-tooltip .tt-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: #888;
-  margin-bottom: 2px;
-}
-.lb-tooltip .tt-best  { color: #6dda8e; }
+.lb-week { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; color: var(--relish); letter-spacing: 0.3px; }
+.lb-count { font-family: 'Bebas Neue', sans-serif; font-size: 22px; line-height: 1; flex-shrink: 0; color: var(--ink); }
+.lb-tooltip { display: none; position: absolute; right: 0; top: 100%; z-index: 50; background: var(--ink); color: #ddd; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; padding: 8px 12px; border-radius: 2px; white-space: nowrap; line-height: 1.6; box-shadow: 0 4px 12px rgba(0,0,0,0.3); pointer-events: none; }
+.lb-tooltip .tt-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-bottom: 2px; }
+.lb-tooltip .tt-best { color: #6dda8e; }
 .lb-tooltip .tt-worst { color: #f08070; }
 .lb-row:hover .lb-tooltip { display: block; }
 
 /* ── HALL OF FAME / SHAME ── */
-.hall-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 28px;
-}
-.hall {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-top-width: 4px;
-  padding: 13px 14px;
-}
-.hall-fame  { border-top-color: var(--relish); }
+.hall-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+.hall { background: var(--white); border: 1px solid var(--border); border-top-width: 4px; padding: 13px 14px; }
+.hall-fame { border-top-color: var(--relish); }
 .hall-shame { border-top-color: var(--ketchup); }
-.hall-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 11px;
-}
-.hall-fame  .hall-title { color: var(--relish); }
+.hall-title { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 11px; }
+.hall-fame .hall-title { color: var(--relish); }
 .hall-shame .hall-title { color: var(--ketchup); }
-.hall-entry {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 6px 0;
-  border-bottom: 1px solid #F2EEE6;
-}
+.hall-entry { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid #F2EEE6; }
 .hall-entry:last-child { border-bottom: none; }
-.hall-dog-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.2;
-}
-.hall-dog-sub {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px;
-  color: var(--dust);
-}
-.hall-score {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.hall-fame  .hall-score { color: var(--relish); }
+.hall-dog-name { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.hall-dog-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dust); }
+.hall-score { font-family: 'Bebas Neue', sans-serif; font-size: 24px; line-height: 1; flex-shrink: 0; }
+.hall-fame .hall-score { color: var(--relish); }
 .hall-shame .hall-score { color: var(--ketchup); }
 
 /* ── MODAL ── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  transition: background 0.2s ease;
-  pointer-events: none;
-}
-.modal-overlay.visible {
-  background: rgba(0,0,0,0.65);
-  pointer-events: auto;
-}
-.modal-box {
-  background: var(--bg);
-  border: 2px solid var(--ink);
-  max-width: 480px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  transform: translateY(20px) scale(0.96);
-  opacity: 0;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
-}
-.modal-overlay.visible .modal-box {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-.modal-header {
-  background: var(--ink);
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.modal-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #aaa;
-  text-transform: uppercase;
-}
-.modal-close {
-  background: none;
-  border: none;
-  color: #aaa;
-  font-size: 20px;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0 2px;
-}
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; transition: background 0.2s ease; pointer-events: none; }
+.modal-overlay.visible { background: rgba(0,0,0,0.65); pointer-events: auto; }
+.modal-box { background: var(--bg); border: 2px solid var(--ink); max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; transform: translateY(20px) scale(0.96); opacity: 0; transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease; }
+.modal-overlay.visible .modal-box { transform: translateY(0) scale(1); opacity: 1; }
+.modal-header { background: var(--ink); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #aaa; text-transform: uppercase; }
+.modal-close { background: none; border: none; color: #aaa; font-size: 20px; cursor: pointer; line-height: 1; padding: 0 2px; }
 .modal-close:hover { color: white; }
 .modal-body { padding: 14px; }
-.modal-body .dog-card {
-  margin-bottom: 0;
-  border: none;
-  padding: 0;
-  background: transparent;
-}
-.modal-reroll {
-  display: block;
-  width: 100%;
-  margin-top: 12px;
-  background: var(--mustard);
-  color: white;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 9px;
-  border: none;
-  cursor: pointer;
-  border-radius: 2px;
-  transition: opacity 0.15s;
-}
+.modal-body .dog-card { margin-bottom: 0; border: none; padding: 0; background: transparent; }
+.modal-reroll { display: block; width: 100%; margin-top: 12px; background: var(--mustard); color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 9px; border: none; cursor: pointer; border-radius: 2px; transition: opacity 0.15s; }
 .modal-reroll:hover { opacity: 0.85; }
 
-/* ── MILESTONE BANNER + CONFETTI ── */
-.milestone-banner {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.85);
-  z-index: 200;
-  background: var(--mustard);
-  color: white;
-  font-family: 'Bebas Neue', Impact, sans-serif;
-  text-align: center;
-  padding: 30px 50px;
-  border: 4px solid var(--ink);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1.3, 0.3, 1);
-}
-.milestone-banner.visible {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-.milestone-banner .ms-eyebrow {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  opacity: 0.85;
-  margin-bottom: 6px;
-}
-.milestone-banner .ms-number {
-  font-size: 96px;
-  line-height: 1;
-  letter-spacing: 2px;
-}
-.milestone-banner .ms-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  margin-top: 4px;
-}
-
-.confetti-container {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 150;
-  overflow: hidden;
-}
-.confetti-piece {
-  position: absolute;
-  top: -40px;
-  font-size: 28px;
-  animation: confettiFall linear forwards;
-  user-select: none;
-}
-@keyframes confettiFall {
-  0%   { transform: translateY(0) rotate(0deg);    opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
-}
+/* ── MILESTONE ── */
+.milestone-banner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.85); z-index: 200; background: var(--mustard); color: white; font-family: 'Bebas Neue', Impact, sans-serif; text-align: center; padding: 30px 50px; border: 4px solid var(--ink); box-shadow: 0 20px 60px rgba(0,0,0,0.4); opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1.3, 0.3, 1); }
+.milestone-banner.visible { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.milestone-banner .ms-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 3px; opacity: 0.85; margin-bottom: 6px; }
+.milestone-banner .ms-number { font-size: 96px; line-height: 1; letter-spacing: 2px; }
+.milestone-banner .ms-label { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 2px; margin-top: 4px; }
+.confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 150; overflow: hidden; }
+.confetti-piece { position: absolute; top: -40px; font-size: 28px; animation: confettiFall linear forwards; user-select: none; }
+@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: 0; } }
 
 /* ── FOOTER ── */
-.site-footer {
-  border-top: 1px solid var(--border);
-  padding-top: 12px;
-  display: flex;
-  justify-content: space-between;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  color: #bbb;
-  letter-spacing: 0.5px;
-}
+.site-footer { border-top: 1px solid var(--border); padding-top: 12px; display: flex; justify-content: space-between; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: #bbb; letter-spacing: 0.5px; }
 
-/* ── UTILITY ── */
-.loading-state {
-  text-align: center;
-  padding: 48px 20px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  color: var(--dust);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-.empty-card {
-  border: 1px dashed var(--border);
-  padding: 22px;
-  text-align: center;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  color: var(--dust);
-  letter-spacing: 0.5px;
-  background: var(--white);
-}
+.loading-state { text-align: center; padding: 48px 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; color: var(--dust); letter-spacing: 1.5px; text-transform: uppercase; }
+.empty-card { border: 1px dashed var(--border); padding: 22px; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--dust); letter-spacing: 0.5px; background: var(--white); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 720px) {
@@ -713,20 +282,15 @@ body {
   .submit-btn { width: 100%; text-align: center; }
   .lb-tooltip { right: auto; left: 12px; }
   .stats-wrap { margin: 0 -16px 14px; padding-left: 16px; padding-right: 16px; }
-  .milestone-banner { padding: 24px 36px; }
-  .milestone-banner .ms-number { font-size: 72px; }
 }
-
 @media (max-width: 540px) {
   body { padding: 10px 12px 24px; font-size: 13px; }
   .site-name { font-size: 38px; }
-  .site-tagline { font-size: 11px; }
   .stat-num { font-size: 30px; }
   .stats-wrap.stuck .stat-num { font-size: 22px; }
   .score-bubble { font-size: 26px; min-width: 52px; padding: 3px 10px; }
-  .dog-name { font-size: 15px; }
+  .hd-clock-value { font-size: 24px; }
 }
-
 @media (max-width: 400px) {
   body { padding: 8px 10px 20px; }
   .site-name { font-size: 32px; }
@@ -736,22 +300,15 @@ body {
   .stats-wrap.stuck .stat-num { font-size: 20px; }
   .stat-label { font-size: 9px; }
   .dog-card { padding: 11px 12px; }
-  .card-header { gap: 7px; }
   .score-bubble { font-size: 22px; min-width: 46px; padding: 3px 8px; }
-  .dog-name { font-size: 14px; }
-  .dog-review { font-size: 12px; }
   .lb-row { padding: 8px 10px; }
-  .lb-name { font-size: 13px; }
   .site-footer { flex-direction: column; gap: 4px; }
   .stats-wrap { margin: 0 -10px 14px; padding-left: 10px; padding-right: 10px; }
-  .milestone-banner { padding: 20px 28px; }
-  .milestone-banner .ms-number { font-size: 56px; }
 }
 </style>
 </head>
 <body>
 
-<!-- MASTHEAD -->
 <header class="masthead">
   <div>
     <div class="site-eyebrow">We got that dog in us.</div>
@@ -761,32 +318,37 @@ body {
   </div>
   <div class="masthead-right">
     <span class="meta-count" id="meta-count">Loading&hellip;</span>
+    <div class="hd-clock">
+      <div class="hd-clock-label">&#127789; Time since last dog</div>
+      <div class="hd-clock-value" id="hd-clock-value">—</div>
+      <div class="hd-clock-sub" id="hd-clock-sub">calculating&hellip;</div>
+    </div>
   </div>
 </header>
 
-<!-- SUBMIT BANNER -->
 <div class="submit-banner">
-  <div class="submit-banner-text">
-    &#127789; Ate a dog recently?
-    <span>Log your report and get on the board.</span>
-  </div>
-  <a class="submit-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdvlRjDFzuYz4IvhmL4Soc6-7vWu034YfmI1rO-rg2tskMnuw/viewform" target="_blank" rel="noopener">
-    Submit a dog &rarr;
-  </a>
+  <div class="submit-banner-text">&#127789; Ate a dog recently? <span>Log your report and get on the board.</span></div>
+  <a class="submit-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdvlRjDFzuYz4IvhmL4Soc6-7vWu034YfmI1rO-rg2tskMnuw/viewform" target="_blank" rel="noopener">Submit a dog &rarr;</a>
 </div>
 
-<!-- STREAK CALLOUT -->
 <div class="streak-bar hidden" id="streak-bar">
   <span class="streak-text" id="streak-text"></span>
 </div>
 
-<!-- ACTION BAR -->
 <div class="action-bar">
   <span class="action-bar-label">Quick actions</span>
   <button class="action-btn" id="random-dog-btn">&#127922; Random Dog</button>
 </div>
 
-<!-- MODAL -->
+<div class="seven-day hidden" id="seven-day">
+  <div class="seven-day-label">&#128197; Last seven days in hot dogs</div>
+  <div class="seven-day-text" id="seven-day-text"></div>
+</div>
+
+<div class="review-ticker hidden" id="review-ticker">
+  <div class="review-ticker-track" id="review-ticker-track"></div>
+</div>
+
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal-box">
     <div class="modal-header">
@@ -797,445 +359,509 @@ body {
   </div>
 </div>
 
-<!-- MILESTONE BANNER -->
 <div class="milestone-banner" id="milestone-banner">
   <div class="ms-eyebrow">Milestone unlocked</div>
   <div class="ms-number" id="ms-number">100</div>
   <div class="ms-label">Dogs consumed &#127789;</div>
 </div>
-
-<!-- CONFETTI CONTAINER -->
 <div class="confetti-container" id="confetti-container"></div>
 
-<!-- DYNAMIC APP -->
-<div id="app">
-  <div class="loading-state">Consulting the committee&hellip;</div>
-</div>
+<div id="app"><div class="loading-state">Consulting the committee&hellip;</div></div>
 
 <script>
 const SUBMISSIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOI4ODSx0JTqCqFzgmKiUbXuiBAzqj95FmDc2MTcdgAOqVb2UXjwYijRUWKPaNB8GidmhkoqfknYWx/pub?gid=1407390795&single=true&output=csv';
 
 const C = {
-  TIMESTAMP:'Timestamp',
-  SCOUT:    'Name',
-  PHOTO:    'Photo',
-  VENDOR:   'Vendor/Home',
-  CITY:     'City',
-  STATE:    'State',
-  DESCRIBE: 'Describe Dat Dog',
+  TIMESTAMP:'Timestamp', SCOUT:'Name', PHOTO:'Photo', VENDOR:'Vendor/Home',
+  CITY:'City', STATE:'State', DESCRIBE:'Describe Dat Dog',
   EAT_AGAIN:'Would you consume this dog again?',
-  SCORE:    "How the f*ck was it?",
-  REVIEW:   'Review',
-  QUANTITY: 'How many dogs did you put in you?',
+  SCORE:"How the f*ck was it?", REVIEW:'Review',
+  QUANTITY:'How many dogs did you put in you?',
 };
 
-/* ============================================================
-   MILESTONE THRESHOLDS — celebrate when total dogs crosses these
-   ============================================================ */
-const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 250, 500, 750, 1000, 1500, 2000];
+const MILESTONES = [10,25,50,75,100,150,200,250,500,750,1000,1500,2000];
 const MILESTONE_KEY = 'frankReportLastMilestone';
+const PAGE_SIZE = 5;
 
-let ALL_SUBS = [];
-let LOAD_TIME = null;
-let HAS_RENDERED_ONCE = false;
+let ALL_SUBS      = [];
+let LOAD_TIME     = null;
+let HAS_RENDERED  = false;
+let CURRENT_TOTAL = 0;
+let FEED_PAGE     = 1;
+let FEED_LOADING  = false;
+let SCROLL_OBS    = null;
+let LAST_DOG_TS   = null;
 
+/* ── QUOTES ── */
 const QUOTES = [
-  { text: "A hot dog at the game beats roast beef at the Ritz.", attr: "Humphrey Bogart" },
-  { text: "You can learn a lot about a person by how they top their hot dog.", attr: "Unknown" },
-  { text: "I think about hot dogs a lot. Probably more than I should.", attr: "Jennifer Garner" },
-  { text: "There are few things more American than eating a hot dog at a ballpark.", attr: "Nolan Ryan" },
-  { text: "Hot dogs are a beautiful thing. No utensils, no plates, just pure democracy.", attr: "Anthony Bourdain" },
-  { text: "Give me a hot dog and a cold beer, and I will fear no evil.", attr: "American proverb" },
-  { text: "I can eat a hot dog any time of year. But the 4th of July one hits different.", attr: "Guy Fieri" },
-  { text: "A hot dog is the perfect food. It fits in your hand. The bun is edible packaging.", attr: "Julia Child" },
-  { text: "I've eaten hot dogs on six continents. The seventh will have to wait.", attr: "Rick Steves" },
-  { text: "In New York, we judge character by your hot dog order.", attr: "Ed Koch" },
-  { text: "Nobody who eats hot dogs can be all bad.", attr: "Attributed to Will Rogers" },
-  { text: "My mother always said life is like a box of chocolates. But I prefer a good hot dog.", attr: "Anonymous" },
-  { text: "Every hot dog tells a story. Most of them are delicious.", attr: "Rachael Ray" },
-  { text: "The noblest of all dogs is the hot dog; it feeds the hand that bites it.", attr: "Laurence J. Peter" },
-  { text: "When you're eating a hot dog, nothing else matters. That's the power of the frank.", attr: "Unknown" },
-  { text: "A man who won't eat a hot dog has something wrong with his soul.", attr: "Texas proverb" },
-  { text: "I served hot dogs to the King and Queen of England. They asked for seconds.", attr: "Franklin D. Roosevelt" },
-  { text: "Some people dream of success. I dream of hot dogs.", attr: "Anonymous" },
-  { text: "I've made a lot of money in my life, and I still get excited about a $2 hot dog.", attr: "Warren Buffett" },
-  { text: "The only time to eat diet food is while waiting for the steak or hot dog to cook.", attr: "Julia Child" },
-  { text: "There is no sincerer love than the love of a good hot dog.", attr: "After George Bernard Shaw" },
-  { text: "Anything is good if it's made of chocolate or it's a hot dog.", attr: "Jo Brand" },
-  { text: "I think the biggest misconception about me is that I'm fancy. I eat hot dogs like three times a week.", attr: "Chrissy Teigen" },
-  { text: "A hot dog is a meal. A great hot dog is an experience.", attr: "Unknown" },
-  { text: "If I had to eat one food for the rest of my life, it would be hot dogs. No hesitation.", attr: "Joey Chestnut" },
+  { text:"A hot dog at the game beats roast beef at the Ritz.", attr:"Humphrey Bogart" },
+  { text:"You can learn a lot about a person by how they top their hot dog.", attr:"Unknown" },
+  { text:"I think about hot dogs a lot. Probably more than I should.", attr:"Jennifer Garner" },
+  { text:"There are few things more American than eating a hot dog at a ballpark.", attr:"Nolan Ryan" },
+  { text:"Hot dogs are a beautiful thing. No utensils, no plates, just pure democracy.", attr:"Anthony Bourdain" },
+  { text:"Give me a hot dog and a cold beer, and I will fear no evil.", attr:"American proverb" },
+  { text:"I can eat a hot dog any time of year. But the 4th of July one hits different.", attr:"Guy Fieri" },
+  { text:"A hot dog is the perfect food. It fits in your hand. The bun is edible packaging.", attr:"Julia Child" },
+  { text:"I've eaten hot dogs on six continents. The seventh will have to wait.", attr:"Rick Steves" },
+  { text:"In New York, we judge character by your hot dog order.", attr:"Ed Koch" },
+  { text:"Nobody who eats hot dogs can be all bad.", attr:"Attributed to Will Rogers" },
+  { text:"Every hot dog tells a story. Most of them are delicious.", attr:"Rachael Ray" },
+  { text:"The noblest of all dogs is the hot dog; it feeds the hand that bites it.", attr:"Laurence J. Peter" },
+  { text:"A man who won't eat a hot dog has something wrong with his soul.", attr:"Texas proverb" },
+  { text:"I served hot dogs to the King and Queen of England. They asked for seconds.", attr:"Franklin D. Roosevelt" },
+  { text:"I've made a lot of money in my life, and I still get excited about a $2 hot dog.", attr:"Warren Buffett" },
+  { text:"The only time to eat diet food is while waiting for the steak or hot dog to cook.", attr:"Julia Child" },
+  { text:"There is no sincerer love than the love of a good hot dog.", attr:"After George Bernard Shaw" },
+  { text:"I think the biggest misconception about me is that I'm fancy. I eat hot dogs like three times a week.", attr:"Chrissy Teigen" },
+  { text:"A hot dog is a meal. A great hot dog is an experience.", attr:"Unknown" },
+  { text:"If I had to eat one food for the rest of my life, it would be hot dogs. No hesitation.", attr:"Joey Chestnut" },
 ];
-
 function showQuote() {
   const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-  document.getElementById('site-quote').innerHTML =
-    `"${q.text}" &mdash; <strong>${q.attr}</strong>`;
+  document.getElementById('site-quote').innerHTML = `"${q.text}" &mdash; <strong>${q.attr}</strong>`;
 }
 
-/* ============================================================
-   MILESTONE CELEBRATION
-   ============================================================ */
-function getHighestMilestoneReached(total) {
-  let highest = 0;
-  for (const m of MILESTONES) {
-    if (total >= m) highest = m;
-    else break;
+/* ── HOT DOG CLOCK ── */
+function formatClockDuration(ms) {
+  const totalSec  = Math.floor(ms / 1000);
+  const totalMin  = Math.floor(totalSec / 60);
+  const totalHour = Math.floor(totalMin / 60);
+  const totalDay  = Math.floor(totalHour / 24);
+
+  if (ms < 86400000) {
+    // Under 24 hours — green
+    if (totalMin < 10)  return { value: `${totalMin}m ${totalSec % 60}s`, sub: `hot off the grill`,  cls: 'fresh' };
+    if (totalMin < 60)  return { value: `${totalMin}m`,                   sub: `very recent`,         cls: 'fresh' };
+    return { value: `${totalHour}h ${totalMin % 60}m`, sub: `since the last dog`, cls: 'fresh' };
   }
-  return highest;
-}
-
-function readLastMilestone() {
-  try {
-    const v = parseInt(localStorage.getItem(MILESTONE_KEY), 10);
-    return isNaN(v) ? 0 : v;
-  } catch (e) { return 0; }
-}
-
-function writeLastMilestone(v) {
-  try { localStorage.setItem(MILESTONE_KEY, String(v)); } catch (e) {}
-}
-
-function checkMilestone(totalDogs) {
-  const highest = getHighestMilestoneReached(totalDogs);
-  const lastSeen = readLastMilestone();
-  if (highest > 0 && highest > lastSeen) {
-    celebrate(highest);
-    writeLastMilestone(highest);
-  } else if (highest > 0 && lastSeen === 0) {
-    // First-ever visit with milestones already passed - just record, don't celebrate
-    writeLastMilestone(highest);
+  if (ms < 259200000) {
+    // 24–72 hours — mustard
+    return { value: `${totalDay}d ${totalHour % 24}h`, sub: `dogs incoming?`, cls: '' };
   }
+  // Over 72 hours — red
+  return { value: `${totalDay}d ${totalHour % 24}h`, sub: `the report is floundering`, cls: 'cold' };
 }
 
-function celebrate(milestone) {
-  // Show banner
-  const banner = document.getElementById('milestone-banner');
-  document.getElementById('ms-number').textContent = milestone.toLocaleString();
-  banner.classList.add('visible');
-
-  // Fire confetti
-  fireConfetti();
-
-  // Hide banner after delay
-  setTimeout(() => banner.classList.remove('visible'), 4000);
+function tickClock() {
+  const el = document.getElementById('hd-clock-value');
+  const sub = document.getElementById('hd-clock-sub');
+  if (!el || !sub) return;
+  if (!LAST_DOG_TS) { el.textContent = '—'; sub.textContent = 'no submissions yet'; return; }
+  const { value, sub: subText, cls } = formatClockDuration(Date.now() - LAST_DOG_TS);
+  el.textContent = value;
+  el.className = 'hd-clock-value' + (cls ? ' ' + cls : '');
+  sub.textContent = subText;
 }
 
+/* ── MILESTONES ── */
+function getHighestMilestone(n) { let h=0; for(const m of MILESTONES){if(n>=m)h=m;else break;} return h; }
+function readLastMilestone()    { try{const v=parseInt(localStorage.getItem(MILESTONE_KEY),10);return isNaN(v)?0:v;}catch(e){return 0;} }
+function writeLastMilestone(v)  { try{localStorage.setItem(MILESTONE_KEY,String(v));}catch(e){} }
+function checkMilestone(n) {
+  const h=getHighestMilestone(n),last=readLastMilestone();
+  if(h>0&&h>last){celebrate(h);writeLastMilestone(h);}
+  else if(h>0&&last===0){writeLastMilestone(h);}
+}
+function celebrate(m) {
+  const b=document.getElementById('milestone-banner');
+  document.getElementById('ms-number').textContent=m.toLocaleString();
+  b.classList.add('visible'); fireConfetti();
+  setTimeout(()=>b.classList.remove('visible'),4000);
+}
 function fireConfetti() {
-  const container = document.getElementById('confetti-container');
-  const emojis = ['🌭', '🎉', '⭐', '🎊', '🔥', '🏆'];
-  const pieces = 60;
-
-  for (let i = 0; i < pieces; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    piece.style.left = (Math.random() * 100) + 'vw';
-    const duration = 2.8 + Math.random() * 2.5;
-    const delay = Math.random() * 0.8;
-    piece.style.animationDuration = duration + 's';
-    piece.style.animationDelay = delay + 's';
-    piece.style.fontSize = (18 + Math.random() * 22) + 'px';
-    piece.style.opacity = 0.7 + Math.random() * 0.3;
-    container.appendChild(piece);
-    // Clean up after animation
-    setTimeout(() => piece.remove(), (duration + delay) * 1000 + 100);
+  const c=document.getElementById('confetti-container');
+  const e=['🌭','🎉','⭐','🎊','🔥','🏆'];
+  for(let i=0;i<60;i++){
+    const p=document.createElement('div'); p.className='confetti-piece';
+    p.textContent=e[Math.floor(Math.random()*e.length)];
+    p.style.left=(Math.random()*100)+'vw';
+    const d=2.8+Math.random()*2.5,dl=Math.random()*0.8;
+    p.style.animationDuration=d+'s'; p.style.animationDelay=dl+'s';
+    p.style.fontSize=(18+Math.random()*22)+'px'; p.style.opacity=0.7+Math.random()*0.3;
+    c.appendChild(p); setTimeout(()=>p.remove(),(d+dl)*1000+100);
   }
 }
 
-/* ============================================================
-   STICKY STATS DETECTION
-   ============================================================ */
+/* ── STICKY STATS ── */
 function setupStickyDetect() {
-  const wrap = document.getElementById('stats-wrap');
-  if (!wrap) return;
-  // Sentinel element above to detect when stats-wrap leaves natural position
-  let sentinel = document.getElementById('stats-sentinel');
-  if (!sentinel) {
-    sentinel = document.createElement('div');
-    sentinel.id = 'stats-sentinel';
-    sentinel.style.cssText = 'height:1px;';
-    wrap.parentNode.insertBefore(sentinel, wrap);
-  }
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) wrap.classList.remove('stuck');
-      else wrap.classList.add('stuck');
-    });
-  }, { threshold: [0] });
-  observer.observe(sentinel);
+  const wrap=document.getElementById('stats-wrap'); if(!wrap)return;
+  let s=document.getElementById('stats-sentinel');
+  if(!s){s=document.createElement('div');s.id='stats-sentinel';s.style.cssText='height:1px;';wrap.parentNode.insertBefore(s,wrap);}
+  new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)wrap.classList.remove('stuck');else wrap.classList.add('stuck');});},{threshold:[0]}).observe(s);
 }
 
-/* ============================================================
-   ANIMATED COUNTERS
-   ============================================================ */
-function animateCounter(el, target, suffix, duration) {
-  if (isNaN(target)) { el.textContent = target; return; }
-  const start = performance.now();
-  const isFloat = String(target).includes('.');
-  function tick(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    const current = ease * target;
-    el.textContent = (isFloat ? current.toFixed(1) : Math.round(current)) + (suffix || '');
-    if (progress < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
+/* ── COUNTERS ── */
+function animateCounter(el,target,suffix,dur){
+  if(isNaN(target)){el.textContent=target;return;}
+  const start=performance.now(),isFloat=String(target).includes('.');
+  (function tick(now){
+    const p=Math.min((now-start)/dur,1),ease=1-Math.pow(1-p,3),cur=ease*target;
+    el.textContent=(isFloat?cur.toFixed(1):Math.round(cur))+(suffix||'');
+    if(p<1)requestAnimationFrame(tick);
+  })(performance.now());
+}
+function animateAllCounters(){
+  document.querySelectorAll('[data-counter]').forEach(el=>{
+    const raw=el.dataset.counter,suffix=el.dataset.suffix||'',val=parseFloat(raw);
+    if(!isNaN(val))animateCounter(el,val,suffix,900);else el.textContent=raw;
+  });
+}
+function updateAgo(){
+  if(!LOAD_TIME)return;
+  const el=document.getElementById('footer-updated');if(!el)return;
+  const d=Math.floor((Date.now()-LOAD_TIME)/1000);
+  if(d<10)el.textContent='Updated just now';
+  else if(d<60)el.textContent=`Updated ${d}s ago`;
+  else if(d<3600)el.textContent=`Updated ${Math.floor(d/60)}m ago`;
+  else el.textContent=`Updated ${Math.floor(d/3600)}h ago`;
 }
 
-function animateAllCounters() {
-  document.querySelectorAll('[data-counter]').forEach(el => {
-    const raw = el.dataset.counter;
-    const suffix = el.dataset.suffix || '';
-    const val = parseFloat(raw);
-    if (!isNaN(val)) animateCounter(el, val, suffix, 900);
-    else el.textContent = raw;
+/* ── CSV ── */
+function parseCSV(text){
+  const rows=[];let row=[],cell='',q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){if(c==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(c==='"'){q=false;}else cell+=c;}
+    else{if(c==='"')q=true;else if(c===','){row.push(cell);cell='';}else if(c==='\n'){row.push(cell);rows.push(row);row=[];cell='';}else if(c!=='\r')cell+=c;}
+  }
+  if(cell||row.length){row.push(cell);rows.push(row);}return rows;
+}
+function csvToObjects(text){
+  const rows=parseCSV(text);if(rows.length<2)return[];
+  const headers=rows[0].map(h=>h.trim());
+  return rows.slice(1).filter(r=>r.some(c=>c.trim())).map(row=>{const o={};headers.forEach((h,i)=>{o[h]=(row[i]||'').trim();});return o;});
+}
+function dogCount(d){
+  let raw=d[C.QUANTITY];
+  if(!raw){const k=Object.keys(d).find(k=>/how many/i.test(k)||/quantity/i.test(k));if(k)raw=d[k];}
+  const n=parseInt(raw,10);return(isNaN(n)||n<1)?1:n;
+}
+function getTimestamp(d){
+  let raw=d[C.TIMESTAMP];
+  if(!raw){const k=Object.keys(d).find(k=>/timestamp/i.test(k));if(k)raw=d[k];}
+  if(!raw)return null;const t=new Date(raw);return isNaN(t.getTime())?null:t;
+}
+function isWithinDays(d,days){const t=getTimestamp(d);if(!t)return false;return(Date.now()-t.getTime())<days*86400000;}
+function driveThumb(url){
+  if(!url||!url.includes('drive.google'))return null;
+  const m1=url.match(/[?&]id=([^&\s]+)/),m2=url.match(/\/d\/([^/\s]+)/);
+  const id=(m1&&m1[1])||(m2&&m2[1]);
+  return id?`https://drive.google.com/thumbnail?id=${id}&sz=w800`:null;
+}
+function scoreClass(s){const n=parseFloat(s);if(isNaN(n))return'score-mid';if(n>=8)return'score-hi';if(n>=5)return'score-mid';return'score-lo';}
+function eatLabel(v){
+  const l=(v||'').toLowerCase();
+  if(l.includes('yes')||l.includes('absolutely'))return['tag-yes','&#10003; Would consume again'];
+  if(l.includes('no')||l.includes('never'))return['tag-no','&#10007; Never again'];
+  return['tag-maybe','~ Maybe, if desperate'];
+}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmt(n){const v=parseFloat(n);return isNaN(v)?'—':v.toFixed(1);}
+
+/* ── MODAL ── */
+function openModal(title,html,reroll){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').innerHTML=html+(reroll?`<button class="modal-reroll" id="modal-reroll-btn">&#127922; Roll another dog</button>`:'');
+  const o=document.getElementById('modal-overlay');
+  o.style.display='flex';requestAnimationFrame(()=>o.classList.add('visible'));
+  if(reroll)document.getElementById('modal-reroll-btn').addEventListener('click',showRandomDog);
+}
+function closeModal(){
+  const o=document.getElementById('modal-overlay');
+  o.classList.remove('visible');setTimeout(()=>{o.style.display='none';},250);
+}
+function showRandomDog(){
+  if(!ALL_SUBS.length)return;
+  const d=ALL_SUBS[Math.floor(Math.random()*ALL_SUBS.length)];
+  openModal('🎲 Random Dog',`<div class="dog-card">${dogCardInner(d,false)}</div>`,true);
+}
+function showLastDog(name){
+  const d=ALL_SUBS.find(s=>s[C.SCOUT]===name);if(!d)return;
+  openModal(`${name}'s Last Dog`,`<div class="dog-card">${dogCardInner(d,false)}</div>`,false);
+}
+document.getElementById('modal-close').addEventListener('click',closeModal);
+document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('modal-overlay'))closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.getElementById('random-dog-btn').addEventListener('click',showRandomDog);
+
+/* ── SEVEN-DAY SUMMARY ── */
+function buildSevenDaySummary(subs){
+  const week=subs.filter(d=>isWithinDays(d,7));if(!week.length)return null;
+  const td=week.reduce((s,d)=>s+dogCount(d),0);
+  const scouts=new Set(week.map(d=>d[C.SCOUT]).filter(Boolean));
+  const vendors=new Set(week.map(d=>d[C.VENDOR]).filter(Boolean));
+  const states=new Set(week.map(d=>d[C.STATE]).filter(Boolean));
+  const sc=week.map(d=>parseFloat(d[C.SCORE])).filter(n=>!isNaN(n));
+  const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):null;
+  const hi=sc.length?Math.max(...sc):null,lo=sc.length?Math.min(...sc):null;
+  let s1=`The committee put away <strong>${td} dog${td!==1?'s':''}</strong> across <strong>${vendors.size} vendor${vendors.size!==1?'s':''}</strong>`;
+  if(states.size>1)s1+=` in <strong>${states.size} states</strong>`;
+  s1+=` with <strong>${scouts.size}</strong> ${scouts.size===1?'scout':'scouts'} pitching in.`;
+  let s2='';
+  if(avg){
+    const mood=parseFloat(avg)>=7?'mostly happy':parseFloat(avg)>=5?'mixed':'a little rough';
+    s2=` Vibes were <strong>${mood}</strong> &mdash; group average sat at <strong>${avg}</strong>`;
+    if(hi!==null&&lo!==null&&hi!==lo)s2+=`, with scores ranging from ${lo.toFixed(1)} to ${hi.toFixed(1)}`;
+    s2+='.';
+  }
+  return s1+s2;
+}
+
+/* ── TICKER ── */
+function firstSentence(text){
+  if(!text)return'';const c=text.trim().replace(/\s+/g,' ');
+  const m=c.match(/^[^.!?]+[.!?]/);let s=m?m[0]:c;
+  if(s.length>140)s=s.slice(0,137)+'...';return s;
+}
+function buildTicker(subs){
+  const items=[];
+  subs.forEach((d,idx)=>{
+    const r=d[C.REVIEW];if(!r||r.length<10)return;
+    const s=firstSentence(r);if(!s)return;
+    items.push({text:s,attr:d[C.SCOUT]||'Anonymous',idx});
+  });
+  if(!items.length)return null;
+  for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]];}
+  return items.slice(0,20);
+}
+function renderTicker(items){
+  const track=document.getElementById('review-ticker-track'),container=document.getElementById('review-ticker');
+  if(!items||!items.length){container.classList.add('hidden');return;}
+  container.classList.remove('hidden');
+  const html=items.concat(items).map(it=>`<button class="ticker-item" data-idx="${it.idx}">&ldquo;${esc(it.text)}&rdquo;<span class="ti-attr">${esc(it.attr)}</span></button>`).join('');
+  track.innerHTML=html;
+  track.querySelectorAll('.ticker-item').forEach(btn=>{btn.addEventListener('click',()=>jumpToSubmission(parseInt(btn.dataset.idx,10)));});
+}
+function jumpToSubmission(idx){
+  while(FEED_PAGE*PAGE_SIZE<=idx&&FEED_PAGE*PAGE_SIZE<ALL_SUBS.length)appendNextPage();
+  requestAnimationFrame(()=>{
+    const el=document.getElementById('sub-'+idx);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('highlight');setTimeout(()=>el.classList.remove('highlight'),2000);}
   });
 }
 
-function updateAgo() {
-  if (!LOAD_TIME) return;
-  const el = document.getElementById('footer-updated');
-  if (!el) return;
-  const diff = Math.floor((Date.now() - LOAD_TIME) / 1000);
-  if (diff < 10)       el.textContent = 'Updated just now';
-  else if (diff < 60)  el.textContent = `Updated ${diff}s ago`;
-  else if (diff < 3600) el.textContent = `Updated ${Math.floor(diff/60)}m ago`;
-  else                  el.textContent = `Updated ${Math.floor(diff/3600)}h ago`;
+/* ── FORECAST ── */
+function buildForecast(subs){
+  const by={};
+  subs.forEach(d=>{const n=d[C.SCOUT],ts=getTimestamp(d);if(!n||!ts)return;if(!by[n])by[n]=[];by[n].push(ts);});
+  const elig=Object.entries(by).filter(([,ts])=>ts.length>=2).map(([name,ts])=>{
+    ts.sort((a,b)=>b-a);const gaps=[];
+    for(let i=0;i<ts.length-1;i++)gaps.push((ts[i]-ts[i+1])/86400000);
+    const avg=gaps.reduce((a,b)=>a+b,0)/gaps.length,dsl=(Date.now()-ts[0].getTime())/86400000;
+    return{name,avg,dsl,ratio:dsl/Math.max(avg,0.5)};
+  }).filter(s=>s.ratio>0.5).sort((a,b)=>b.ratio-a.ratio);
+  if(!elig.length)return null;
+  const p=elig[0];
+  const phrase=p.ratio>=2?'is very overdue':p.ratio>=1.3?'is due':'might be ready';
+  const ds=p.dsl<1?'less than a day ago':`${Math.round(p.dsl)} day${Math.round(p.dsl)!==1?'s':''} ago`;
+  const gs=p.avg<1?'less than a day':`${Math.round(p.avg)} day${Math.round(p.avg)!==1?'s':''}`;
+  return{body:`<strong>${esc(p.name)}</strong> ${phrase} for another dog. Last logged ${ds}; they usually go about ${gs} between submissions.`,method:"Based on each scout's average gap between submissions vs. how long it's been since their last."};
 }
 
-function parseCSV(text) {
-  const rows = [];
-  let row = [], cell = '', q = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (q) {
-      if (c === '"' && text[i+1] === '"') { cell += '"'; i++; }
-      else if (c === '"') { q = false; }
-      else { cell += c; }
-    } else {
-      if (c === '"')  { q = true; }
-      else if (c === ',') { row.push(cell); cell = ''; }
-      else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
-      else if (c === '\r') { /* skip */ }
-      else { cell += c; }
-    }
+/* ── HOT DOG MATH ── */
+function pickHotDogMath(n){
+  if(n<1)return null;
+  const gens=[
+    ()=>{const ft=n*6/12,m=n*0.1524;
+      if(n<8)return{big:`${ft.toFixed(1)} feet`,body:`end to end, all the dogs would stretch about <strong>${ft.toFixed(1)} feet</strong> &mdash; roughly the length of a parking space.`};
+      if(n<30)return{big:`${ft.toFixed(0)} feet`,body:`lined up, the dogs would reach <strong>${ft.toFixed(0)} feet</strong> &mdash; about the length of a bowling lane.`};
+      if(n<80)return{big:`${ft.toFixed(0)} feet`,body:`the dogs span <strong>${ft.toFixed(0)} feet</strong> &mdash; roughly the width of a basketball court.`};
+      if(n<200)return{big:`${ft.toFixed(0)} feet`,body:`end to end: <strong>${ft.toFixed(0)} feet</strong> &mdash; longer than a football field.`};
+      if(n<600)return{big:`${m.toFixed(0)} meters`,body:`lined up: <strong>${m.toFixed(0)} meters</strong> &mdash; taller than the Eiffel Tower on its side.`};
+      return{big:`${(ft/5280).toFixed(2)} miles`,body:`end to end: <strong>${(ft/5280).toFixed(2)} miles</strong> &mdash; a respectable jog.`};
+    },
+    ()=>{const lbs=n*0.125;
+      if(n<8)return{big:`${lbs.toFixed(1)} lbs`,body:`all the meat so far weighs about <strong>${lbs.toFixed(1)} pounds</strong> &mdash; like a small chicken.`};
+      if(n<32)return{big:`${lbs.toFixed(1)} lbs`,body:`roughly a bowling ball's worth: <strong>${lbs.toFixed(1)} pounds</strong>.`};
+      if(n<80)return{big:`${lbs.toFixed(0)} lbs`,body:`<strong>${lbs.toFixed(0)} pounds</strong> &mdash; about the weight of a labrador retriever.`};
+      if(n<400)return{big:`${lbs.toFixed(0)} lbs`,body:`<strong>${lbs.toFixed(0)} pounds</strong> &mdash; heavier than a baby grand piano.`};
+      return{big:`${(lbs/2000).toFixed(2)} tons`,body:`the dogs weigh in at <strong>${(lbs/2000).toFixed(2)} tons</strong>. The committee is becoming a tonnage operation.`};
+    },
+    ()=>{const cal=n*150,days=cal/2000;
+      if(n<14)return{big:`${cal.toLocaleString()} cal`,body:`about <strong>${cal.toLocaleString()} calories</strong> &mdash; somewhere between a satisfying lunch and a full day's intake.`};
+      if(n<70)return{big:`${days.toFixed(1)} days`,body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; roughly ${days.toFixed(1)} days of someone's recommended intake.`};
+      if(n<350)return{big:`${days.toFixed(0)} days`,body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; about ${days.toFixed(0)} days of meals for a person.`};
+      return{big:`${(days/30).toFixed(1)} months`,body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; enough to feed someone for ${(days/30).toFixed(1)} months.`};
+    },
+    ()=>{const min=n*5,hr=min/60,day=hr/24;
+      if(n<12)return{big:`${min} min`,body:`eating all of these would take about <strong>${min} minutes</strong> at a steady pace.`};
+      if(n<60)return{big:`${hr.toFixed(1)} hrs`,body:`all the chewing: roughly <strong>${hr.toFixed(1)} hours</strong> &mdash; half a workday.`};
+      if(n<300)return{big:`${hr.toFixed(0)} hrs`,body:`<strong>${hr.toFixed(0)} hours</strong> of continuous eating &mdash; over a full workweek.`};
+      return{big:`${day.toFixed(1)} days`,body:`<strong>${day.toFixed(1)} solid days</strong> of nonstop chewing.`};
+    },
+    ()=>{const $=n*5;
+      if(n<10)return{big:`~$${$}`,body:`at street prices, roughly <strong>$${$}</strong> in dogs.`};
+      if(n<200)return{big:`~$${$.toLocaleString()}`,body:`around <strong>$${$.toLocaleString()}</strong> in dogs &mdash; a small but committed budget.`};
+      return{big:`~$${$.toLocaleString()}`,body:`<strong>$${$.toLocaleString()}</strong> spent on dogs. Could've been a vacation.`};
+    },
+    ()=>{const cm=n/7.6;
+      if(n<10)return{big:`${cm.toFixed(1)} min`,body:`Joey Chestnut could eat all of these in about <strong>${cm.toFixed(1)} minutes</strong>.`};
+      if(n<76)return{big:`${cm.toFixed(1)} min`,body:`Joey Chestnut could put all of these away in <strong>${cm.toFixed(1)} minutes</strong>.`};
+      return{big:`${(n/76).toFixed(1)}×`,body:`the group has eaten <strong>${(n/76).toFixed(1)} Joey Chestnuts</strong> worth &mdash; measured in his 10-minute world record.`};
+    },
+    ()=>{const buns=n;
+      if(n<13)return{big:`${buns} buns`,body:`<strong>${buns} buns</strong> consumed &mdash; almost a baker's dozen.`};
+      return{big:`${(buns/8).toFixed(0)} packs`,body:`eight-packs burned through: roughly <strong>${(buns/8).toFixed(0)}</strong>.`};
+    },
+    ()=>{const cups=n/16;
+      if(n<16)return{big:`${n} tbsp`,body:`if every dog got ketchup: <strong>${n} tablespoons</strong>. The Chicago contingent is shaking.`};
+      return{big:`${cups.toFixed(1)} cups`,body:`roughly <strong>${cups.toFixed(1)} cups of ketchup</strong> deployed. Chicago is not pleased.`};
+    },
+  ];
+  return gens[Math.floor(Math.random()*gens.length)]();
+}
+
+let MATH_TOTAL=0;
+function refreshMath(){
+  const w=document.getElementById('math-body');if(!w)return;
+  const m=pickHotDogMath(MATH_TOTAL);
+  if(!m){w.textContent='Need at least one dog.';return;}
+  w.innerHTML=`<span class="big">${m.big}</span>${m.body}`;
+}
+
+/* ── INFINITE SCROLL ── */
+function dogCardInner(d,newest){
+  const thumb=driveThumb(d[C.PHOTO]);
+  const[eatCls,eatTxt]=eatLabel(d[C.EAT_AGAIN]);
+  const qty=dogCount(d);
+  const review=d[C.REVIEW]?`<div class="dog-review">"${esc(d[C.REVIEW])}"</div>`:'';
+  const describe=d[C.DESCRIBE]?`<span class="tag tag-top">${esc(d[C.DESCRIBE]).substring(0,80)}</span>`:'';
+  const qtyTag=qty>1?`<span class="tag tag-qty">&#127789; &times;${qty}</span>`:'';
+  return`${newest?'<div class="featured-flag">Latest submission</div>':''}
+    ${thumb?`<img class="dog-photo" src="${thumb}" alt="${esc(d[C.VENDOR])}" loading="lazy" onerror="this.remove()">` :''}
+    <div class="card-header"><div><div class="dog-name">${esc(d[C.VENDOR])}</div>
+    <div class="dog-meta">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div></div>
+    <div class="score-bubble ${scoreClass(d[C.SCORE])}">${fmt(d[C.SCORE])}</div></div>
+    ${review}<div class="dog-tags"><span class="tag ${eatCls}">${eatTxt}</span>${qtyTag}${describe}</div>`;
+}
+
+function appendNextPage(){
+  const feed=document.getElementById('feed-container');
+  const spinner=document.getElementById('feed-spinner');
+  const endMsg=document.getElementById('feed-end');
+  if(!feed)return;
+  const start=FEED_PAGE*PAGE_SIZE;
+  const slice=ALL_SUBS.slice(start,start+PAGE_SIZE);
+  if(!slice.length)return;
+  slice.forEach((d,i)=>{
+    const idx=start+i,el=document.createElement('div');
+    el.className='dog-card'; el.id='sub-'+idx;
+    el.innerHTML=dogCardInner(d,false);
+    feed.appendChild(el);
+  });
+  FEED_PAGE++;
+  if(FEED_PAGE*PAGE_SIZE>=ALL_SUBS.length){
+    if(spinner)spinner.classList.remove('visible');
+    if(endMsg)endMsg.classList.add('visible');
+    if(SCROLL_OBS){const s=document.getElementById('feed-sentinel');if(s)SCROLL_OBS.unobserve(s);}
   }
-  if (cell || row.length) { row.push(cell); rows.push(row); }
-  return rows;
 }
 
-function csvToObjects(text) {
-  const rows = parseCSV(text);
-  if (rows.length < 2) return [];
-  const headers = rows[0].map(h => h.trim());
-  return rows.slice(1)
-    .filter(r => r.some(c => c.trim()))
-    .map(row => {
-      const obj = {};
-      headers.forEach((h, i) => { obj[h] = (row[i] || '').trim(); });
-      return obj;
+function setupInfiniteScroll(){
+  const sentinel=document.getElementById('feed-sentinel');
+  if(!sentinel)return;
+  if(SCROLL_OBS)SCROLL_OBS.disconnect();
+  SCROLL_OBS=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting||FEED_LOADING)return;
+      const nextStart=FEED_PAGE*PAGE_SIZE;
+      if(nextStart>=ALL_SUBS.length)return;
+      FEED_LOADING=true;
+      const spinner=document.getElementById('feed-spinner');
+      if(spinner)spinner.classList.add('visible');
+      setTimeout(()=>{
+        appendNextPage();
+        FEED_LOADING=false;
+        const sp=document.getElementById('feed-spinner');
+        if(sp&&FEED_PAGE*PAGE_SIZE<ALL_SUBS.length)sp.classList.remove('visible');
+      },120);
     });
+  },{threshold:0.1,rootMargin:'200px'});
+  SCROLL_OBS.observe(sentinel);
 }
 
-function dogCount(d) {
-  let raw = d[C.QUANTITY];
-  if (raw === undefined || raw === '') {
-    const keys = Object.keys(d);
-    const qKey = keys.find(k =>
-      /how many/i.test(k) || /quantity/i.test(k) || /# of dogs/i.test(k) || /number of dogs/i.test(k)
-    );
-    if (qKey) raw = d[qKey];
-  }
-  const n = parseInt(raw, 10);
-  return (isNaN(n) || n < 1) ? 1 : n;
-}
-
-function getTimestamp(d) {
-  let raw = d[C.TIMESTAMP];
-  if (!raw) {
-    const keys = Object.keys(d);
-    const tKey = keys.find(k => /timestamp/i.test(k));
-    if (tKey) raw = d[tKey];
-  }
-  if (!raw) return null;
-  const t = new Date(raw);
-  return isNaN(t.getTime()) ? null : t;
-}
-
-function isWithinDays(d, days) {
-  const t = getTimestamp(d);
-  if (!t) return false;
-  return (Date.now() - t.getTime()) < days * 24 * 60 * 60 * 1000;
-}
-
-function driveThumb(url) {
-  if (!url || !url.includes('drive.google')) return null;
-  const m1 = url.match(/[?&]id=([^&\s]+)/);
-  const m2 = url.match(/\/d\/([^/\s]+)/);
-  const id  = (m1 && m1[1]) || (m2 && m2[1]);
-  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w800` : null;
-}
-
-function scoreClass(s) {
-  const n = parseFloat(s);
-  if (isNaN(n)) return 'score-mid';
-  if (n >= 8)  return 'score-hi';
-  if (n >= 5)  return 'score-mid';
-  return 'score-lo';
-}
-
-function eatLabel(v) {
-  const l = (v || '').toLowerCase();
-  if (l.includes('yes') || l.includes('absolutely')) return ['tag-yes', '&#10003; Would consume again'];
-  if (l.includes('no')  || l.includes('never'))      return ['tag-no',  '&#10007; Never again'];
-  return ['tag-maybe', '~ Maybe, if desperate'];
-}
-
-function esc(str) {
-  return (str || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
-
-function fmt(n) {
-  const v = parseFloat(n);
-  return isNaN(v) ? '—' : v.toFixed(1);
-}
-
-function openModal(titleText, cardHTML, showReroll) {
-  document.getElementById('modal-title').textContent = titleText;
-  document.getElementById('modal-body').innerHTML = cardHTML +
-    (showReroll ? `<button class="modal-reroll" id="modal-reroll-btn">&#127922; Roll another dog</button>` : '');
-  const overlay = document.getElementById('modal-overlay');
-  overlay.style.display = 'flex';
-  requestAnimationFrame(() => overlay.classList.add('visible'));
-  if (showReroll) {
-    document.getElementById('modal-reroll-btn').addEventListener('click', showRandomDog);
-  }
-}
-
-function closeModal() {
-  const overlay = document.getElementById('modal-overlay');
-  overlay.classList.remove('visible');
-  setTimeout(() => { overlay.style.display = 'none'; }, 250);
-}
-
-function showRandomDog() {
-  if (!ALL_SUBS.length) return;
-  const d = ALL_SUBS[Math.floor(Math.random() * ALL_SUBS.length)];
-  openModal('🎲 Random Dog', `<div class="dog-card">${dogCardInner(d, false)}</div>`, true);
-}
-
-function showLastDog(scoutName) {
-  const match = ALL_SUBS.find(d => d[C.SCOUT] === scoutName);
-  if (!match) return;
-  openModal(`${scoutName}'s Last Dog`, `<div class="dog-card">${dogCardInner(match, false)}</div>`, false);
-}
-
-document.getElementById('modal-close').addEventListener('click', closeModal);
-document.getElementById('modal-overlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-document.getElementById('random-dog-btn').addEventListener('click', showRandomDog);
-
-async function load() {
-  try {
-    const resp = await fetch(SUBMISSIONS_CSV + '&nocache=' + Date.now());
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const text = await resp.text();
-    ALL_SUBS = csvToObjects(text).reverse();
-    LOAD_TIME = Date.now();
+/* ── LOAD / RENDER ── */
+async function load(){
+  try{
+    const resp=await fetch(SUBMISSIONS_CSV+'&nocache='+Date.now());
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const text=await resp.text();
+    ALL_SUBS=csvToObjects(text).filter(d=>(d[C.VENDOR]||'').trim()&&(d[C.SCOUT]||'').trim()).reverse();
+    LOAD_TIME=Date.now();
+    for(const d of ALL_SUBS){const t=getTimestamp(d);if(t){LAST_DOG_TS=t.getTime();break;}}
     render(ALL_SUBS);
-  } catch (e) {
-    document.getElementById('app').innerHTML =
-      `<div class="loading-state">&#9888;&nbsp; Could not load data. Check that the Google Sheet is still published as CSV and the URL is current.</div>`;
-    document.getElementById('meta-count').textContent = 'Offline';
+  }catch(e){
+    document.getElementById('app').innerHTML=`<div class="loading-state">&#9888;&nbsp; Could not load data.</div>`;
+    document.getElementById('meta-count').textContent='Offline';
   }
 }
 
-function render(subs) {
-  const totalDogs    = subs.reduce((sum, d) => sum + dogCount(d), 0);
-  const totalReports = subs.length;
+function render(subs){
+  FEED_PAGE=1;
+  const totalDogs=subs.reduce((s,d)=>s+dogCount(d),0);
+  CURRENT_TOTAL=totalDogs; MATH_TOTAL=totalDogs;
+  const totalReports=subs.length;
+  const scores=subs.map(d=>parseFloat(d[C.SCORE])).filter(n=>!isNaN(n));
+  const avg=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):'—';
+  const avgNum=parseFloat(avg);
+  const avgClass=avgNum>=7?'green':avgNum>=5?'amber':'red';
+  const states=new Set(subs.map(d=>d[C.STATE]).filter(Boolean));
+  const wouldYes=subs.filter(d=>eatLabel(d[C.EAT_AGAIN])[0]==='tag-yes').length;
+  const wouldPct=totalReports?Math.round(wouldYes/totalReports*100)+'%':'—';
 
-  const scores   = subs.map(d => parseFloat(d[C.SCORE])).filter(n => !isNaN(n));
-  const avg      = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
-  const avgNum   = parseFloat(avg);
-  const avgClass = avgNum >= 7 ? 'green' : avgNum >= 5 ? 'amber' : 'red';
-  const states   = new Set(subs.map(d=>d[C.STATE]).filter(Boolean));
-  const wouldYes = subs.filter(d => eatLabel(d[C.EAT_AGAIN])[0] === 'tag-yes').length;
-  const wouldPct = totalReports ? Math.round(wouldYes/totalReports*100)+'%' : '—';
-
-  const scoutMap = {};
-  subs.forEach(d => {
-    const n = d[C.SCOUT]; if (!n) return;
-    if (!scoutMap[n]) scoutMap[n] = { reports:0, dogs:0, weekDogs:0, scoreTotal:0, scoreCount:0, allScored:[] };
-    scoutMap[n].reports++;
-    scoutMap[n].dogs += dogCount(d);
-    if (isWithinDays(d, 7)) scoutMap[n].weekDogs += dogCount(d);
-    const s = parseFloat(d[C.SCORE]);
-    if (!isNaN(s)) {
-      scoutMap[n].scoreTotal += s;
-      scoutMap[n].scoreCount++;
-      scoutMap[n].allScored.push({ vendor: d[C.VENDOR] || '?', score: s });
-    }
+  const sm={};
+  subs.forEach(d=>{
+    const n=d[C.SCOUT];if(!n)return;
+    if(!sm[n])sm[n]={reports:0,dogs:0,weekDogs:0,st:0,sc:0,all:[]};
+    sm[n].reports++;sm[n].dogs+=dogCount(d);
+    if(isWithinDays(d,7))sm[n].weekDogs+=dogCount(d);
+    const s=parseFloat(d[C.SCORE]);if(!isNaN(s)){sm[n].st+=s;sm[n].sc++;sm[n].all.push({vendor:d[C.VENDOR]||'?',score:s});}
   });
-  const scouts = Object.entries(scoutMap)
-    .map(([name, s]) => {
-      const sorted = [...s.allScored].sort((a,b) => b.score - a.score);
-      return {
-        name,
-        dogs:     s.dogs,
-        reports:  s.reports,
-        weekDogs: s.weekDogs,
-        avg:      s.scoreCount ? (s.scoreTotal / s.scoreCount).toFixed(1) : '—',
-        best:     sorted[0] || null,
-        worst:    sorted[sorted.length-1] || null,
-      };
-    })
-    .sort((a,b) => b.dogs - a.dogs);
+  const scouts=Object.entries(sm).map(([name,s])=>{
+    const sorted=[...s.all].sort((a,b)=>b.score-a.score);
+    return{name,dogs:s.dogs,reports:s.reports,weekDogs:s.weekDogs,avg:s.sc?(s.st/s.sc).toFixed(1):'—',best:sorted[0]||null,worst:sorted[sorted.length-1]||null};
+  }).sort((a,b)=>b.dogs-a.dogs);
 
-  const streakBar  = document.getElementById('streak-bar');
-  const streakText = document.getElementById('streak-text');
-  const recentSub  = subs.find(d => isWithinDays(d, 2));
-  if (recentSub && recentSub[C.SCOUT]) {
-    const name   = recentSub[C.SCOUT];
-    const qty    = dogCount(recentSub);
-    const vendor = recentSub[C.VENDOR] || 'somewhere';
-    streakText.innerHTML = `&#128293; ${esc(name)} is on a tear &mdash; just logged ${qty > 1 ? qty + ' dogs' : 'a dog'} from ${esc(vendor)}`;
-    streakBar.classList.remove('hidden');
-  } else {
-    streakBar.classList.add('hidden');
-  }
+  const sb=document.getElementById('streak-bar'),st=document.getElementById('streak-text');
+  const rs=subs.find(d=>isWithinDays(d,2));
+  if(rs&&rs[C.SCOUT]){const qty=dogCount(rs);st.innerHTML=`&#128293; ${esc(rs[C.SCOUT])} is on a tear &mdash; just logged ${qty>1?qty+' dogs':'a dog'} from ${esc(rs[C.VENDOR]||'somewhere')}`;sb.classList.remove('hidden');}
+  else sb.classList.add('hidden');
 
-  const scored   = subs.filter(d => !isNaN(parseFloat(d[C.SCORE])));
-  const sortedAll = [...scored].sort((a,b) => parseFloat(b[C.SCORE]) - parseFloat(a[C.SCORE]));
-  const fame     = sortedAll.slice(0,3);
-  const shame    = sortedAll.slice(-3).reverse();
+  const sd=buildSevenDaySummary(subs);
+  const sde=document.getElementById('seven-day');
+  if(sd){document.getElementById('seven-day-text').innerHTML=sd;sde.classList.remove('hidden');}else sde.classList.add('hidden');
 
-  document.getElementById('meta-count').textContent =
-    `${totalDogs} dog${totalDogs!==1?'s':''} consumed \u00b7 ${scouts.length} glizzy muncher${scouts.length!==1?'s':''}`;
+  renderTicker(buildTicker(subs));
 
-  document.getElementById('app').innerHTML = `
-    ${renderStats(totalDogs, avg, avgClass, states.size, wouldPct)}
+  const scored=subs.filter(d=>!isNaN(parseFloat(d[C.SCORE])));
+  const sortedAll=[...scored].sort((a,b)=>parseFloat(b[C.SCORE])-parseFloat(a[C.SCORE]));
+  const fame=sortedAll.slice(0,3),shame=sortedAll.slice(-3).reverse();
+  const forecast=buildForecast(subs);
+
+  document.getElementById('meta-count').textContent=`${totalDogs} dog${totalDogs!==1?'s':''} consumed \u00b7 ${scouts.length} glizzy muncher${scouts.length!==1?'s':''}`;
+
+  const initialCards=subs.slice(0,PAGE_SIZE).map((d,i)=>`<div class="dog-card${i===0&&subs.length>1?' featured':''}" id="sub-${i}">${dogCardInner(d,i===0&&subs.length>1)}</div>`).join('');
+  const hasMore=subs.length>PAGE_SIZE;
+
+  document.getElementById('app').innerHTML=`
+    ${renderStats(totalDogs,avg,avgClass,states.size,wouldPct)}
     <div class="main-grid">
       <div>
-        <div class="section-label">Latest submissions</div>
-        ${subs.length
-          ? subs.slice(0,5).map((d,i) => renderCard(d, i===0 && subs.length>1)).join('')
-          : '<div class="empty-card">No dogs yet. Someone eat something.</div>'}
+        <div class="section-label">Submissions</div>
+        ${subs.length?`<div id="feed-container">${initialCards}</div>
+          <div class="load-sentinel" id="feed-sentinel"></div>
+          <div class="load-spinner" id="feed-spinner">Loading more dogs</div>
+          <div class="load-end" id="feed-end">&#127789; You've reached the beginning. That's all the dogs.</div>`
+          :'<div class="empty-card">No dogs yet. Someone eat something.</div>'}
       </div>
       <div>
+        ${renderForecast(forecast)}
+        ${renderMath()}
         <div class="section-label">Glizzy Muncher leaderboard &mdash; by consumption</div>
         ${renderLeaderboard(scouts)}
       </div>
     </div>
-    <div class="hall-grid">
-      ${renderHall('fame',  fame)}
-      ${renderHall('shame', shame)}
-    </div>
+    <div class="hall-grid">${renderHall('fame',fame)}${renderHall('shame',shame)}</div>
     <footer class="site-footer">
       <span>The Frank Report &middot; For investigative purposes only</span>
       <span id="footer-updated">Updated just now</span>
@@ -1244,130 +870,56 @@ function render(subs) {
 
   animateAllCounters();
   setupStickyDetect();
+  refreshMath();
 
-  document.querySelectorAll('.lb-last-dog').forEach(btn => {
-    btn.addEventListener('click', () => showLastDog(btn.dataset.scout));
-  });
+  if(!hasMore){const e=document.getElementById('feed-end');if(e)e.classList.add('visible');}
+  else setupInfiniteScroll();
 
-  /* Check for milestone celebration — only on first render, not on auto-refresh */
-  if (!HAS_RENDERED_ONCE) {
-    HAS_RENDERED_ONCE = true;
-    setTimeout(() => checkMilestone(totalDogs), 1100);  // wait for counter animation
-  } else {
-    /* On refresh, still check in case threshold was just crossed */
-    checkMilestone(totalDogs);
-  }
+  document.querySelectorAll('.lb-last-dog').forEach(btn=>{btn.addEventListener('click',()=>showLastDog(btn.dataset.scout));});
+  const rb=document.getElementById('math-reroll');if(rb)rb.addEventListener('click',refreshMath);
+
+  if(!HAS_RENDERED){HAS_RENDERED=true;setTimeout(()=>checkMilestone(totalDogs),1100);}
+  else checkMilestone(totalDogs);
 }
 
-function renderStats(totalDogs, avg, avgClass, states, wouldPct) {
-  const wouldNum = parseInt(wouldPct) || 0;
-  return `<div class="stats-wrap" id="stats-wrap"><div class="stats-bar">
-    <div class="stat-card"><div class="stat-num" data-counter="${totalDogs}">0</div><div class="stat-label">Dogs consumed</div></div>
+function renderStats(td,avg,avgClass,states,wouldPct){
+  const wn=parseInt(wouldPct)||0;
+  return`<div class="stats-wrap" id="stats-wrap"><div class="stats-bar">
+    <div class="stat-card"><div class="stat-num" data-counter="${td}">0</div><div class="stat-label">Dogs consumed</div></div>
     <div class="stat-card"><div class="stat-num ${avgClass}" data-counter="${avg}">0</div><div class="stat-label">Group avg rating</div></div>
     <div class="stat-card"><div class="stat-num" data-counter="${states}">0</div><div class="stat-label">States hit</div></div>
-    <div class="stat-card"><div class="stat-num green" data-counter="${wouldNum}" data-suffix="%">0</div><div class="stat-label">Would eat again</div></div>
+    <div class="stat-card"><div class="stat-num green" data-counter="${wn}" data-suffix="%">0</div><div class="stat-label">Would eat again</div></div>
   </div></div>`;
 }
-
-function dogCardInner(d, newest) {
-  const thumb = driveThumb(d[C.PHOTO]);
-  const [eatCls, eatTxt] = eatLabel(d[C.EAT_AGAIN]);
-  const qty = dogCount(d);
-  const review = d[C.REVIEW]
-    ? `<div class="dog-review">"${esc(d[C.REVIEW])}"</div>`
-    : '';
-  const describe = d[C.DESCRIBE]
-    ? `<span class="tag tag-top">${esc(d[C.DESCRIBE]).substring(0,80)}</span>`
-    : '';
-  const qtyTag = qty > 1
-    ? `<span class="tag tag-qty">&#127789; &times;${qty}</span>`
-    : '';
-  return `
-    ${newest ? '<div class="featured-flag">Latest submission</div>' : ''}
-    ${thumb ? `<img class="dog-photo" src="${thumb}" alt="${esc(d[C.VENDOR])}" loading="lazy" onerror="this.remove()">` : ''}
-    <div class="card-header">
-      <div>
-        <div class="dog-name">${esc(d[C.VENDOR])}</div>
-        <div class="dog-meta">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div>
-      </div>
-      <div class="score-bubble ${scoreClass(d[C.SCORE])}">${fmt(d[C.SCORE])}</div>
-    </div>
-    ${review}
-    <div class="dog-tags">
-      <span class="tag ${eatCls}">${eatTxt}</span>
-      ${qtyTag}
-      ${describe}
-    </div>`;
+function renderForecast(f){
+  if(!f)return`<div class="widget widget-forecast"><div class="widget-title">&#128302; The Frank Forecast</div><div class="widget-body">No forecast yet &mdash; need a few more submissions per scout to spot patterns.</div></div>`;
+  return`<div class="widget widget-forecast"><div class="widget-title">&#128302; The Frank Forecast</div><div class="widget-body">${f.body}</div><div class="widget-method">Methodology: ${esc(f.method)}</div></div>`;
+}
+function renderMath(){
+  return`<div class="widget widget-math"><div class="widget-title">&#129518; Hot Dog Math</div><div class="widget-body" id="math-body">Calculating&hellip;</div><button class="widget-reroll" id="math-reroll">&#8635; Another fun fact</button></div>`;
+}
+function renderLeaderboard(scouts){
+  if(!scouts.length)return'<div class="empty-card">No glizzy munchers yet.</div>';
+  return`<div class="leaderboard">${scouts.slice(0,8).map((s,i)=>{
+    let tt='';
+    if(s.best&&s.worst&&s.best!==s.worst)tt=`<div class="lb-tooltip"><div class="tt-label">Best</div><div class="tt-best">${esc(s.best.vendor)} &mdash; ${s.best.score.toFixed(1)}</div><div class="tt-label" style="margin-top:4px">Worst</div><div class="tt-worst">${esc(s.worst.vendor)} &mdash; ${s.worst.score.toFixed(1)}</div></div>`;
+    else if(s.best)tt=`<div class="lb-tooltip"><div class="tt-label">Only rated</div><div class="tt-best">${esc(s.best.vendor)} &mdash; ${s.best.score.toFixed(1)}</div></div>`;
+    const wb=s.weekDogs>0?`<span class="lb-week">&#128293; ${s.weekDogs} this week</span>`:'';
+    return`<div class="lb-row${i===0?' lb-top':''}"><div class="lb-rank${i===0?' gold':''}">${i+1}</div><div class="lb-info"><div class="lb-name">${esc(s.name)}</div><div class="lb-sub"><span>${s.reports} report${s.reports!==1?'s':''} &middot; avg ${s.avg}</span>${wb}<button class="lb-last-dog" data-scout="${esc(s.name)}">Show their last dog</button></div></div><div class="lb-count">${s.dogs}</div>${tt}</div>`;
+  }).join('')}</div>`;
+}
+function renderHall(type,entries){
+  const isFame=type==='fame';
+  return`<div class="hall hall-${type}"><div class="hall-title">${isFame?'Hall of fame &mdash; all-time greats':'Hall of shame &mdash; we will not forget'}</div>${entries.length?entries.map(d=>`<div class="hall-entry"><div><div class="hall-dog-name">${esc(d[C.VENDOR])}</div><div class="hall-dog-sub">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div></div><div class="hall-score">${fmt(d[C.SCORE])}</div></div>`).join(''):`<div style="font-size:12px;color:#bbb;text-align:center;padding:14px">${isFame?'Submit some dogs first.':'Nothing bad enough yet. Give it time.'}</div>`}</div>`;
 }
 
-function renderCard(d, newest) {
-  return `<div class="dog-card${newest?' featured':''}">${dogCardInner(d, newest)}</div>`;
-}
-
-function renderLeaderboard(scouts) {
-  if (!scouts.length) return '<div class="empty-card">No glizzy munchers yet.</div>';
-  return `<div class="leaderboard">
-    ${scouts.slice(0,8).map((s,i) => {
-      let ttHTML = '';
-      if (s.best && s.worst && s.best !== s.worst) {
-        ttHTML = `
-          <div class="lb-tooltip">
-            <div class="tt-label">Best</div>
-            <div class="tt-best">${esc(s.best.vendor)} &mdash; ${s.best.score.toFixed(1)}</div>
-            <div class="tt-label" style="margin-top:4px">Worst</div>
-            <div class="tt-worst">${esc(s.worst.vendor)} &mdash; ${s.worst.score.toFixed(1)}</div>
-          </div>`;
-      } else if (s.best) {
-        ttHTML = `
-          <div class="lb-tooltip">
-            <div class="tt-label">Only rated</div>
-            <div class="tt-best">${esc(s.best.vendor)} &mdash; ${s.best.score.toFixed(1)}</div>
-          </div>`;
-      }
-      const weekBadge = s.weekDogs > 0
-        ? `<span class="lb-week">&#128293; ${s.weekDogs} this week</span>`
-        : '';
-      return `
-      <div class="lb-row${i===0?' lb-top':''}">
-        <div class="lb-rank${i===0?' gold':''}">${i+1}</div>
-        <div class="lb-info">
-          <div class="lb-name">${esc(s.name)}</div>
-          <div class="lb-sub">
-            <span>${s.reports} report${s.reports!==1?'s':''} &middot; avg ${s.avg}</span>
-            ${weekBadge}
-            <button class="lb-last-dog" data-scout="${esc(s.name)}">Show their last dog</button>
-          </div>
-        </div>
-        <div class="lb-count">${s.dogs}</div>
-        ${ttHTML}
-      </div>`;
-    }).join('')}
-  </div>`;
-}
-
-function renderHall(type, entries) {
-  const isFame = type === 'fame';
-  return `<div class="hall hall-${type}">
-    <div class="hall-title">${isFame ? 'Hall of fame &mdash; all-time greats' : 'Hall of shame &mdash; we will not forget'}</div>
-    ${entries.length
-      ? entries.map(d => `
-          <div class="hall-entry">
-            <div>
-              <div class="hall-dog-name">${esc(d[C.VENDOR])}</div>
-              <div class="hall-dog-sub">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div>
-            </div>
-            <div class="hall-score">${fmt(d[C.SCORE])}</div>
-          </div>`).join('')
-      : `<div style="font-size:12px;color:#bbb;text-align:center;padding:14px">${isFame?'Submit some dogs first.':'Nothing bad enough yet. Give it time.'}</div>`}
-  </div>`;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',()=>{
   showQuote();
-  document.getElementById('modal-overlay').style.display = 'none';
+  document.getElementById('modal-overlay').style.display='none';
   load();
-  setInterval(load, 5 * 60 * 1000);
-  setInterval(updateAgo, 10 * 1000);
+  setInterval(load,5*60*1000);
+  setInterval(updateAgo,10*1000);
+  setInterval(tickClock,1000);
 });
 </script>
 </body>
