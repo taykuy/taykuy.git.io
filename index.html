@@ -252,6 +252,9 @@ body {
 .loading-state { text-align: center; padding: 48px 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; color: var(--dust); letter-spacing: 1.5px; text-transform: uppercase; }
 .empty-card { border: 1px dashed var(--border); padding: 22px; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--dust); letter-spacing: 0.5px; background: var(--white); }
 
+/* ── SIDEBAR MOBILE INJECT ── */
+.sidebar-mobile-inject { display: none; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 720px) {
   body { padding: 14px 16px 28px; }
@@ -265,6 +268,8 @@ body {
   .submit-btn { width: 100%; text-align: center; }
   .lb-tooltip { right: auto; left: 12px; }
   .stats-wrap { margin: 0 -16px 14px; padding-left: 16px; padding-right: 16px; }
+  .sidebar-mobile-inject { display: block; }
+  .main-grid > div:last-child { display: none; }
 }
 @media (max-width: 540px) {
   body { padding: 10px 12px 24px; font-size: 13px; }
@@ -562,13 +567,12 @@ function buildSevenDaySummary(subs){
   const week=subs.filter(d=>isWithinDays(d,7));if(!week.length)return null;
   const td=week.reduce((s,d)=>s+dogCount(d),0);
   const glizzys=new Set(week.map(d=>d[C.SCOUT]).filter(Boolean));
-  const vendors=new Set(week.map(d=>d[C.VENDOR]).filter(Boolean));
   const states=new Set(week.map(d=>d[C.STATE]).filter(Boolean));
   const sc=week.map(d=>parseFloat(d[C.SCORE])).filter(n=>!isNaN(n));
   const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):null;
   const hi=sc.length?Math.max(...sc):null,lo=sc.length?Math.min(...sc):null;
-  let s1=`The committee put away <strong>${td} dog${td!==1?'s':''}</strong> across <strong>${vendors.size} vendor${vendors.size!==1?'s':''}</strong>`;
-  if(states.size>1)s1+=` in <strong>${states.size} states</strong>`;
+  let s1=`The committee put away <strong>${td} dog${td!==1?'s':''}</strong>`;
+  if(states.size>1)s1+=` across <strong>${states.size} states</strong>`;
   s1+=` with <strong>${glizzys.size}</strong> glizzy muncher${glizzys.size===1?'':'s'} pitching in.`;
   let s2='';
   if(avg){
@@ -622,9 +626,10 @@ function buildForecast(subs){
     for(let i=0;i<ts.length-1;i++)gaps.push((ts[i]-ts[i+1])/86400000);
     const avg=gaps.reduce((a,b)=>a+b,0)/gaps.length,dsl=(Date.now()-ts[0].getTime())/86400000;
     return{name,avg,dsl,ratio:dsl/Math.max(avg,0.5)};
-  }).filter(s=>s.ratio>0.5).sort((a,b)=>b.ratio-a.ratio);
+  }).filter(s=>s.ratio>0.5);
   if(!elig.length)return null;
-  const p=elig[0];
+  // Randomly pick any eligible muncher (anyone past their baseline), not always the most overdue
+  const p=elig[Math.floor(Math.random()*elig.length)];
   const phrase=p.ratio>=2?'is very overdue':p.ratio>=1.3?'is due':'might be ready';
   const ds=p.dsl<1?'less than a day ago':`${Math.round(p.dsl)} day${Math.round(p.dsl)!==1?'s':''} ago`;
   const gs=p.avg<1?'less than a day':`${Math.round(p.avg)} day${Math.round(p.avg)!==1?'s':''}`;
@@ -836,9 +841,17 @@ function render(subs) {
   document.getElementById('meta-count').textContent=
     `${totalDogs} dog${totalDogs!==1?'s':''} consumed \u00b7 ${glizzys.length} glizzy muncher${glizzys.length!==1?'s':''}`;
 
-  const initialCards=subs.slice(0,PAGE_SIZE).map((d,i)=>
-    `<div class="dog-card${i===0&&subs.length>1?' featured':''}" id="sub-${i}">${dogCardInner(d,i===0&&subs.length>1)}</div>`
-  ).join('');
+  const sidebarHTML=`<div class="sidebar-mobile-inject">
+    ${renderForecast(forecast)}
+    ${renderMath(totalDogs)}
+    <div class="section-label">Glizzy Muncher leaderboard &mdash; by consumption</div>
+    ${renderLeaderboard(glizzys)}
+  </div>`;
+
+  const initialCards=subs.slice(0,PAGE_SIZE).map((d,i)=>{
+    const card=`<div class="dog-card${i===0&&subs.length>1?' featured':''}" id="sub-${i}">${dogCardInner(d,i===0&&subs.length>1)}</div>`;
+    return i===0 ? card+sidebarHTML : card;
+  }).join('');
   const hasMore=subs.length>PAGE_SIZE;
 
   document.getElementById('app').innerHTML=`
