@@ -110,30 +110,12 @@ body {
 .meta-count { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dust); letter-spacing: 0.3px; margin-bottom: 8px; }
 
 /* ── HOT DOG CLOCK ── */
-.hd-clock {
-  background: transparent;
-  padding: 8px 0 8px 12px;
-  display: inline-block;
-  text-align: right;
-}
-.hd-clock-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 2px; color: var(--dust);
-  text-transform: uppercase; margin-bottom: 3px;
-}
-.hd-clock-value {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 32px; line-height: 1;
-  color: var(--mustard); letter-spacing: 0.5px;
-}
+.hd-clock { background: transparent; padding: 8px 0 8px 12px; display: inline-block; text-align: right; }
+.hd-clock-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--dust); text-transform: uppercase; margin-bottom: 3px; }
+.hd-clock-value { font-family: 'Bebas Neue', sans-serif; font-size: 32px; line-height: 1; color: var(--mustard); letter-spacing: 0.5px; }
 .hd-clock-value.fresh { color: var(--relish); }
 .hd-clock-value.cold  { color: var(--ketchup); }
-.hd-clock-sub {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px; color: var(--dust);
-  margin-top: 3px; letter-spacing: 0.3px;
-}
+.hd-clock-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--dust); margin-top: 3px; letter-spacing: 0.3px; }
 
 /* ── STICKY STATS WRAPPER ── */
 .stats-wrap {
@@ -199,6 +181,7 @@ body {
 .widget-body { font-family: 'Barlow', Georgia, serif; font-size: 13px; line-height: 1.5; color: #333; }
 .widget-body strong { color: var(--ink); font-weight: 600; }
 .widget-body .big { font-family: 'Bebas Neue', sans-serif; font-size: 24px; line-height: 1.1; display: block; margin: 4px 0; color: var(--ink); letter-spacing: 0.5px; }
+.widget-note { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: var(--dust); margin-top: 8px; padding-top: 8px; border-top: 1px solid #F2EEE6; letter-spacing: 0.3px; font-style: italic; }
 .widget-method { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: var(--dust); margin-top: 8px; padding-top: 8px; border-top: 1px solid #F2EEE6; letter-spacing: 0.3px; font-style: italic; }
 .widget-reroll { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--relish); background: none; border: none; cursor: pointer; padding: 0; margin-top: 6px; text-decoration: underline; text-underline-offset: 2px; }
 .widget-reroll:hover { color: var(--mustard); }
@@ -386,11 +369,11 @@ const PAGE_SIZE = 5;
 let ALL_SUBS      = [];
 let LOAD_TIME     = null;
 let HAS_RENDERED  = false;
-let CURRENT_TOTAL = 0;
 let FEED_PAGE     = 1;
 let FEED_LOADING  = false;
 let SCROLL_OBS    = null;
 let LAST_DOG_TS   = null;
+let MATH_TOTAL    = 0;
 
 /* ── QUOTES ── */
 const QUOTES = [
@@ -427,64 +410,54 @@ function formatClockDuration(ms) {
   const totalMin  = Math.floor(totalSec / 60);
   const totalHour = Math.floor(totalMin / 60);
   const totalDay  = Math.floor(totalHour / 24);
-
   if (ms < 86400000) {
-    // Under 24 hours — green
-    if (totalMin < 10)  return { value: `${totalMin}m ${totalSec % 60}s`, sub: `hot off the grill`,  cls: 'fresh' };
-    if (totalMin < 60)  return { value: `${totalMin}m`,                   sub: `very recent`,         cls: 'fresh' };
-    return { value: `${totalHour}h ${totalMin % 60}m`, sub: `since the last dog`, cls: 'fresh' };
+    if (totalMin < 10)  return { value:`${totalMin}m ${totalSec%60}s`, sub:`hot off the grill`,  cls:'fresh' };
+    if (totalMin < 60)  return { value:`${totalMin}m`,                  sub:`very recent`,         cls:'fresh' };
+    return { value:`${totalHour}h ${totalMin%60}m`, sub:`since the last dog`, cls:'fresh' };
   }
-  if (ms < 259200000) {
-    // 24–72 hours — mustard
-    return { value: `${totalDay}d ${totalHour % 24}h`, sub: `dogs incoming?`, cls: '' };
-  }
-  // Over 72 hours — red
-  return { value: `${totalDay}d ${totalHour % 24}h`, sub: `the report is floundering`, cls: 'cold' };
+  if (ms < 259200000) return { value:`${totalDay}d ${totalHour%24}h`, sub:`dogs incoming?`, cls:'' };
+  return { value:`${totalDay}d ${totalHour%24}h`, sub:`the report is floundering`, cls:'cold' };
 }
-
 function tickClock() {
-  const el = document.getElementById('hd-clock-value');
-  const sub = document.getElementById('hd-clock-sub');
-  if (!el || !sub) return;
-  if (!LAST_DOG_TS) { el.textContent = '—'; sub.textContent = 'no submissions yet'; return; }
-  const { value, sub: subText, cls } = formatClockDuration(Date.now() - LAST_DOG_TS);
-  el.textContent = value;
-  el.className = 'hd-clock-value' + (cls ? ' ' + cls : '');
-  sub.textContent = subText;
+  const el=document.getElementById('hd-clock-value'), sub=document.getElementById('hd-clock-sub');
+  if(!el||!sub)return;
+  if(!LAST_DOG_TS){el.textContent='—';sub.textContent='no submissions yet';return;}
+  const{value,sub:s,cls}=formatClockDuration(Date.now()-LAST_DOG_TS);
+  el.textContent=value; el.className='hd-clock-value'+(cls?' '+cls:''); sub.textContent=s;
 }
 
 /* ── MILESTONES ── */
-function getHighestMilestone(n) { let h=0; for(const m of MILESTONES){if(n>=m)h=m;else break;} return h; }
-function readLastMilestone()    { try{const v=parseInt(localStorage.getItem(MILESTONE_KEY),10);return isNaN(v)?0:v;}catch(e){return 0;} }
-function writeLastMilestone(v)  { try{localStorage.setItem(MILESTONE_KEY,String(v));}catch(e){} }
-function checkMilestone(n) {
+function getHighestMilestone(n){let h=0;for(const m of MILESTONES){if(n>=m)h=m;else break;}return h;}
+function readLastMilestone(){try{const v=parseInt(localStorage.getItem(MILESTONE_KEY),10);return isNaN(v)?0:v;}catch(e){return 0;}}
+function writeLastMilestone(v){try{localStorage.setItem(MILESTONE_KEY,String(v));}catch(e){}}
+function checkMilestone(n){
   const h=getHighestMilestone(n),last=readLastMilestone();
   if(h>0&&h>last){celebrate(h);writeLastMilestone(h);}
   else if(h>0&&last===0){writeLastMilestone(h);}
 }
-function celebrate(m) {
+function celebrate(m){
   const b=document.getElementById('milestone-banner');
   document.getElementById('ms-number').textContent=m.toLocaleString();
-  b.classList.add('visible'); fireConfetti();
+  b.classList.add('visible');fireConfetti();
   setTimeout(()=>b.classList.remove('visible'),4000);
 }
-function fireConfetti() {
+function fireConfetti(){
   const c=document.getElementById('confetti-container');
   const e=['🌭','🎉','⭐','🎊','🔥','🏆'];
   for(let i=0;i<60;i++){
-    const p=document.createElement('div'); p.className='confetti-piece';
+    const p=document.createElement('div');p.className='confetti-piece';
     p.textContent=e[Math.floor(Math.random()*e.length)];
     p.style.left=(Math.random()*100)+'vw';
     const d=2.8+Math.random()*2.5,dl=Math.random()*0.8;
-    p.style.animationDuration=d+'s'; p.style.animationDelay=dl+'s';
-    p.style.fontSize=(18+Math.random()*22)+'px'; p.style.opacity=0.7+Math.random()*0.3;
-    c.appendChild(p); setTimeout(()=>p.remove(),(d+dl)*1000+100);
+    p.style.animationDuration=d+'s';p.style.animationDelay=dl+'s';
+    p.style.fontSize=(18+Math.random()*22)+'px';p.style.opacity=0.7+Math.random()*0.3;
+    c.appendChild(p);setTimeout(()=>p.remove(),(d+dl)*1000+100);
   }
 }
 
 /* ── STICKY STATS ── */
-function setupStickyDetect() {
-  const wrap=document.getElementById('stats-wrap'); if(!wrap)return;
+function setupStickyDetect(){
+  const wrap=document.getElementById('stats-wrap');if(!wrap)return;
   let s=document.getElementById('stats-sentinel');
   if(!s){s=document.createElement('div');s.id='stats-sentinel';s.style.cssText='height:1px;';wrap.parentNode.insertBefore(s,wrap);}
   new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)wrap.classList.remove('stuck');else wrap.classList.add('stuck');});},{threshold:[0]}).observe(s);
@@ -588,7 +561,7 @@ document.getElementById('random-dog-btn').addEventListener('click',showRandomDog
 function buildSevenDaySummary(subs){
   const week=subs.filter(d=>isWithinDays(d,7));if(!week.length)return null;
   const td=week.reduce((s,d)=>s+dogCount(d),0);
-  const scouts=new Set(week.map(d=>d[C.SCOUT]).filter(Boolean));
+  const glizzys=new Set(week.map(d=>d[C.SCOUT]).filter(Boolean));
   const vendors=new Set(week.map(d=>d[C.VENDOR]).filter(Boolean));
   const states=new Set(week.map(d=>d[C.STATE]).filter(Boolean));
   const sc=week.map(d=>parseFloat(d[C.SCORE])).filter(n=>!isNaN(n));
@@ -596,7 +569,7 @@ function buildSevenDaySummary(subs){
   const hi=sc.length?Math.max(...sc):null,lo=sc.length?Math.min(...sc):null;
   let s1=`The committee put away <strong>${td} dog${td!==1?'s':''}</strong> across <strong>${vendors.size} vendor${vendors.size!==1?'s':''}</strong>`;
   if(states.size>1)s1+=` in <strong>${states.size} states</strong>`;
-  s1+=` with <strong>${scouts.size}</strong> ${scouts.size===1?'scout':'scouts'} pitching in.`;
+  s1+=` with <strong>${glizzys.size}</strong> glizzy muncher${glizzys.size===1?'':'s'} pitching in.`;
   let s2='';
   if(avg){
     const mood=parseFloat(avg)>=7?'mostly happy':parseFloat(avg)>=5?'mixed':'a little rough';
@@ -655,72 +628,80 @@ function buildForecast(subs){
   const phrase=p.ratio>=2?'is very overdue':p.ratio>=1.3?'is due':'might be ready';
   const ds=p.dsl<1?'less than a day ago':`${Math.round(p.dsl)} day${Math.round(p.dsl)!==1?'s':''} ago`;
   const gs=p.avg<1?'less than a day':`${Math.round(p.avg)} day${Math.round(p.avg)!==1?'s':''}`;
-  return{body:`<strong>${esc(p.name)}</strong> ${phrase} for another dog. Last logged ${ds}; they usually go about ${gs} between submissions.`,method:"Based on each scout's average gap between submissions vs. how long it's been since their last."};
+  return{body:`<strong>${esc(p.name)}</strong> ${phrase} for another dog. Last logged ${ds}; they usually go about ${gs} between submissions.`,method:"Based on each glizzy muncher's average gap between submissions vs. how long it's been since their last."};
 }
 
-/* ── HOT DOG MATH ── */
-function pickHotDogMath(n){
-  if(n<1)return null;
-  const gens=[
-    ()=>{const ft=n*6/12,m=n*0.1524;
-      if(n<8)return{big:`${ft.toFixed(1)} feet`,body:`end to end, all the dogs would stretch about <strong>${ft.toFixed(1)} feet</strong> &mdash; roughly the length of a parking space.`};
-      if(n<30)return{big:`${ft.toFixed(0)} feet`,body:`lined up, the dogs would reach <strong>${ft.toFixed(0)} feet</strong> &mdash; about the length of a bowling lane.`};
-      if(n<80)return{big:`${ft.toFixed(0)} feet`,body:`the dogs span <strong>${ft.toFixed(0)} feet</strong> &mdash; roughly the width of a basketball court.`};
-      if(n<200)return{big:`${ft.toFixed(0)} feet`,body:`end to end: <strong>${ft.toFixed(0)} feet</strong> &mdash; longer than a football field.`};
-      if(n<600)return{big:`${m.toFixed(0)} meters`,body:`lined up: <strong>${m.toFixed(0)} meters</strong> &mdash; taller than the Eiffel Tower on its side.`};
-      return{big:`${(ft/5280).toFixed(2)} miles`,body:`end to end: <strong>${(ft/5280).toFixed(2)} miles</strong> &mdash; a respectable jog.`};
+/* ============================================================
+   HOT DOG MATH
+   Only uses facts derivable from real submission data:
+   — total dogs consumed (from quantity field)
+   Constants used: avg hot dog weight 2 oz, length 6 in,
+   calories 150, eating time 5 min, cost ~$5, Joey Chestnut
+   pace 7.6 dogs/min (verified 76 dogs / 10 min world record).
+   No topping, condiment, or bun data is collected by the form.
+   ============================================================ */
+function pickHotDogMath(n) {
+  if (n < 1) return null;
+
+  const gens = [
+    // LENGTH — 6 inches per dog (USDA avg frankfurter ~6")
+    () => {
+      const ft = n * 6 / 12, m = n * 0.1524;
+      if (n < 8)   return { big:`${ft.toFixed(1)} ft`,  body:`end to end, the dogs would stretch <strong>${ft.toFixed(1)} feet</strong> &mdash; roughly a parking space.` };
+      if (n < 30)  return { big:`${ft.toFixed(0)} ft`,  body:`lined up, the dogs reach <strong>${ft.toFixed(0)} feet</strong> &mdash; about the length of a bowling lane.` };
+      if (n < 80)  return { big:`${ft.toFixed(0)} ft`,  body:`the dogs span <strong>${ft.toFixed(0)} feet</strong> &mdash; roughly the width of a basketball court.` };
+      if (n < 200) return { big:`${ft.toFixed(0)} ft`,  body:`end to end: <strong>${ft.toFixed(0)} feet</strong> &mdash; longer than a football field.` };
+      if (n < 600) return { big:`${m.toFixed(0)} m`,    body:`lined up: <strong>${m.toFixed(0)} meters</strong> &mdash; taller than the Eiffel Tower on its side.` };
+      return           { big:`${(ft/5280).toFixed(2)} mi`, body:`end to end: <strong>${(ft/5280).toFixed(2)} miles</strong> &mdash; a respectable jog.` };
     },
-    ()=>{const lbs=n*0.125;
-      if(n<8)return{big:`${lbs.toFixed(1)} lbs`,body:`all the meat so far weighs about <strong>${lbs.toFixed(1)} pounds</strong> &mdash; like a small chicken.`};
-      if(n<32)return{big:`${lbs.toFixed(1)} lbs`,body:`roughly a bowling ball's worth: <strong>${lbs.toFixed(1)} pounds</strong>.`};
-      if(n<80)return{big:`${lbs.toFixed(0)} lbs`,body:`<strong>${lbs.toFixed(0)} pounds</strong> &mdash; about the weight of a labrador retriever.`};
-      if(n<400)return{big:`${lbs.toFixed(0)} lbs`,body:`<strong>${lbs.toFixed(0)} pounds</strong> &mdash; heavier than a baby grand piano.`};
-      return{big:`${(lbs/2000).toFixed(2)} tons`,body:`the dogs weigh in at <strong>${(lbs/2000).toFixed(2)} tons</strong>. The committee is becoming a tonnage operation.`};
+    // WEIGHT — 2 oz / 57g per dog (USDA standard frankfurter)
+    () => {
+      const lbs = n * 0.125;
+      if (n < 8)   return { big:`${lbs.toFixed(1)} lbs`, body:`all the meat so far weighs about <strong>${lbs.toFixed(1)} pounds</strong> &mdash; like a small chicken.` };
+      if (n < 32)  return { big:`${lbs.toFixed(1)} lbs`, body:`roughly a bowling ball's worth of meat: <strong>${lbs.toFixed(1)} pounds</strong>.` };
+      if (n < 80)  return { big:`${lbs.toFixed(0)} lbs`, body:`<strong>${lbs.toFixed(0)} pounds</strong> &mdash; about the weight of a labrador retriever.` };
+      if (n < 400) return { big:`${lbs.toFixed(0)} lbs`, body:`<strong>${lbs.toFixed(0)} pounds</strong> of hot dog &mdash; heavier than a baby grand piano.` };
+      return           { big:`${(lbs/2000).toFixed(2)} tons`, body:`the dogs weigh in at <strong>${(lbs/2000).toFixed(2)} tons</strong>. The committee is becoming a tonnage operation.` };
     },
-    ()=>{const cal=n*150,days=cal/2000;
-      if(n<14)return{big:`${cal.toLocaleString()} cal`,body:`about <strong>${cal.toLocaleString()} calories</strong> &mdash; somewhere between a satisfying lunch and a full day's intake.`};
-      if(n<70)return{big:`${days.toFixed(1)} days`,body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; roughly ${days.toFixed(1)} days of someone's recommended intake.`};
-      if(n<350)return{big:`${days.toFixed(0)} days`,body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; about ${days.toFixed(0)} days of meals for a person.`};
-      return{big:`${(days/30).toFixed(1)} months`,body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; enough to feed someone for ${(days/30).toFixed(1)} months.`};
+    // CALORIES — ~150 cal per standard beef hot dog (USDA)
+    () => {
+      const cal = n * 150, days = cal / 2000;
+      if (n < 14)  return { big:`${cal.toLocaleString()} cal`, body:`about <strong>${cal.toLocaleString()} calories</strong> &mdash; somewhere between a satisfying lunch and a full day's intake.` };
+      if (n < 70)  return { big:`${days.toFixed(1)} days`,     body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; roughly ${days.toFixed(1)} days of someone's recommended intake.` };
+      if (n < 350) return { big:`${days.toFixed(0)} days`,     body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; about ${days.toFixed(0)} days of meals for one person.` };
+      return           { big:`${(days/30).toFixed(1)} months`,  body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; enough to feed someone for ${(days/30).toFixed(1)} months.` };
     },
-    ()=>{const min=n*5,hr=min/60,day=hr/24;
-      if(n<12)return{big:`${min} min`,body:`eating all of these would take about <strong>${min} minutes</strong> at a steady pace.`};
-      if(n<60)return{big:`${hr.toFixed(1)} hrs`,body:`all the chewing: roughly <strong>${hr.toFixed(1)} hours</strong> &mdash; half a workday.`};
-      if(n<300)return{big:`${hr.toFixed(0)} hrs`,body:`<strong>${hr.toFixed(0)} hours</strong> of continuous eating &mdash; over a full workweek.`};
-      return{big:`${day.toFixed(1)} days`,body:`<strong>${day.toFixed(1)} solid days</strong> of nonstop chewing.`};
+    // TIME — ~5 min per dog (reasonable casual pace)
+    () => {
+      const min = n * 5, hr = min / 60, day = hr / 24;
+      if (n < 12)  return { big:`${min} min`,            body:`eating all of these would take about <strong>${min} minutes</strong> at a comfortable pace.` };
+      if (n < 60)  return { big:`${hr.toFixed(1)} hrs`,  body:`all the chewing: roughly <strong>${hr.toFixed(1)} hours</strong> &mdash; half a workday.` };
+      if (n < 300) return { big:`${hr.toFixed(0)} hrs`,  body:`<strong>${hr.toFixed(0)} hours</strong> of continuous eating &mdash; over a full workweek.` };
+      return           { big:`${day.toFixed(1)} days`,   body:`<strong>${day.toFixed(1)} solid days</strong> of nonstop eating.` };
     },
-    ()=>{const $=n*5;
-      if(n<10)return{big:`~$${$}`,body:`at street prices, roughly <strong>$${$}</strong> in dogs.`};
-      if(n<200)return{big:`~$${$.toLocaleString()}`,body:`around <strong>$${$.toLocaleString()}</strong> in dogs &mdash; a small but committed budget.`};
-      return{big:`~$${$.toLocaleString()}`,body:`<strong>$${$.toLocaleString()}</strong> spent on dogs. Could've been a vacation.`};
-    },
-    ()=>{const cm=n/7.6;
-      if(n<10)return{big:`${cm.toFixed(1)} min`,body:`Joey Chestnut could eat all of these in about <strong>${cm.toFixed(1)} minutes</strong>.`};
-      if(n<76)return{big:`${cm.toFixed(1)} min`,body:`Joey Chestnut could put all of these away in <strong>${cm.toFixed(1)} minutes</strong>.`};
-      return{big:`${(n/76).toFixed(1)}×`,body:`the group has eaten <strong>${(n/76).toFixed(1)} Joey Chestnuts</strong> worth &mdash; measured in his 10-minute world record.`};
-    },
-    ()=>{const buns=n;
-      if(n<13)return{big:`${buns} buns`,body:`<strong>${buns} buns</strong> consumed &mdash; almost a baker's dozen.`};
-      return{big:`${(buns/8).toFixed(0)} packs`,body:`eight-packs burned through: roughly <strong>${(buns/8).toFixed(0)}</strong>.`};
-    },
-    ()=>{const cups=n/16;
-      if(n<16)return{big:`${n} tbsp`,body:`if every dog got ketchup: <strong>${n} tablespoons</strong>. The Chicago contingent is shaking.`};
-      return{big:`${cups.toFixed(1)} cups`,body:`roughly <strong>${cups.toFixed(1)} cups of ketchup</strong> deployed. Chicago is not pleased.`};
+
+    // JOEY CHESTNUT — 76 dogs in 10 min = 7.6/min (2023 world record, verified)
+    () => {
+      const min = (n / 7.6).toFixed(1);
+      if (n < 10)  return { big:`${min} min`,            body:`Joey Chestnut could eat all of these in about <strong>${min} minutes</strong>. The committee took considerably longer.` };
+      if (n < 76)  return { big:`${min} min`,            body:`Joey Chestnut, at world record pace, could put all of these away in <strong>${min} minutes</strong>.` };
+      return           { big:`${(n/76).toFixed(1)}&times;`, body:`the group has eaten the equivalent of <strong>${(n/76).toFixed(1)} full Joey Chestnut world records</strong> worth of dogs.` };
     },
   ];
-  return gens[Math.floor(Math.random()*gens.length)]();
+
+  return gens[Math.floor(Math.random() * gens.length)]();
 }
 
-let MATH_TOTAL=0;
-function refreshMath(){
-  const w=document.getElementById('math-body');if(!w)return;
-  const m=pickHotDogMath(MATH_TOTAL);
-  if(!m){w.textContent='Need at least one dog.';return;}
-  w.innerHTML=`<span class="big">${m.big}</span>${m.body}`;
+function refreshMath() {
+  const w = document.getElementById('math-body');
+  if (!w) return;
+  const m = pickHotDogMath(MATH_TOTAL);
+  if (!m) { w.textContent = 'Need at least one dog.'; return; }
+  w.innerHTML = `<span class="big">${m.big}</span>${m.body}`;
 }
 
 /* ── INFINITE SCROLL ── */
-function dogCardInner(d,newest){
+function dogCardInner(d, newest) {
   const thumb=driveThumb(d[C.PHOTO]);
   const[eatCls,eatTxt]=eatLabel(d[C.EAT_AGAIN]);
   const qty=dogCount(d);
@@ -735,7 +716,7 @@ function dogCardInner(d,newest){
     ${review}<div class="dog-tags"><span class="tag ${eatCls}">${eatTxt}</span>${qtyTag}${describe}</div>`;
 }
 
-function appendNextPage(){
+function appendNextPage() {
   const feed=document.getElementById('feed-container');
   const spinner=document.getElementById('feed-spinner');
   const endMsg=document.getElementById('feed-end');
@@ -745,7 +726,7 @@ function appendNextPage(){
   if(!slice.length)return;
   slice.forEach((d,i)=>{
     const idx=start+i,el=document.createElement('div');
-    el.className='dog-card'; el.id='sub-'+idx;
+    el.className='dog-card';el.id='sub-'+idx;
     el.innerHTML=dogCardInner(d,false);
     feed.appendChild(el);
   });
@@ -757,21 +738,18 @@ function appendNextPage(){
   }
 }
 
-function setupInfiniteScroll(){
-  const sentinel=document.getElementById('feed-sentinel');
-  if(!sentinel)return;
+function setupInfiniteScroll() {
+  const sentinel=document.getElementById('feed-sentinel');if(!sentinel)return;
   if(SCROLL_OBS)SCROLL_OBS.disconnect();
   SCROLL_OBS=new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
       if(!entry.isIntersecting||FEED_LOADING)return;
-      const nextStart=FEED_PAGE*PAGE_SIZE;
-      if(nextStart>=ALL_SUBS.length)return;
+      if(FEED_PAGE*PAGE_SIZE>=ALL_SUBS.length)return;
       FEED_LOADING=true;
       const spinner=document.getElementById('feed-spinner');
       if(spinner)spinner.classList.add('visible');
       setTimeout(()=>{
-        appendNextPage();
-        FEED_LOADING=false;
+        appendNextPage();FEED_LOADING=false;
         const sp=document.getElementById('feed-spinner');
         if(sp&&FEED_PAGE*PAGE_SIZE<ALL_SUBS.length)sp.classList.remove('visible');
       },120);
@@ -781,8 +759,8 @@ function setupInfiniteScroll(){
 }
 
 /* ── LOAD / RENDER ── */
-async function load(){
-  try{
+async function load() {
+  try {
     const resp=await fetch(SUBMISSIONS_CSV+'&nocache='+Date.now());
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     const text=await resp.text();
@@ -790,16 +768,16 @@ async function load(){
     LOAD_TIME=Date.now();
     for(const d of ALL_SUBS){const t=getTimestamp(d);if(t){LAST_DOG_TS=t.getTime();break;}}
     render(ALL_SUBS);
-  }catch(e){
+  } catch(e) {
     document.getElementById('app').innerHTML=`<div class="loading-state">&#9888;&nbsp; Could not load data.</div>`;
     document.getElementById('meta-count').textContent='Offline';
   }
 }
 
-function render(subs){
+function render(subs) {
   FEED_PAGE=1;
   const totalDogs=subs.reduce((s,d)=>s+dogCount(d),0);
-  CURRENT_TOTAL=totalDogs; MATH_TOTAL=totalDogs;
+  MATH_TOTAL=totalDogs;
   const totalReports=subs.length;
   const scores=subs.map(d=>parseFloat(d[C.SCORE])).filter(n=>!isNaN(n));
   const avg=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):'—';
@@ -809,6 +787,7 @@ function render(subs){
   const wouldYes=subs.filter(d=>eatLabel(d[C.EAT_AGAIN])[0]==='tag-yes').length;
   const wouldPct=totalReports?Math.round(wouldYes/totalReports*100)+'%':'—';
 
+  // Glizzy muncher leaderboard data
   const sm={};
   subs.forEach(d=>{
     const n=d[C.SCOUT];if(!n)return;
@@ -817,30 +796,37 @@ function render(subs){
     if(isWithinDays(d,7))sm[n].weekDogs+=dogCount(d);
     const s=parseFloat(d[C.SCORE]);if(!isNaN(s)){sm[n].st+=s;sm[n].sc++;sm[n].all.push({vendor:d[C.VENDOR]||'?',score:s});}
   });
-  const scouts=Object.entries(sm).map(([name,s])=>{
+  const glizzys=Object.entries(sm).map(([name,s])=>{
     const sorted=[...s.all].sort((a,b)=>b.score-a.score);
     return{name,dogs:s.dogs,reports:s.reports,weekDogs:s.weekDogs,avg:s.sc?(s.st/s.sc).toFixed(1):'—',best:sorted[0]||null,worst:sorted[sorted.length-1]||null};
   }).sort((a,b)=>b.dogs-a.dogs);
 
+  // Streak callout
   const sb=document.getElementById('streak-bar'),st=document.getElementById('streak-text');
   const rs=subs.find(d=>isWithinDays(d,2));
   if(rs&&rs[C.SCOUT]){const qty=dogCount(rs);st.innerHTML=`&#128293; ${esc(rs[C.SCOUT])} is on a tear &mdash; just logged ${qty>1?qty+' dogs':'a dog'} from ${esc(rs[C.VENDOR]||'somewhere')}`;sb.classList.remove('hidden');}
   else sb.classList.add('hidden');
 
+  // Seven-day summary
   const sd=buildSevenDaySummary(subs);
   const sde=document.getElementById('seven-day');
   if(sd){document.getElementById('seven-day-text').innerHTML=sd;sde.classList.remove('hidden');}else sde.classList.add('hidden');
 
+  // Ticker
   renderTicker(buildTicker(subs));
 
+  // Hall of fame/shame
   const scored=subs.filter(d=>!isNaN(parseFloat(d[C.SCORE])));
   const sortedAll=[...scored].sort((a,b)=>parseFloat(b[C.SCORE])-parseFloat(a[C.SCORE]));
   const fame=sortedAll.slice(0,3),shame=sortedAll.slice(-3).reverse();
   const forecast=buildForecast(subs);
 
-  document.getElementById('meta-count').textContent=`${totalDogs} dog${totalDogs!==1?'s':''} consumed \u00b7 ${scouts.length} glizzy muncher${scouts.length!==1?'s':''}`;
+  document.getElementById('meta-count').textContent=
+    `${totalDogs} dog${totalDogs!==1?'s':''} consumed \u00b7 ${glizzys.length} glizzy muncher${glizzys.length!==1?'s':''}`;
 
-  const initialCards=subs.slice(0,PAGE_SIZE).map((d,i)=>`<div class="dog-card${i===0&&subs.length>1?' featured':''}" id="sub-${i}">${dogCardInner(d,i===0&&subs.length>1)}</div>`).join('');
+  const initialCards=subs.slice(0,PAGE_SIZE).map((d,i)=>
+    `<div class="dog-card${i===0&&subs.length>1?' featured':''}" id="sub-${i}">${dogCardInner(d,i===0&&subs.length>1)}</div>`
+  ).join('');
   const hasMore=subs.length>PAGE_SIZE;
 
   document.getElementById('app').innerHTML=`
@@ -856,9 +842,9 @@ function render(subs){
       </div>
       <div>
         ${renderForecast(forecast)}
-        ${renderMath()}
+        ${renderMath(totalDogs)}
         <div class="section-label">Glizzy Muncher leaderboard &mdash; by consumption</div>
-        ${renderLeaderboard(scouts)}
+        ${renderLeaderboard(glizzys)}
       </div>
     </div>
     <div class="hall-grid">${renderHall('fame',fame)}${renderHall('shame',shame)}</div>
@@ -891,23 +877,44 @@ function renderStats(td,avg,avgClass,states,wouldPct){
     <div class="stat-card"><div class="stat-num green" data-counter="${wn}" data-suffix="%">0</div><div class="stat-label">Would eat again</div></div>
   </div></div>`;
 }
+
 function renderForecast(f){
-  if(!f)return`<div class="widget widget-forecast"><div class="widget-title">&#128302; The Frank Forecast</div><div class="widget-body">No forecast yet &mdash; need a few more submissions per scout to spot patterns.</div></div>`;
+  if(!f)return`<div class="widget widget-forecast"><div class="widget-title">&#128302; The Frank Forecast</div><div class="widget-body">No forecast yet &mdash; need a few more submissions per glizzy muncher to spot patterns.</div></div>`;
   return`<div class="widget widget-forecast"><div class="widget-title">&#128302; The Frank Forecast</div><div class="widget-body">${f.body}</div><div class="widget-method">Methodology: ${esc(f.method)}</div></div>`;
 }
-function renderMath(){
-  return`<div class="widget widget-math"><div class="widget-title">&#129518; Hot Dog Math</div><div class="widget-body" id="math-body">Calculating&hellip;</div><button class="widget-reroll" id="math-reroll">&#8635; Another fun fact</button></div>`;
+
+function renderMath(totalDogs){
+  return`<div class="widget widget-math">
+    <div class="widget-title">&#129518; Hot Dog Math</div>
+    <div class="widget-body" id="math-body">Calculating&hellip;</div>
+    <div class="widget-note">Buns and toppings not included. Figures derived from verified constants: USDA avg frankfurter weight (2 oz) and calories (150), standard length (6 in), and Joey Chestnut&rsquo;s 2023 world record (76 dogs / 10 min). Applied to ${totalDogs} dog${totalDogs!==1?'s':''} consumed.</div>
+    <button class="widget-reroll" id="math-reroll">&#8635; Another fun fact</button>
+  </div>`;
 }
-function renderLeaderboard(scouts){
-  if(!scouts.length)return'<div class="empty-card">No glizzy munchers yet.</div>';
-  return`<div class="leaderboard">${scouts.slice(0,8).map((s,i)=>{
+
+function renderLeaderboard(glizzys){
+  if(!glizzys.length)return'<div class="empty-card">No glizzy munchers yet.</div>';
+  return`<div class="leaderboard">${glizzys.slice(0,8).map((s,i)=>{
     let tt='';
     if(s.best&&s.worst&&s.best!==s.worst)tt=`<div class="lb-tooltip"><div class="tt-label">Best</div><div class="tt-best">${esc(s.best.vendor)} &mdash; ${s.best.score.toFixed(1)}</div><div class="tt-label" style="margin-top:4px">Worst</div><div class="tt-worst">${esc(s.worst.vendor)} &mdash; ${s.worst.score.toFixed(1)}</div></div>`;
     else if(s.best)tt=`<div class="lb-tooltip"><div class="tt-label">Only rated</div><div class="tt-best">${esc(s.best.vendor)} &mdash; ${s.best.score.toFixed(1)}</div></div>`;
     const wb=s.weekDogs>0?`<span class="lb-week">&#128293; ${s.weekDogs} this week</span>`:'';
-    return`<div class="lb-row${i===0?' lb-top':''}"><div class="lb-rank${i===0?' gold':''}">${i+1}</div><div class="lb-info"><div class="lb-name">${esc(s.name)}</div><div class="lb-sub"><span>${s.reports} report${s.reports!==1?'s':''} &middot; avg ${s.avg}</span>${wb}<button class="lb-last-dog" data-scout="${esc(s.name)}">Show their last dog</button></div></div><div class="lb-count">${s.dogs}</div>${tt}</div>`;
+    return`<div class="lb-row${i===0?' lb-top':''}">
+      <div class="lb-rank${i===0?' gold':''}">${i+1}</div>
+      <div class="lb-info">
+        <div class="lb-name">${esc(s.name)}</div>
+        <div class="lb-sub">
+          <span>${s.reports} report${s.reports!==1?'s':''} &middot; avg ${s.avg}</span>
+          ${wb}
+          <button class="lb-last-dog" data-scout="${esc(s.name)}">Show their last dog</button>
+        </div>
+      </div>
+      <div class="lb-count">${s.dogs}</div>
+      ${tt}
+    </div>`;
   }).join('')}</div>`;
 }
+
 function renderHall(type,entries){
   const isFame=type==='fame';
   return`<div class="hall hall-${type}"><div class="hall-title">${isFame?'Hall of fame &mdash; all-time greats':'Hall of shame &mdash; we will not forget'}</div>${entries.length?entries.map(d=>`<div class="hall-entry"><div><div class="hall-dog-name">${esc(d[C.VENDOR])}</div><div class="hall-dog-sub">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div></div><div class="hall-score">${fmt(d[C.SCORE])}</div></div>`).join(''):`<div style="font-size:12px;color:#bbb;text-align:center;padding:14px">${isFame?'Submit some dogs first.':'Nothing bad enough yet. Give it time.'}</div>`}</div>`;
