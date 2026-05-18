@@ -645,47 +645,59 @@ function pickHotDogMath(n) {
 
   const gens = [
     // LENGTH — 6 inches per dog (USDA avg frankfurter ~6")
+    // Formula: n × 6 in = total inches; divide by 12 for feet
     () => {
-      const ft = n * 6 / 12, m = n * 0.1524;
-      if (n < 8)   return { big:`${ft.toFixed(1)} ft`,  body:`end to end, the dogs would stretch <strong>${ft.toFixed(1)} feet</strong> &mdash; roughly a parking space.` };
-      if (n < 30)  return { big:`${ft.toFixed(0)} ft`,  body:`lined up, the dogs reach <strong>${ft.toFixed(0)} feet</strong> &mdash; about the length of a bowling lane.` };
-      if (n < 80)  return { big:`${ft.toFixed(0)} ft`,  body:`the dogs span <strong>${ft.toFixed(0)} feet</strong> &mdash; roughly the width of a basketball court.` };
-      if (n < 200) return { big:`${ft.toFixed(0)} ft`,  body:`end to end: <strong>${ft.toFixed(0)} feet</strong> &mdash; longer than a football field.` };
-      if (n < 600) return { big:`${m.toFixed(0)} m`,    body:`lined up: <strong>${m.toFixed(0)} meters</strong> &mdash; taller than the Eiffel Tower on its side.` };
-      return           { big:`${(ft/5280).toFixed(2)} mi`, body:`end to end: <strong>${(ft/5280).toFixed(2)} miles</strong> &mdash; a respectable jog.` };
+      const totalIn = n * 6;
+      const ft = totalIn / 12;
+      const m  = n * 0.1524;
+      const formula = `(${n} dogs &times; 6 in = ${totalIn.toLocaleString()} in = <strong>${ft % 1 === 0 ? ft.toFixed(0) : ft.toFixed(1)} ft</strong>)`;
+      if (n < 8)   return { big:`${ft.toFixed(1)} ft`,        body:`${formula} &mdash; about the length of a standard door (6'8").` };
+      if (n < 30)  return { big:`${ft.toFixed(0)} ft`,        body:`${formula} &mdash; about the length of a mid-size car (~14&ndash;15 ft).` };
+      if (n < 80)  return { big:`${ft.toFixed(0)} ft`,        body:`${formula} &mdash; about the length of a school bus (~35&ndash;40 ft).` };
+      if (n < 200) return { big:`${ft.toFixed(0)} ft`,        body:`${formula} &mdash; longer than a football field (300 ft / 100 yds).` };
+      if (n < 600) return { big:`${ft.toFixed(0)} ft`,        body:`${formula} &mdash; roughly the length of a city block (~200&ndash;300 ft).` };
+      return           { big:`${(ft/5280).toFixed(2)} mi`,    body:`(${n} dogs &times; 6 in = ${totalIn.toLocaleString()} in = <strong>${(ft/5280).toFixed(2)} miles</strong>) &mdash; a respectable jog.` };
     },
-    // WEIGHT — 2 oz / 57g per dog (USDA standard frankfurter)
+    // WEIGHT — 2 oz / 0.125 lbs per dog (USDA standard frankfurter)
+    // Formula: n × 0.125 lbs
     () => {
       const lbs = n * 0.125;
-      if (n < 8)   return { big:`${lbs.toFixed(1)} lbs`, body:`all the meat so far weighs about <strong>${lbs.toFixed(1)} pounds</strong> &mdash; like a small chicken.` };
-      if (n < 32)  return { big:`${lbs.toFixed(1)} lbs`, body:`roughly a bowling ball's worth of meat: <strong>${lbs.toFixed(1)} pounds</strong>.` };
-      if (n < 80)  return { big:`${lbs.toFixed(0)} lbs`, body:`<strong>${lbs.toFixed(0)} pounds</strong> &mdash; about the weight of a labrador retriever.` };
-      if (n < 400) return { big:`${lbs.toFixed(0)} lbs`, body:`<strong>${lbs.toFixed(0)} pounds</strong> of hot dog &mdash; heavier than a baby grand piano.` };
-      return           { big:`${(lbs/2000).toFixed(2)} tons`, body:`the dogs weigh in at <strong>${(lbs/2000).toFixed(2)} tons</strong>. The committee is becoming a tonnage operation.` };
+      const formula = `(${n} dogs &times; 2 oz = <strong>${lbs % 1 === 0 ? lbs.toFixed(0) : lbs.toFixed(2)} lbs</strong>)`;
+      if (n < 8)   return { big:`${lbs.toFixed(2)} lbs`,      body:`${formula} &mdash; about the weight of a large bag of apples (~3 lbs).` };
+      if (n < 32)  return { big:`${lbs.toFixed(1)} lbs`,      body:`${formula} &mdash; about the weight of a large bag of apples (~3 lbs) up to a car tire (~25 lbs).` };
+      if (n < 80)  return { big:`${lbs.toFixed(0)} lbs`,      body:`${formula} &mdash; about the weight of a car tire (~20&ndash;25 lbs).` };
+      if (n < 400) return { big:`${lbs.toFixed(0)} lbs`,      body:`${formula} &mdash; about the weight of a labrador retriever (~55&ndash;80 lbs).` };
+      return           { big:`${(lbs/2000).toFixed(3)} tons`, body:`(${n} dogs &times; 2 oz = ${lbs.toFixed(0)} lbs = <strong>${(lbs/2000).toFixed(3)} tons</strong>). The committee is becoming a tonnage operation.` };
     },
-    // CALORIES — ~150 cal per standard beef hot dog (USDA)
+    // CALORIES — 150 cal per standard beef hot dog (USDA)
+    // Formula: n × 150 cal; 2,000 cal/day recommended intake
     () => {
       const cal = n * 150, days = cal / 2000;
-      if (n < 14)  return { big:`${cal.toLocaleString()} cal`, body:`about <strong>${cal.toLocaleString()} calories</strong> &mdash; somewhere between a satisfying lunch and a full day's intake.` };
-      if (n < 70)  return { big:`${days.toFixed(1)} days`,     body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; roughly ${days.toFixed(1)} days of someone's recommended intake.` };
-      if (n < 350) return { big:`${days.toFixed(0)} days`,     body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; about ${days.toFixed(0)} days of meals for one person.` };
-      return           { big:`${(days/30).toFixed(1)} months`,  body:`<strong>${cal.toLocaleString()} calories</strong> &mdash; enough to feed someone for ${(days/30).toFixed(1)} months.` };
+      const formula = `(${n} dogs &times; 150 cal = <strong>${cal.toLocaleString()} cal</strong>`;
+      if (n < 14)  return { big:`${cal.toLocaleString()} cal`,  body:`${formula}) &mdash; somewhere between a big lunch and a full day's intake (2,000 cal/day).` };
+      if (n < 70)  return { big:`${days.toFixed(1)} days`,      body:`${formula} &divide; 2,000 cal/day = <strong>${days.toFixed(1)} days</strong>) of someone's recommended intake.` };
+      if (n < 350) return { big:`${days.toFixed(0)} days`,      body:`${formula} &divide; 2,000 cal/day = <strong>${days.toFixed(0)} days</strong>) of meals for one person.` };
+      return           { big:`${(days/30).toFixed(1)} months`,  body:`${formula} &divide; 2,000 cal/day &divide; 30 days = <strong>${(days/30).toFixed(1)} months</strong>) of food for one person.` };
     },
-    // TIME — ~5 min per dog (reasonable casual pace)
+    // TIME — 5 min per dog (reasonable casual eating pace)
+    // Formula: n × 5 min
     () => {
       const min = n * 5, hr = min / 60, day = hr / 24;
-      if (n < 12)  return { big:`${min} min`,            body:`eating all of these would take about <strong>${min} minutes</strong> at a comfortable pace.` };
-      if (n < 60)  return { big:`${hr.toFixed(1)} hrs`,  body:`all the chewing: roughly <strong>${hr.toFixed(1)} hours</strong> &mdash; half a workday.` };
-      if (n < 300) return { big:`${hr.toFixed(0)} hrs`,  body:`<strong>${hr.toFixed(0)} hours</strong> of continuous eating &mdash; over a full workweek.` };
-      return           { big:`${day.toFixed(1)} days`,   body:`<strong>${day.toFixed(1)} solid days</strong> of nonstop eating.` };
+      const formula = `(${n} dogs &times; 5 min = <strong>${min.toLocaleString()} min`;
+      if (n < 12)  return { big:`${min} min`,           body:`${formula}</strong>) &mdash; eating all of these at a casual pace.` };
+      if (n < 60)  return { big:`${hr.toFixed(1)} hrs`, body:`${formula} &divide; 60 = ${hr.toFixed(1)} hrs</strong>) &mdash; roughly half a workday.` };
+      if (n < 300) return { big:`${hr.toFixed(0)} hrs`, body:`${formula} &divide; 60 = ${hr.toFixed(0)} hrs</strong>) &mdash; a few full workdays of continuous eating.` };
+      return           { big:`${day.toFixed(1)} days`,  body:`${formula} &divide; 60 &divide; 24 = ${day.toFixed(1)} days</strong>) of nonstop eating.` };
     },
-
-    // JOEY CHESTNUT — 76 dogs in 10 min = 7.6/min (2023 world record, verified)
+    // JOEY CHESTNUT — 76 dogs in 10 min = 7.6 dogs/min (2023 MLE world record)
+    // Formula: n ÷ 7.6 dogs/min = minutes for Chestnut; n ÷ 76 = number of full records
     () => {
       const min = (n / 7.6).toFixed(1);
-      if (n < 10)  return { big:`${min} min`,            body:`Joey Chestnut could eat all of these in about <strong>${min} minutes</strong>. The committee took considerably longer.` };
-      if (n < 76)  return { big:`${min} min`,            body:`Joey Chestnut, at world record pace, could put all of these away in <strong>${min} minutes</strong>.` };
-      return           { big:`${(n/76).toFixed(1)}&times;`, body:`the group has eaten the equivalent of <strong>${(n/76).toFixed(1)} full Joey Chestnut world records</strong> worth of dogs.` };
+      const recs = (n / 76).toFixed(2);
+      const formula = `(${n} dogs &divide; 7.6 dogs/min = <strong>${min} min</strong>`;
+      if (n < 10)  return { big:`${min} min`,              body:`${formula}) for Joey Chestnut to eat all of these at his 2023 world record pace. The committee took longer.` };
+      if (n < 76)  return { big:`${min} min`,              body:`${formula}) &mdash; that's how long Joey Chestnut would need at world record pace (76 dogs / 10 min).` };
+      return           { big:`${(n/76).toFixed(1)}&times;`, body:`(${n} dogs &divide; 76 dogs/record = <strong>${recs} full Chestnut world records</strong>) worth of dogs consumed by the committee.` };
     },
   ];
 
