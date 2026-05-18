@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Frank Report 🌭</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌭</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -192,24 +193,46 @@ body {
   letter-spacing: 0.3px;
 }
 
-/* ── STATS BAR ── */
+/* ── STICKY STATS WRAPPER ── */
+.stats-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg);
+  padding: 10px 0;
+  margin: 0 -24px 14px;  /* extend bg to edges of body padding */
+  padding-left: 24px;
+  padding-right: 24px;
+  transition: box-shadow 0.2s ease, padding 0.2s ease;
+}
+.stats-wrap.stuck {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border-bottom: 1px solid var(--border);
+}
 .stats-bar {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  margin-bottom: 24px;
 }
 .stat-card {
   background: var(--white);
   border: 1px solid var(--border);
   padding: 12px 14px 11px;
   text-align: center;
+  transition: padding 0.2s ease;
+}
+.stats-wrap.stuck .stat-card {
+  padding: 8px 14px 7px;
 }
 .stat-num {
   font-family: 'Bebas Neue', Impact, sans-serif;
   font-size: 38px;
   line-height: 1;
   color: var(--ink);
+  transition: font-size 0.2s ease;
+}
+.stats-wrap.stuck .stat-num {
+  font-size: 28px;
 }
 .stat-num.green  { color: var(--relish); }
 .stat-num.amber  { color: var(--mustard); }
@@ -581,6 +604,69 @@ body {
 }
 .modal-reroll:hover { opacity: 0.85; }
 
+/* ── MILESTONE BANNER + CONFETTI ── */
+.milestone-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  z-index: 200;
+  background: var(--mustard);
+  color: white;
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  text-align: center;
+  padding: 30px 50px;
+  border: 4px solid var(--ink);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1.3, 0.3, 1);
+}
+.milestone-banner.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.milestone-banner .ms-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+.milestone-banner .ms-number {
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: 2px;
+}
+.milestone-banner .ms-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 150;
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute;
+  top: -40px;
+  font-size: 28px;
+  animation: confettiFall linear forwards;
+  user-select: none;
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg);    opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+}
+
 /* ── FOOTER ── */
 .site-footer {
   border-top: 1px solid var(--border);
@@ -626,6 +712,9 @@ body {
   .submit-banner { flex-direction: column; align-items: flex-start; gap: 10px; }
   .submit-btn { width: 100%; text-align: center; }
   .lb-tooltip { right: auto; left: 12px; }
+  .stats-wrap { margin: 0 -16px 14px; padding-left: 16px; padding-right: 16px; }
+  .milestone-banner { padding: 24px 36px; }
+  .milestone-banner .ms-number { font-size: 72px; }
 }
 
 @media (max-width: 540px) {
@@ -633,6 +722,7 @@ body {
   .site-name { font-size: 38px; }
   .site-tagline { font-size: 11px; }
   .stat-num { font-size: 30px; }
+  .stats-wrap.stuck .stat-num { font-size: 22px; }
   .score-bubble { font-size: 26px; min-width: 52px; padding: 3px 10px; }
   .dog-name { font-size: 15px; }
 }
@@ -643,6 +733,7 @@ body {
   .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 7px; }
   .stat-card { padding: 9px 10px; }
   .stat-num { font-size: 26px; }
+  .stats-wrap.stuck .stat-num { font-size: 20px; }
   .stat-label { font-size: 9px; }
   .dog-card { padding: 11px 12px; }
   .card-header { gap: 7px; }
@@ -652,6 +743,9 @@ body {
   .lb-row { padding: 8px 10px; }
   .lb-name { font-size: 13px; }
   .site-footer { flex-direction: column; gap: 4px; }
+  .stats-wrap { margin: 0 -10px 14px; padding-left: 10px; padding-right: 10px; }
+  .milestone-banner { padding: 20px 28px; }
+  .milestone-banner .ms-number { font-size: 56px; }
 }
 </style>
 </head>
@@ -703,6 +797,16 @@ body {
   </div>
 </div>
 
+<!-- MILESTONE BANNER -->
+<div class="milestone-banner" id="milestone-banner">
+  <div class="ms-eyebrow">Milestone unlocked</div>
+  <div class="ms-number" id="ms-number">100</div>
+  <div class="ms-label">Dogs consumed &#127789;</div>
+</div>
+
+<!-- CONFETTI CONTAINER -->
+<div class="confetti-container" id="confetti-container"></div>
+
 <!-- DYNAMIC APP -->
 <div id="app">
   <div class="loading-state">Consulting the committee&hellip;</div>
@@ -725,8 +829,15 @@ const C = {
   QUANTITY: 'How many dogs did you put in you?',
 };
 
+/* ============================================================
+   MILESTONE THRESHOLDS — celebrate when total dogs crosses these
+   ============================================================ */
+const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 250, 500, 750, 1000, 1500, 2000];
+const MILESTONE_KEY = 'frankReportLastMilestone';
+
 let ALL_SUBS = [];
 let LOAD_TIME = null;
+let HAS_RENDERED_ONCE = false;
 
 const QUOTES = [
   { text: "A hot dog at the game beats roast beef at the Ritz.", attr: "Humphrey Bogart" },
@@ -762,6 +873,102 @@ function showQuote() {
     `"${q.text}" &mdash; <strong>${q.attr}</strong>`;
 }
 
+/* ============================================================
+   MILESTONE CELEBRATION
+   ============================================================ */
+function getHighestMilestoneReached(total) {
+  let highest = 0;
+  for (const m of MILESTONES) {
+    if (total >= m) highest = m;
+    else break;
+  }
+  return highest;
+}
+
+function readLastMilestone() {
+  try {
+    const v = parseInt(localStorage.getItem(MILESTONE_KEY), 10);
+    return isNaN(v) ? 0 : v;
+  } catch (e) { return 0; }
+}
+
+function writeLastMilestone(v) {
+  try { localStorage.setItem(MILESTONE_KEY, String(v)); } catch (e) {}
+}
+
+function checkMilestone(totalDogs) {
+  const highest = getHighestMilestoneReached(totalDogs);
+  const lastSeen = readLastMilestone();
+  if (highest > 0 && highest > lastSeen) {
+    celebrate(highest);
+    writeLastMilestone(highest);
+  } else if (highest > 0 && lastSeen === 0) {
+    // First-ever visit with milestones already passed - just record, don't celebrate
+    writeLastMilestone(highest);
+  }
+}
+
+function celebrate(milestone) {
+  // Show banner
+  const banner = document.getElementById('milestone-banner');
+  document.getElementById('ms-number').textContent = milestone.toLocaleString();
+  banner.classList.add('visible');
+
+  // Fire confetti
+  fireConfetti();
+
+  // Hide banner after delay
+  setTimeout(() => banner.classList.remove('visible'), 4000);
+}
+
+function fireConfetti() {
+  const container = document.getElementById('confetti-container');
+  const emojis = ['🌭', '🎉', '⭐', '🎊', '🔥', '🏆'];
+  const pieces = 60;
+
+  for (let i = 0; i < pieces; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    piece.style.left = (Math.random() * 100) + 'vw';
+    const duration = 2.8 + Math.random() * 2.5;
+    const delay = Math.random() * 0.8;
+    piece.style.animationDuration = duration + 's';
+    piece.style.animationDelay = delay + 's';
+    piece.style.fontSize = (18 + Math.random() * 22) + 'px';
+    piece.style.opacity = 0.7 + Math.random() * 0.3;
+    container.appendChild(piece);
+    // Clean up after animation
+    setTimeout(() => piece.remove(), (duration + delay) * 1000 + 100);
+  }
+}
+
+/* ============================================================
+   STICKY STATS DETECTION
+   ============================================================ */
+function setupStickyDetect() {
+  const wrap = document.getElementById('stats-wrap');
+  if (!wrap) return;
+  // Sentinel element above to detect when stats-wrap leaves natural position
+  let sentinel = document.getElementById('stats-sentinel');
+  if (!sentinel) {
+    sentinel = document.createElement('div');
+    sentinel.id = 'stats-sentinel';
+    sentinel.style.cssText = 'height:1px;';
+    wrap.parentNode.insertBefore(sentinel, wrap);
+  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) wrap.classList.remove('stuck');
+      else wrap.classList.add('stuck');
+    });
+  }, { threshold: [0] });
+  observer.observe(sentinel);
+}
+
+/* ============================================================
+   ANIMATED COUNTERS
+   ============================================================ */
 function animateCounter(el, target, suffix, duration) {
   if (isNaN(target)) { el.textContent = target; return; }
   const start = performance.now();
@@ -1036,20 +1243,30 @@ function render(subs) {
   `;
 
   animateAllCounters();
+  setupStickyDetect();
 
   document.querySelectorAll('.lb-last-dog').forEach(btn => {
     btn.addEventListener('click', () => showLastDog(btn.dataset.scout));
   });
+
+  /* Check for milestone celebration — only on first render, not on auto-refresh */
+  if (!HAS_RENDERED_ONCE) {
+    HAS_RENDERED_ONCE = true;
+    setTimeout(() => checkMilestone(totalDogs), 1100);  // wait for counter animation
+  } else {
+    /* On refresh, still check in case threshold was just crossed */
+    checkMilestone(totalDogs);
+  }
 }
 
 function renderStats(totalDogs, avg, avgClass, states, wouldPct) {
   const wouldNum = parseInt(wouldPct) || 0;
-  return `<div class="stats-bar">
+  return `<div class="stats-wrap" id="stats-wrap"><div class="stats-bar">
     <div class="stat-card"><div class="stat-num" data-counter="${totalDogs}">0</div><div class="stat-label">Dogs consumed</div></div>
     <div class="stat-card"><div class="stat-num ${avgClass}" data-counter="${avg}">0</div><div class="stat-label">Group avg rating</div></div>
     <div class="stat-card"><div class="stat-num" data-counter="${states}">0</div><div class="stat-label">States hit</div></div>
     <div class="stat-card"><div class="stat-num green" data-counter="${wouldNum}" data-suffix="%">0</div><div class="stat-label">Would eat again</div></div>
-  </div>`;
+  </div></div>`;
 }
 
 function dogCardInner(d, newest) {
