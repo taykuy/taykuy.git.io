@@ -308,10 +308,12 @@ body {
   padding: 20px;
   transition: background 0.22s ease;
   pointer-events: none;
+  visibility: hidden;
 }
 .lb-overlay.lb-visible {
   background: rgba(0,0,0,0.92);
   pointer-events: auto;
+  visibility: visible;
 }
 .lb-img-wrap {
   position: relative;
@@ -359,6 +361,31 @@ body {
   -webkit-backdrop-filter: blur(4px);
 }
 .lb-close:hover { background: var(--mustard); border-color: var(--mustard); }
+.lb-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  width: 48px;
+  height: 64px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  user-select: none;
+}
+.lb-nav:hover { background: rgba(200,132,10,0.85); border-color: var(--mustard); }
+.lb-nav.lb-prev { left: 16px; }
+.lb-nav.lb-next { right: 16px; }
+.lb-nav.lb-hidden { display: none; }
 .lb-caption {
   position: fixed;
   bottom: 14px;
@@ -664,6 +691,17 @@ body {
   </div>
 </div>
 
+<!-- LIGHTBOX -->
+<div id="lb-overlay" class="lb-overlay" aria-modal="true" role="dialog">
+  <div class="lb-img-wrap" id="lb-img-wrap">
+    <img id="lb-img" src="" alt="">
+  </div>
+  <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+  <button class="lb-nav lb-prev lb-hidden" id="lb-prev" aria-label="Previous photo">&#8249;</button>
+  <button class="lb-nav lb-next lb-hidden" id="lb-next" aria-label="Next photo">&#8250;</button>
+  <div class="lb-caption" id="lb-caption"></div>
+</div>
+
 <div class="milestone-banner" id="milestone-banner">
   <div class="ms-eyebrow">Milestone unlocked</div>
   <div class="ms-number" id="ms-number">100</div>
@@ -927,56 +965,39 @@ function getScoutStats(name, allSubs) {
  * Called after any DOM injection so new cards also get initialized.
  */
 
-/* ── LIGHTBOX (singleton) ── */
-(function() {
-  const overlay  = document.createElement('div');
-  overlay.className = 'lb-overlay';
-  overlay.id = 'lb-overlay';
-  overlay.innerHTML = `
-    <div class="lb-img-wrap" id="lb-img-wrap">
-      <img id="lb-img" src="" alt="">
-    </div>
-    <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
-    <div class="lb-caption" id="lb-caption"></div>
-  `;
-  overlay.style.display = 'none';
-  document.addEventListener('DOMContentLoaded', () => document.body.appendChild(overlay));
+/* ── LIGHTBOX ── */
+let LB_URLS = [];
+let LB_IDX  = 0;
 
-  // These are resolved lazily so they're always the live elements
-  function lbImg()     { return document.getElementById('lb-img'); }
-  function lbCaption() { return document.getElementById('lb-caption'); }
+function lbShow(idx) {
+  const img = document.getElementById('lb-img');
+  const cap = document.getElementById('lb-caption');
+  const prev = document.getElementById('lb-prev');
+  const next = document.getElementById('lb-next');
+  LB_IDX = (idx + LB_URLS.length) % LB_URLS.length;
+  img.src = LB_URLS[LB_IDX];
+  const multi = LB_URLS.length > 1;
+  cap.textContent = multi ? `${LB_IDX + 1} / ${LB_URLS.length}` : '';
+  cap.style.display = multi ? 'block' : 'none';
+  prev.classList.toggle('lb-hidden', !multi);
+  next.classList.toggle('lb-hidden', !multi);
+}
 
-  function lbOpen(src, alt, captionText) {
-    const i = lbImg(), cap = lbCaption();
-    i.src = src;
-    i.alt = alt || '';
-    cap.textContent = captionText || '';
-    cap.style.display = captionText ? 'block' : 'none';
-    overlay.style.display = 'flex';
-    // Double rAF ensures display:flex has painted before the transition class fires
-    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('lb-visible')));
-    document.body.style.overflow = 'hidden';
-  }
+function lbOpen(urls, startIdx) {
+  LB_URLS = Array.isArray(urls) ? urls : [urls];
+  document.getElementById('lb-overlay').classList.add('lb-visible');
+  document.body.style.overflow = 'hidden';
+  lbShow(startIdx || 0);
+}
 
-  function lbClose() {
-    overlay.classList.remove('lb-visible');
-    setTimeout(() => { overlay.style.display = 'none'; lbImg().src = ''; }, 250);
-    document.body.style.overflow = '';
-  }
+function lbClose() {
+  document.getElementById('lb-overlay').classList.remove('lb-visible');
+  setTimeout(() => { document.getElementById('lb-img').src = ''; }, 250);
+  document.body.style.overflow = '';
+}
 
-  window.lbOpen  = lbOpen;
-  window.lbClose = lbClose;
-
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay || e.target.id === 'lb-img-wrap') lbClose();
-  });
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('lb-close').addEventListener('click', lbClose);
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && overlay.classList.contains('lb-visible')) lbClose();
-  });
-})();
+window.lbOpen  = lbOpen;
+window.lbClose = lbClose;
 
 function initSlideshows(root) {
   root.querySelectorAll('.slideshow').forEach(sl => {
@@ -1038,12 +1059,8 @@ function initSlideshows(root) {
     sl.addEventListener('click', e => {
       // Don't trigger on buttons/dots
       if (e.target.closest('.slideshow-btn') || e.target.closest('.slideshow-dots')) return;
-      const currentSlide = slides[current];
-      const currentImg = currentSlide ? currentSlide.querySelector('img') : null;
-      if (currentImg && currentImg.src) {
-        const captionText = total > 1 ? `${current + 1} / ${total}` : null;
-        window.lbOpen(currentImg.src, currentImg.alt, captionText);
-      }
+      const allUrls = Array.from(slides).map(s => s.querySelector('img')?.src).filter(Boolean);
+      if (allUrls.length) window.lbOpen(allUrls, current);
     });
 
     // Init
@@ -1470,10 +1487,13 @@ function pickHotDogMath(n){
   return gens[Math.floor(Math.random()*gens.length)]();
 }
 function refreshMath(){
-  const w=document.getElementById('math-body');if(!w)return;
   const m=pickHotDogMath(MATH_TOTAL);
-  if(!m){w.textContent='Need at least one dog.';return;}
-  w.innerHTML=`<span class="big">${m.big}</span>${m.body}`;
+  const html = m ? `<span class="big">${m.big}</span>${m.body}` : 'Need at least one dog.';
+  // Update both instances (desktop sidebar + mobile inject)
+  ['math-body','math-body-mobile'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.innerHTML=html;
+  });
 }
 
 /* ── PHOTO HTML BUILDER ── */
@@ -1489,7 +1509,7 @@ function buildPhotoHtml(d) {
 
   if (thumbs.length === 1) {
     return `<img class="dog-photo" src="${esc(thumbs[0])}" alt="${esc(d[C.VENDOR])}" loading="lazy"
-      onclick="window.lbOpen(this.src, this.alt, null)"
+      onclick="window.lbOpen([this.src], 0)"
       onerror="this.remove();">`;
   }
 
@@ -1706,7 +1726,7 @@ function render(subs){
 
   const sidebarHTML=`<div class="sidebar-mobile-inject">
     ${renderForecast(forecast)}
-    ${renderMath(totalDogs)}
+    ${renderMath(totalDogs, '-mobile')}
     <div class="wiener-board-label">🌭 The Wiener Board 🌭</div>
     ${renderLeaderboard(glizzys)}
   </div>`;
@@ -1760,7 +1780,9 @@ function render(subs){
   else setupInfiniteScroll();
 
   document.querySelectorAll('.lb-last-dog').forEach(btn=>{btn.addEventListener('click',()=>showLastDog(btn.dataset.scout));});
-  const rb=document.getElementById('math-reroll');if(rb)rb.addEventListener('click',refreshMath);
+  ['math-reroll','math-reroll-mobile'].forEach(id=>{
+    const rb=document.getElementById(id);if(rb)rb.addEventListener('click',refreshMath);
+  });
 
   if(!HAS_RENDERED){HAS_RENDERED=true;setTimeout(()=>checkMilestone(totalDogs),1100);}
   else checkMilestone(totalDogs);
@@ -1781,12 +1803,13 @@ function renderForecast(f){
   return`<div class="widget widget-forecast"><div class="widget-title">&#128302; The Frank Forecast</div><div class="widget-body">${f.body}</div><div class="widget-method">Methodology: ${esc(f.method)}</div></div>`;
 }
 
-function renderMath(totalDogs){
+function renderMath(totalDogs, idSuffix){
+  const sfx = idSuffix || '';
   return`<div class="widget widget-math">
     <div class="widget-title">&#129518; Hot Dog Math</div>
-    <div class="widget-body" id="math-body">Calculating&hellip;</div>
+    <div class="widget-body" id="math-body${sfx}">Calculating&hellip;</div>
     <div class="widget-note">Buns and toppings not included. Figures derived from verified constants: USDA avg frankfurter weight (2 oz) and calories (150), standard length (6 in), and Joey Chestnut&rsquo;s 2023 world record (76 dogs / 10 min). Applied to ${totalDogs} dog${totalDogs!==1?'s':''} consumed.</div>
-    <button class="widget-reroll" id="math-reroll">&#8635; Another fun fact</button>
+    <button class="widget-reroll" id="math-reroll${sfx}">&#8635; Another fun fact</button>
   </div>`;
 }
 
@@ -1822,6 +1845,21 @@ document.addEventListener('DOMContentLoaded',()=>{
   showQuote();
   document.getElementById('modal-overlay').style.display='none';
   document.getElementById('share-overlay').style.display='none';
+
+  // Lightbox handlers
+  document.getElementById('lb-close').addEventListener('click', lbClose);
+  document.getElementById('lb-prev').addEventListener('click', () => lbShow(LB_IDX - 1));
+  document.getElementById('lb-next').addEventListener('click', () => lbShow(LB_IDX + 1));
+  document.getElementById('lb-overlay').addEventListener('click', e=>{
+    if(e.target.id==='lb-overlay'||e.target.id==='lb-img-wrap') lbClose();
+  });
+  document.addEventListener('keydown', e=>{
+    if(!document.getElementById('lb-overlay').classList.contains('lb-visible')) return;
+    if(e.key==='Escape') lbClose();
+    if(e.key==='ArrowLeft')  lbShow(LB_IDX - 1);
+    if(e.key==='ArrowRight') lbShow(LB_IDX + 1);
+  });
+
   load();
   setInterval(load,5*60*1000);
   setInterval(updateAgo,10*1000);
