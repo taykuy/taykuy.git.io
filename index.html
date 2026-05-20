@@ -927,10 +927,9 @@ function getScoutStats(name, allSubs) {
  * Called after any DOM injection so new cards also get initialized.
  */
 
-/* ── LIGHTBOX (singleton, shared across all photos) ── */
+/* ── LIGHTBOX (singleton) ── */
 (function() {
-  // Build the overlay once and append to body
-  const overlay = document.createElement('div');
+  const overlay  = document.createElement('div');
   overlay.className = 'lb-overlay';
   overlay.id = 'lb-overlay';
   overlay.innerHTML = `
@@ -940,47 +939,42 @@ function getScoutStats(name, allSubs) {
     <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
     <div class="lb-caption" id="lb-caption"></div>
   `;
-  document.addEventListener('DOMContentLoaded', () => {
-    document.body.appendChild(overlay);
-    document.getElementById('lb-close').addEventListener('click', close);
-    overlay.style.display = 'none';
-  });
+  overlay.style.display = 'none';
+  document.addEventListener('DOMContentLoaded', () => document.body.appendChild(overlay));
 
-  function open(src, alt, captionText) {
-    const i = img();
+  // These are resolved lazily so they're always the live elements
+  function lbImg()     { return document.getElementById('lb-img'); }
+  function lbCaption() { return document.getElementById('lb-caption'); }
+
+  function lbOpen(src, alt, captionText) {
+    const i = lbImg(), cap = lbCaption();
     i.src = src;
     i.alt = alt || '';
-    if (captionText) {
-      caption().textContent = captionText;
-      caption().style.display = 'block';
-    } else {
-      caption().style.display = 'none';
-    }
+    cap.textContent = captionText || '';
+    cap.style.display = captionText ? 'block' : 'none';
     overlay.style.display = 'flex';
-    requestAnimationFrame(() => overlay.classList.add('lb-visible'));
+    // Double rAF ensures display:flex has painted before the transition class fires
+    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('lb-visible')));
     document.body.style.overflow = 'hidden';
   }
 
-  function close() {
+  function lbClose() {
     overlay.classList.remove('lb-visible');
-    setTimeout(() => {
-      overlay.style.display = 'none';
-      img().src = '';
-    }, 230);
+    setTimeout(() => { overlay.style.display = 'none'; lbImg().src = ''; }, 250);
     document.body.style.overflow = '';
   }
 
-  // Expose globally so photo HTML can call it
-  window.lbOpen = open;
+  window.lbOpen  = lbOpen;
+  window.lbClose = lbClose;
 
-  // Close on overlay backdrop click
   overlay.addEventListener('click', e => {
-    if (e.target === overlay || e.target === document.getElementById('lb-img-wrap')) close();
+    if (e.target === overlay || e.target.id === 'lb-img-wrap') lbClose();
   });
-
-  // Escape key
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('lb-close').addEventListener('click', lbClose);
+  });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && overlay.classList.contains('lb-visible')) close();
+    if (e.key === 'Escape' && overlay.classList.contains('lb-visible')) lbClose();
   });
 })();
 
