@@ -293,6 +293,86 @@ body {
   pointer-events: none;
 }
 
+/* clickable hint on photo thumbnails */
+.slideshow, .dog-photo { cursor: zoom-in; }
+
+/* ── LIGHTBOX ── */
+.lb-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0,0,0,0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: background 0.22s ease;
+  pointer-events: none;
+}
+.lb-overlay.lb-visible {
+  background: rgba(0,0,0,0.92);
+  pointer-events: auto;
+}
+.lb-img-wrap {
+  position: relative;
+  max-width: min(92vw, 1000px);
+  max-height: 92vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.93);
+  transition: opacity 0.22s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+.lb-overlay.lb-visible .lb-img-wrap {
+  opacity: 1;
+  transform: scale(1);
+}
+.lb-overlay img {
+  display: block;
+  max-width: 100%;
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 2px;
+  box-shadow: 0 8px 60px rgba(0,0,0,0.6);
+}
+.lb-close {
+  position: fixed;
+  top: 16px;
+  right: 18px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.lb-close:hover { background: var(--mustard); border-color: var(--mustard); }
+.lb-caption {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 .dog-review { font-family: 'Barlow', Georgia, serif; font-style: italic; font-size: 14px; color: #444; border-left: 3px solid var(--border); padding-left: 10px; margin-bottom: 10px; line-height: 1.55; }
 .dog-tags { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
 .tag { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 2px; letter-spacing: 0.2px; white-space: nowrap; }
@@ -846,6 +926,64 @@ function getScoutStats(name, allSubs) {
  * Wire up all .slideshow elements inside a given root element.
  * Called after any DOM injection so new cards also get initialized.
  */
+
+/* ── LIGHTBOX (singleton, shared across all photos) ── */
+(function() {
+  // Build the overlay once and append to body
+  const overlay = document.createElement('div');
+  overlay.className = 'lb-overlay';
+  overlay.id = 'lb-overlay';
+  overlay.innerHTML = `
+    <div class="lb-img-wrap" id="lb-img-wrap">
+      <img id="lb-img" src="" alt="">
+    </div>
+    <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+    <div class="lb-caption" id="lb-caption"></div>
+  `;
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.appendChild(overlay);
+    document.getElementById('lb-close').addEventListener('click', close);
+    overlay.style.display = 'none';
+  });
+
+  function open(src, alt, captionText) {
+    const i = img();
+    i.src = src;
+    i.alt = alt || '';
+    if (captionText) {
+      caption().textContent = captionText;
+      caption().style.display = 'block';
+    } else {
+      caption().style.display = 'none';
+    }
+    overlay.style.display = 'flex';
+    requestAnimationFrame(() => overlay.classList.add('lb-visible'));
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    overlay.classList.remove('lb-visible');
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      img().src = '';
+    }, 230);
+    document.body.style.overflow = '';
+  }
+
+  // Expose globally so photo HTML can call it
+  window.lbOpen = open;
+
+  // Close on overlay backdrop click
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay || e.target === document.getElementById('lb-img-wrap')) close();
+  });
+
+  // Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('lb-visible')) close();
+  });
+})();
+
 function initSlideshows(root) {
   root.querySelectorAll('.slideshow').forEach(sl => {
     // Avoid double-init
@@ -901,6 +1039,18 @@ function initSlideshows(root) {
     // Pause auto-advance while hovering
     sl.addEventListener('mouseenter', stopAuto);
     sl.addEventListener('mouseleave', startAuto);
+
+    // Click on the slideshow area opens lightbox for current slide
+    sl.addEventListener('click', e => {
+      // Don't trigger on buttons/dots
+      if (e.target.closest('.slideshow-btn') || e.target.closest('.slideshow-dots')) return;
+      const currentSlide = slides[current];
+      const currentImg = currentSlide ? currentSlide.querySelector('img') : null;
+      if (currentImg && currentImg.src) {
+        const captionText = total > 1 ? `${current + 1} / ${total}` : null;
+        window.lbOpen(currentImg.src, currentImg.alt, captionText);
+      }
+    });
 
     // Init
     goTo(0);
@@ -1344,7 +1494,9 @@ function buildPhotoHtml(d) {
   if (!thumbs.length) return '';
 
   if (thumbs.length === 1) {
-    return `<img class="dog-photo" src="${esc(thumbs[0])}" alt="${esc(d[C.VENDOR])}" loading="lazy" onerror="this.closest('.dog-photo')?.remove(); this.remove();">`;
+    return `<img class="dog-photo" src="${esc(thumbs[0])}" alt="${esc(d[C.VENDOR])}" loading="lazy"
+      onclick="window.lbOpen(this.src, this.alt, null)"
+      onerror="this.remove();">`;
   }
 
   // Multi-photo slideshow
