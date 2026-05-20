@@ -167,7 +167,6 @@ body {
 /* ── SECTION LABEL ── */
 .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--dust); text-transform: uppercase; margin-bottom: 11px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
 
-
 /* ── WIENER BOARD LABEL ── */
 .wiener-board-label {
   font-family: 'Bebas Neue', Impact, sans-serif;
@@ -196,7 +195,104 @@ body {
 .score-hi  { background: var(--relish-bg);  color: var(--relish);  }
 .score-mid { background: var(--mustard-bg); color: var(--mustard); }
 .score-lo  { background: var(--ketchup-bg); color: var(--ketchup); }
-.dog-photo { width: 100%; height: auto; display: block; border-radius: 1px; margin-bottom: 10px; }
+
+/* ── SLIDESHOW ── */
+.slideshow {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+  background: #000;
+  border-radius: 1px;
+  overflow: hidden;
+  user-select: none;
+}
+.slideshow-track {
+  display: flex;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.slideshow-slide {
+  min-width: 100%;
+  flex-shrink: 0;
+}
+.slideshow-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 1px;
+  /* cap height so tall portrait shots don't dominate */
+  max-height: 480px;
+  object-fit: cover;
+}
+/* single-photo — no wrapper, keep existing dog-photo style */
+.dog-photo { width: 100%; height: auto; display: block; border-radius: 1px; margin-bottom: 10px; max-height: 480px; object-fit: cover; }
+
+/* prev / next buttons */
+.slideshow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  font-size: 18px;
+  line-height: 1;
+  padding: 8px 10px;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.15s;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.slideshow-btn:hover { background: rgba(200,132,10,0.85); }
+.slideshow-btn.prev { left: 6px; }
+.slideshow-btn.next { right: 6px; }
+
+/* dot indicators */
+.slideshow-dots {
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  z-index: 10;
+}
+.slideshow-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  padding: 0;
+}
+.slideshow-dot.active {
+  background: var(--mustard);
+  border-color: var(--mustard);
+  transform: scale(1.25);
+}
+
+/* counter badge (e.g. "2 / 4") */
+.slideshow-counter {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+  background: rgba(0,0,0,0.55);
+  padding: 2px 7px;
+  border-radius: 2px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 10;
+  pointer-events: none;
+}
+
 .dog-review { font-family: 'Barlow', Georgia, serif; font-style: italic; font-size: 14px; color: #444; border-left: 3px solid var(--border); padding-left: 10px; margin-bottom: 10px; line-height: 1.55; }
 .dog-tags { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
 .tag { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 2px; letter-spacing: 0.2px; white-space: nowrap; }
@@ -509,7 +605,6 @@ const C = {
   QUANTITY:'How many dogs did you put in you?',
 };
 
-
 /* ── STATE NORMALIZER ── */
 const STATE_MAP = {
   'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California',
@@ -524,7 +619,6 @@ const STATE_MAP = {
   'VA':'Virginia','WA':'Washington','WV':'West Virginia','WI':'Wisconsin','WY':'Wyoming',
   'DC':'Washington D.C.','PR':'Puerto Rico','GU':'Guam','VI':'U.S. Virgin Islands',
 };
-// Reverse map: full name -> canonical full name (normalized casing)
 const STATE_NAME_MAP = {};
 Object.entries(STATE_MAP).forEach(([abbr, full]) => {
   STATE_NAME_MAP[full.toUpperCase()] = full;
@@ -535,11 +629,8 @@ function normalizeState(raw) {
   const trimmed = raw.trim();
   if (!trimmed) return null;
   const upper = trimmed.toUpperCase();
-  // Check if it's a known abbreviation
   if (STATE_MAP[upper]) return STATE_MAP[upper];
-  // Check if it's a full state name (case-insensitive)
   if (STATE_NAME_MAP[upper]) return STATE_NAME_MAP[upper];
-  // Return title-cased version of whatever was entered as fallback
   return trimmed.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 }
 
@@ -695,12 +786,35 @@ function getTimestamp(d){
   if(!raw)return null;const t=new Date(raw);return isNaN(t.getTime())?null:t;
 }
 function isWithinDays(d,days){const t=getTimestamp(d);if(!t)return false;return(Date.now()-t.getTime())<days*86400000;}
+
+/* ── PHOTO HELPERS ── */
+
+/**
+ * Parse a photo field that may contain one or more Drive URLs
+ * separated by commas, newlines, or whitespace.
+ * Returns an array of thumbnail URLs (empty array if none).
+ */
+function driveThumbsFromField(raw) {
+  if (!raw) return [];
+  // Split on comma, newline, or runs of whitespace between URLs
+  // We look for anything that looks like a URL (starts with http)
+  const parts = raw.split(/[\s,]+/).map(s => s.trim()).filter(Boolean);
+  const thumbs = [];
+  for (const part of parts) {
+    if (!part.startsWith('http')) continue;
+    const t = driveThumb(part);
+    if (t) thumbs.push(t);
+  }
+  return thumbs;
+}
+
 function driveThumb(url){
   if(!url||!url.includes('drive.google'))return null;
   const m1=url.match(/[?&]id=([^&\s]+)/),m2=url.match(/\/d\/([^/\s]+)/);
   const id=(m1&&m1[1])||(m2&&m2[1]);
   return id?`https://drive.google.com/thumbnail?id=${id}&sz=w800`:null;
 }
+
 function scoreClass(s){const n=parseFloat(s);if(isNaN(n))return'score-mid';if(n>=8)return'score-hi';if(n>=5)return'score-mid';return'score-lo';}
 function eatLabel(v){
   const l=(v||'').toLowerCase();
@@ -718,7 +832,6 @@ function getScoutStats(name, allSubs) {
   const totalDogs = subs.reduce((s, d) => s + dogCount(d), 0);
   const scores = subs.map(d => parseFloat(d[C.SCORE])).filter(n => !isNaN(n));
   const avgRating = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : null;
-  // Find earliest submission for weeks-since calculation
   const timestamps = subs.map(d => getTimestamp(d)).filter(Boolean);
   if (!timestamps.length) return { totalDogs, avgRating, weeklyAvg: null };
   timestamps.sort((a,b) => a-b);
@@ -728,12 +841,81 @@ function getScoutStats(name, allSubs) {
   return { totalDogs, avgRating, weeklyAvg };
 }
 
+/* ── SLIDESHOW INIT ── */
+/**
+ * Wire up all .slideshow elements inside a given root element.
+ * Called after any DOM injection so new cards also get initialized.
+ */
+function initSlideshows(root) {
+  root.querySelectorAll('.slideshow').forEach(sl => {
+    // Avoid double-init
+    if (sl.dataset.ssInit) return;
+    sl.dataset.ssInit = '1';
+
+    const track = sl.querySelector('.slideshow-track');
+    const slides = sl.querySelectorAll('.slideshow-slide');
+    const dots   = sl.querySelectorAll('.slideshow-dot');
+    const counter = sl.querySelector('.slideshow-counter');
+    const total  = slides.length;
+    if (total <= 1) return; // nothing to wire
+
+    let current = 0;
+    let autoTimer = null;
+
+    function goTo(idx) {
+      current = (idx + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      if (counter) counter.textContent = `${current + 1} / ${total}`;
+    }
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = setInterval(() => goTo(current + 1), 4500);
+    }
+    function stopAuto() {
+      if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    }
+
+    // Buttons
+    const prevBtn = sl.querySelector('.slideshow-btn.prev');
+    const nextBtn = sl.querySelector('.slideshow-btn.next');
+    if (prevBtn) prevBtn.addEventListener('click', e => { e.stopPropagation(); goTo(current - 1); startAuto(); });
+    if (nextBtn) nextBtn.addEventListener('click', e => { e.stopPropagation(); goTo(current + 1); startAuto(); });
+
+    // Dots
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', e => { e.stopPropagation(); goTo(i); startAuto(); });
+    });
+
+    // Swipe / drag support
+    let touchStartX = null;
+    sl.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    sl.addEventListener('touchend', e => {
+      if (touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) { goTo(current + (dx < 0 ? 1 : -1)); startAuto(); }
+      touchStartX = null;
+    }, { passive: true });
+
+    // Pause auto-advance while hovering
+    sl.addEventListener('mouseenter', stopAuto);
+    sl.addEventListener('mouseleave', startAuto);
+
+    // Init
+    goTo(0);
+    startAuto();
+  });
+}
+
 /* ── MODAL ── */
 function openModal(title, html, reroll) {
   document.getElementById('modal-title').textContent = title;
   document.getElementById('modal-body').innerHTML = html + (reroll ? `<button class="modal-reroll" id="modal-reroll-btn">&#127922; Roll another dog</button>` : '');
   const o = document.getElementById('modal-overlay');
   o.style.display = 'flex'; requestAnimationFrame(() => o.classList.add('visible'));
+  // Init any slideshows inside the modal
+  initSlideshows(document.getElementById('modal-body'));
   if (reroll) document.getElementById('modal-reroll-btn').addEventListener('click', showRandomDog);
 }
 function closeModal() {
@@ -769,7 +951,6 @@ function populateFilterOptions(subs) {
   const states = [...new Set(subs.map(d => normalizeState(d[C.STATE])).filter(Boolean))].sort();
   const sc = document.getElementById('f-scout');
   const st = document.getElementById('f-state');
-  // preserve existing selections
   const scVal = sc.value, stVal = st.value;
   sc.innerHTML = '<option value="">All Glizzy Guzzlers</option>' + scouts.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
   st.innerHTML = '<option value="">All states</option>' + states.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
@@ -793,7 +974,6 @@ function applyFilters() {
   if (dateFrom) filtered = filtered.filter(d => { const t=getTimestamp(d); return t && t >= new Date(dateFrom); });
   if (dateTo)   filtered = filtered.filter(d => { const t=getTimestamp(d); return t && t <= new Date(dateTo+'T23:59:59'); });
 
-  // sort
   filtered.sort((a,b) => {
     if (sort==='date-desc') { const ta=getTimestamp(a)||new Date(0),tb=getTimestamp(b)||new Date(0); return tb-ta; }
     if (sort==='date-asc')  { const ta=getTimestamp(a)||new Date(0),tb=getTimestamp(b)||new Date(0); return ta-tb; }
@@ -805,7 +985,6 @@ function applyFilters() {
   });
 
   ACTIVE_FILTERS = !!(scout||state||!isNaN(scoreMin)||!isNaN(scoreMax)||dateFrom||dateTo||sort!=='date-desc');
-  // update badge
   const btn = document.getElementById('filter-toggle-btn');
   const existing = btn.querySelector('.filter-active-badge');
   if (ACTIVE_FILTERS) {
@@ -876,15 +1055,11 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 }
 
 function drawCardText(ctx, d, W, H, textW) {
-  // Background
   ctx.fillStyle = '#111111';
   ctx.fillRect(0, 0, W, H);
-
-  // Mustard accent bar top
   ctx.fillStyle = '#C8840A';
   ctx.fillRect(0, 0, W, 5);
 
-  // Score badge — top left
   const score = parseFloat(d[C.SCORE]);
   const scoreStr = isNaN(score) ? '—' : score.toFixed(1);
   const scoreColor = score>=8 ? '#1A6B3C' : score>=5 ? '#C8840A' : '#B82918';
@@ -896,13 +1071,11 @@ function drawCardText(ctx, d, W, H, textW) {
   ctx.textAlign = 'center';
   ctx.fillText(scoreStr, 45, 47);
 
-  // Vendor name — right of score badge
   const textStart = 84;
   ctx.fillStyle = '#FFFFFF';
   ctx.font = 'bold 18px "Barlow Condensed", "Arial Narrow", sans-serif';
   ctx.textAlign = 'left';
   const vendor = (d[C.VENDOR]||'Unknown Vendor');
-  // truncate to fit in text column
   let vendorStr = vendor;
   while (ctx.measureText(vendorStr).width > textW - textStart - 10 && vendorStr.length > 4) {
     vendorStr = vendorStr.slice(0, -1);
@@ -910,7 +1083,6 @@ function drawCardText(ctx, d, W, H, textW) {
   if (vendorStr.length < vendor.length) vendorStr += '…';
   ctx.fillText(vendorStr, textStart, 35);
 
-  // Glizzy Guzzler + location
   ctx.fillStyle = '#999999';
   ctx.font = '13px "Barlow Condensed", "Arial Narrow", sans-serif';
   const meta = [d[C.SCOUT], d[C.CITY], normalizeState(d[C.STATE])].filter(Boolean).join(' · ');
@@ -921,12 +1093,10 @@ function drawCardText(ctx, d, W, H, textW) {
   if (metaStr.length < meta.length) metaStr += '…';
   ctx.fillText(metaStr, textStart, 52);
 
-  // Divider
   ctx.strokeStyle = '#333';
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(16, 70); ctx.lineTo(textW - 10, 70); ctx.stroke();
 
-  // Review
   const review = d[C.REVIEW];
   if (review && review.length > 5) {
     ctx.fillStyle = '#CCCCCC';
@@ -935,7 +1105,6 @@ function drawCardText(ctx, d, W, H, textW) {
     wrapText(ctx, truncated, 16, 90, textW - 26, 18);
   }
 
-  // Eat again tag
   const eatAgain = (d[C.EAT_AGAIN]||'').toLowerCase();
   let eatText, eatColor, eatBg;
   if (eatAgain.includes('yes')||eatAgain.includes('absolutely')) { eatText='✓ Would consume again'; eatColor='#1A6B3C'; eatBg='#E4F4EC'; }
@@ -950,7 +1119,6 @@ function drawCardText(ctx, d, W, H, textW) {
   ctx.fillStyle = eatColor;
   ctx.fillText(eatText, 25, H - 30);
 
-  // Footer branding bar
   ctx.fillStyle = '#2a2a2a';
   ctx.fillRect(0, H - 22, W, 22);
   ctx.fillStyle = '#777777';
@@ -968,54 +1136,47 @@ function renderShareCard(d) {
   const W = 520, H = 290;
   canvas.width = W; canvas.height = H;
 
-  const PHOTO_W = 160; // fixed right column width
-  const thumbUrl = driveThumb(d[C.PHOTO]);
-  const textW = thumbUrl ? W - PHOTO_W : W; // text column width
+  const PHOTO_W = 160;
+  // Use only the first photo for the share card
+  const thumbs = driveThumbsFromField(d[C.PHOTO]);
+  const thumbUrl = thumbs[0] || null;
+  const textW = thumbUrl ? W - PHOTO_W : W;
 
-  // Draw text layer first
   drawCardText(ctx, d, W, H, textW);
 
   if (thumbUrl) {
-    // Draw a dark placeholder for the photo column while loading
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(textW, 5, PHOTO_W, H - 5);
 
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
-      // Redraw background for photo column
       ctx.fillStyle = '#111111';
       ctx.fillRect(textW, 5, PHOTO_W, H - 27);
 
-      // Draw divider line between columns
       ctx.strokeStyle = '#2a2a2a';
       ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(textW, 5); ctx.lineTo(textW, H - 22); ctx.stroke();
 
-      // Cover-fit the photo into the right column
-      const colH = H - 27; // leave room for footer
+      const colH = H - 27;
       const imgAspect = img.naturalWidth / img.naturalHeight;
       const colAspect = PHOTO_W / colH;
       let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
       if (imgAspect > colAspect) {
-        // image wider than column — crop sides
         sw = Math.round(img.naturalHeight * colAspect);
         sx = Math.round((img.naturalWidth - sw) / 2);
       } else {
-        // image taller than column — crop top/bottom
         sh = Math.round(img.naturalWidth / colAspect);
         sy = Math.round((img.naturalHeight - sh) / 2);
       }
       ctx.drawImage(img, sx, sy, sw, sh, textW, 5, PHOTO_W, colH);
 
-      // Redraw footer over the photo column too
       ctx.fillStyle = '#2a2a2a';
       ctx.fillRect(textW, H - 22, PHOTO_W, 22);
 
       document.getElementById('share-note').textContent = 'Share card ready. Tap download or copy.';
     };
     img.onerror = () => {
-      // Redraw text zone without photo column
       drawCardText(ctx, d, W, H, W);
       document.getElementById('share-note').textContent = 'Photo unavailable — card ready without it.';
     };
@@ -1171,17 +1332,52 @@ function refreshMath(){
   w.innerHTML=`<span class="big">${m.big}</span>${m.body}`;
 }
 
+/* ── PHOTO HTML BUILDER ── */
+/**
+ * Returns the HTML for the photo section of a card.
+ * - 0 photos → empty string
+ * - 1 photo  → simple <img> (original behaviour)
+ * - 2+ photos → .slideshow with prev/next/dots
+ */
+function buildPhotoHtml(d) {
+  const thumbs = driveThumbsFromField(d[C.PHOTO]);
+  if (!thumbs.length) return '';
+
+  if (thumbs.length === 1) {
+    return `<img class="dog-photo" src="${esc(thumbs[0])}" alt="${esc(d[C.VENDOR])}" loading="lazy" onerror="this.closest('.dog-photo')?.remove(); this.remove();">`;
+  }
+
+  // Multi-photo slideshow
+  const slides = thumbs.map((url, i) =>
+    `<div class="slideshow-slide">
+       <img src="${esc(url)}" alt="${esc(d[C.VENDOR])} photo ${i+1}" loading="lazy" onerror="this.parentElement.style.display='none'">
+     </div>`
+  ).join('');
+
+  const dots = thumbs.map((_, i) =>
+    `<button class="slideshow-dot${i===0?' active':''}" aria-label="Photo ${i+1}"></button>`
+  ).join('');
+
+  return `<div class="slideshow">
+    <div class="slideshow-track">${slides}</div>
+    <button class="slideshow-btn prev" aria-label="Previous photo">&#8249;</button>
+    <button class="slideshow-btn next" aria-label="Next photo">&#8250;</button>
+    <div class="slideshow-dots">${dots}</div>
+    <div class="slideshow-counter">1 / ${thumbs.length}</div>
+  </div>`;
+}
+
 /* ── FEED RENDERING ── */
 function dogCardInner(d, newest, inModal) {
-  const thumb=driveThumb(d[C.PHOTO]);
   const[eatCls,eatTxt]=eatLabel(d[C.EAT_AGAIN]);
   const qty=dogCount(d);
   const review=d[C.REVIEW]?`<div class="dog-review">"${esc(d[C.REVIEW])}"</div>`:'';
   const describe=d[C.DESCRIBE]?`<span class="tag tag-top">${esc(d[C.DESCRIBE]).substring(0,80)}</span>`:'';
   const qtyTag=qty>1?`<span class="tag tag-qty">&#127789; &times;${qty}</span>`:'';
   const shareBtn=inModal?'':`<button class="share-btn" data-share-idx="${ALL_SUBS.indexOf(d)}">&#8599; Share</button>`;
+  const photoHtml = buildPhotoHtml(d);
   return`${newest?'<div class="featured-flag">Latest submission</div>':''}
-    ${thumb?`<img class="dog-photo" src="${thumb}" alt="${esc(d[C.VENDOR])}" loading="lazy" onerror="this.remove()">` :''}
+    ${photoHtml}
     <div class="card-header"><div><div class="dog-name">${esc(d[C.VENDOR])}</div>
     <div class="dog-meta">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(normalizeState(d[C.STATE])||'')}</div></div>
     <div class="score-bubble ${scoreClass(d[C.SCORE])}">${fmt(d[C.SCORE])}</div></div>
@@ -1229,6 +1425,7 @@ function renderFeed(subs) {
     el.innerHTML = dogCardInner(d, i===0&&subs.length>1&&!ACTIVE_FILTERS, false);
     feedContainer.appendChild(el);
     bindShareButtons(el);
+    initSlideshows(el);
   });
 
   FEED_PAGE = 1;
@@ -1257,6 +1454,7 @@ function appendNextPage() {
     el.innerHTML=dogCardInner(d,false,false);
     feed.appendChild(el);
     bindShareButtons(el);
+    initSlideshows(el);
   });
   FEED_PAGE++;
   if(FEED_PAGE*PAGE_SIZE>=src.length){
@@ -1318,7 +1516,6 @@ function render(subs){
   const wouldYes=subs.filter(d=>eatLabel(d[C.EAT_AGAIN])[0]==='tag-yes').length;
   const wouldPct=totalReports?Math.round(wouldYes/totalReports*100)+'%':'—';
 
-  // Leaderboard data
   const sm={};
   subs.forEach(d=>{
     const n=d[C.SCOUT];if(!n)return;
@@ -1332,7 +1529,6 @@ function render(subs){
     return{name,dogs:s.dogs,reports:s.reports,weekDogs:s.weekDogs,avg:s.sc?(s.st/s.sc).toFixed(1):'—',best:sorted[0]||null,worst:sorted[sorted.length-1]||null};
   }).sort((a,b)=>b.dogs-a.dogs);
 
-  // ── STREAK BAR (updated) ──
   const sb=document.getElementById('streak-bar'),st=document.getElementById('streak-text');
   const rs=subs.find(d=>isWithinDays(d,2));
   if(rs&&rs[C.SCOUT]){
@@ -1348,7 +1544,6 @@ function render(subs){
     sb.classList.remove('hidden');
   } else sb.classList.add('hidden');
 
-  // Seven-day summary
   const sd=buildSevenDaySummary(subs);
   const sde=document.getElementById('seven-day');
   if(sd){document.getElementById('seven-day-text').innerHTML=sd;sde.classList.remove('hidden');}else sde.classList.add('hidden');
@@ -1403,8 +1598,11 @@ function render(subs){
     </footer>
   `;
 
-  // Bind share buttons on initial cards
-  document.querySelectorAll('#feed-container .dog-card').forEach(card => bindShareButtons(card));
+  // Bind share buttons and init slideshows on initial render
+  document.querySelectorAll('#feed-container .dog-card').forEach(card => {
+    bindShareButtons(card);
+    initSlideshows(card);
+  });
 
   animateAllCounters();
   setupStickyDetect();
