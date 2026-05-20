@@ -167,6 +167,20 @@ body {
 /* ── SECTION LABEL ── */
 .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--dust); text-transform: uppercase; margin-bottom: 11px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
 
+
+/* ── WIENER BOARD LABEL ── */
+.wiener-board-label {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: var(--mustard);
+  text-transform: uppercase;
+  margin-bottom: 11px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--mustard);
+}
+
 /* ── MAIN GRID ── */
 .main-grid { display: grid; grid-template-columns: 1fr 268px; gap: 22px; margin-bottom: 24px; }
 
@@ -393,9 +407,9 @@ body {
 
 <div class="filter-bar" id="filter-bar">
   <div class="filter-group">
-    <label class="filter-label">Scout</label>
+    <label class="filter-label">Glizzy Guzzler</label>
     <select class="filter-select" id="f-scout">
-      <option value="">All scouts</option>
+      <option value="">All Glizzy Guzzlers</option>
     </select>
   </div>
   <div class="filter-group">
@@ -722,7 +736,7 @@ function populateFilterOptions(subs) {
   const st = document.getElementById('f-state');
   // preserve existing selections
   const scVal = sc.value, stVal = st.value;
-  sc.innerHTML = '<option value="">All scouts</option>' + scouts.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
+  sc.innerHTML = '<option value="">All Glizzy Guzzlers</option>' + scouts.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
   st.innerHTML = '<option value="">All states</option>' + states.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
   sc.value = scVal; st.value = stVal;
 }
@@ -965,7 +979,7 @@ function buildSevenDaySummary(subs) {
   const hi=sc.length?Math.max(...sc):null,lo=sc.length?Math.min(...sc):null;
   let s1=`The committee put away <strong>${td} dog${td!==1?'s':''}</strong>`;
   if(states.size>1)s1+=` across <strong>${states.size} states</strong>`;
-  s1+=` with <strong>${glizzys.size}</strong> glizzy muncher${glizzys.size===1?'':'s'} pitching in.`;
+  s1+=` with <strong>${glizzys.size}</strong> Glizzy Guzzler${glizzys.size===1?'':'s'} pitching in.`;
   let s2='';
   if(avg){
     const mood=parseFloat(avg)>=7?'mostly happy':parseFloat(avg)>=5?'mixed':'a little rough';
@@ -1024,7 +1038,7 @@ function buildForecast(subs){
   const phrase=p.ratio>=2?'is very overdue':p.ratio>=1.3?'is due':'might be ready';
   const ds=p.dsl<1?'less than a day ago':`${Math.round(p.dsl)} day${Math.round(p.dsl)!==1?'s':''} ago`;
   const gs=p.avg<1?'less than a day':`${Math.round(p.avg)} day${Math.round(p.avg)!==1?'s':''}`;
-  return{body:`<strong>${esc(p.name)}</strong> ${phrase} for another dog. Last logged ${ds}; they usually go about ${gs} between submissions.`,method:"Based on each glizzy muncher's average gap between submissions vs. how long it's been since their last."};
+  return{body:`<strong>${esc(p.name)}</strong> ${phrase} for another dog. Last logged ${ds}; they usually go about ${gs} between submissions.`,method:"Based on each Glizzy Guzzler's average gap between submissions vs. how long it's been since their last."};
 }
 
 /* ── HOT DOG MATH ── */
@@ -1263,12 +1277,12 @@ function render(subs){
   const forecast=buildForecast(subs);
 
   document.getElementById('meta-count').textContent=
-    `${totalDogs} dog${totalDogs!==1?'s':''} consumed \u00b7 ${glizzys.length} glizzy muncher${glizzys.length!==1?'s':''}`;
+    `${totalDogs} dog${totalDogs!==1?'s':''} consumed \u00b7 ${glizzys.length} Glizzy Guzzler${glizzys.length!==1?'s':''}`;
 
   const sidebarHTML=`<div class="sidebar-mobile-inject">
     ${renderForecast(forecast)}
     ${renderMath(totalDogs)}
-    <div class="section-label">Glizzy Muncher leaderboard &mdash; by consumption</div>
+    <div class="wiener-board-label">🌭 The Wiener Board 🌭</div>
     ${renderLeaderboard(glizzys)}
   </div>`;
 
@@ -1294,7 +1308,7 @@ function render(subs){
       <div>
         ${renderForecast(forecast)}
         ${renderMath(totalDogs)}
-        <div class="section-label">Glizzy Muncher leaderboard &mdash; by consumption</div>
+        <div class="wiener-board-label">🌭 The Wiener Board 🌭</div>
         ${renderLeaderboard(glizzys)}
       </div>
     </div>
@@ -1335,7 +1349,7 @@ function renderStats(td,avg,avgClass,states,wouldPct){
 }
 
 function renderForecast(f){
-  if(!f)return`<div class="widget widget-forecast"><div class="widget-title">&#128302; The Frank Forecast</div><div class="widget-body">No forecast yet &mdash; need a few more submissions per glizzy muncher to spot patterns.</div></div>`;
+  if(!f)return`<div class="widget widget-forecast"><div class="widget-title">&#128302; The Frank Forecast</div><div class="widget-body">No forecast yet &mdash; need a few more submissions per Glizzy Guzzler to spot patterns.</div></div>`;
   return`<div class="widget widget-forecast"><div class="widget-title">&#128302; The Frank Forecast</div><div class="widget-body">${f.body}</div><div class="widget-method">Methodology: ${esc(f.method)}</div></div>`;
 }
 
@@ -1349,7 +1363,7 @@ function renderMath(totalDogs){
 }
 
 function renderLeaderboard(glizzys){
-  if(!glizzys.length)return'<div class="empty-card">No glizzy munchers yet.</div>';
+  if(!glizzys.length)return'<div class="empty-card">No Glizzy Guzzlers yet.</div>';
   return`<div class="leaderboard">${glizzys.slice(0,8).map((s,i)=>{
     let tt='';
     if(s.best&&s.worst&&s.best!==s.worst)tt=`<div class="lb-tooltip"><div class="tt-label">Best</div><div class="tt-best">${esc(s.best.vendor)} &mdash; ${s.best.score.toFixed(1)}</div><div class="tt-label" style="margin-top:4px">Worst</div><div class="tt-worst">${esc(s.worst.vendor)} &mdash; ${s.worst.score.toFixed(1)}</div></div>`;
