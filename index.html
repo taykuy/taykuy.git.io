@@ -841,100 +841,149 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   return lines.length;
 }
 
-function renderShareCard(d) {
-  const canvas = document.getElementById('share-canvas');
-  const ctx = canvas.getContext('2d');
-  const W = 480, H = 300;
-  canvas.width = W; canvas.height = H;
-
+function drawCardText(ctx, d, W, H, textW) {
   // Background
   ctx.fillStyle = '#111111';
   ctx.fillRect(0, 0, W, H);
 
-  // Mustard accent bar
+  // Mustard accent bar top
   ctx.fillStyle = '#C8840A';
   ctx.fillRect(0, 0, W, 5);
 
-  // Score badge
+  // Score badge — top left
   const score = parseFloat(d[C.SCORE]);
   const scoreStr = isNaN(score) ? '—' : score.toFixed(1);
   const scoreColor = score>=8 ? '#1A6B3C' : score>=5 ? '#C8840A' : '#B82918';
-  const scoreBg = score>=8 ? '#E4F4EC' : score>=5 ? '#FFF6DC' : '#FDECEA';
+  const scoreBg   = score>=8 ? '#E4F4EC' : score>=5 ? '#FFF6DC' : '#FDECEA';
   ctx.fillStyle = scoreBg;
-  ctx.fillRect(W-90, 20, 70, 50);
+  ctx.fillRect(16, 16, 58, 44);
   ctx.fillStyle = scoreColor;
-  ctx.font = 'bold 32px "Bebas Neue", Impact, sans-serif';
+  ctx.font = 'bold 30px "Bebas Neue", Impact, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(scoreStr, W-55, 57);
+  ctx.fillText(scoreStr, 45, 47);
 
-  // Vendor name
+  // Vendor name — right of score badge
+  const textStart = 84;
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 22px "Barlow Condensed", "Arial Narrow", sans-serif';
+  ctx.font = 'bold 18px "Barlow Condensed", "Arial Narrow", sans-serif';
   ctx.textAlign = 'left';
-  const vendor = (d[C.VENDOR]||'Unknown Vendor').substring(0,40);
-  ctx.fillText(vendor, 20, 50);
+  const vendor = (d[C.VENDOR]||'Unknown Vendor');
+  // truncate to fit in text column
+  let vendorStr = vendor;
+  while (ctx.measureText(vendorStr).width > textW - textStart - 10 && vendorStr.length > 4) {
+    vendorStr = vendorStr.slice(0, -1);
+  }
+  if (vendorStr.length < vendor.length) vendorStr += '…';
+  ctx.fillText(vendorStr, textStart, 35);
 
-  // Scout + location
+  // Glizzy Guzzler + location
   ctx.fillStyle = '#999999';
-  ctx.font = '14px "Barlow Condensed", "Arial Narrow", sans-serif';
+  ctx.font = '13px "Barlow Condensed", "Arial Narrow", sans-serif';
   const meta = [d[C.SCOUT], d[C.CITY], d[C.STATE]].filter(Boolean).join(' · ');
-  ctx.fillText(meta.substring(0,60), 20, 72);
+  let metaStr = meta;
+  while (ctx.measureText(metaStr).width > textW - textStart - 10 && metaStr.length > 4) {
+    metaStr = metaStr.slice(0, -1);
+  }
+  if (metaStr.length < meta.length) metaStr += '…';
+  ctx.fillText(metaStr, textStart, 52);
 
   // Divider
   ctx.strokeStyle = '#333';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(20, 85); ctx.lineTo(W-20, 85); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(16, 70); ctx.lineTo(textW - 10, 70); ctx.stroke();
 
   // Review
   const review = d[C.REVIEW];
   if (review && review.length > 5) {
     ctx.fillStyle = '#CCCCCC';
-    ctx.font = 'italic 13px Georgia, serif';
-    const truncated = '"' + review.substring(0, 200) + (review.length>200?'…':'"');
-    wrapText(ctx, truncated, 20, 108, W-40, 20);
+    ctx.font = 'italic 12px Georgia, serif';
+    const truncated = '"' + review.substring(0, 180) + (review.length>180?'…':'"');
+    wrapText(ctx, truncated, 16, 90, textW - 26, 18);
   }
 
   // Eat again tag
   const eatAgain = (d[C.EAT_AGAIN]||'').toLowerCase();
   let eatText, eatColor, eatBg;
   if (eatAgain.includes('yes')||eatAgain.includes('absolutely')) { eatText='✓ Would consume again'; eatColor='#1A6B3C'; eatBg='#E4F4EC'; }
-  else if (eatAgain.includes('no')||eatAgain.includes('never')) { eatText='✗ Never again'; eatColor='#B82918'; eatBg='#FDECEA'; }
-  else { eatText='~ Maybe, if desperate'; eatColor='#C8840A'; eatBg='#FFF6DC'; }
+  else if (eatAgain.includes('no')||eatAgain.includes('never'))  { eatText='✗ Never again';         eatColor='#B82918'; eatBg='#FDECEA'; }
+  else                                                            { eatText='~ Maybe, if desperate'; eatColor='#C8840A'; eatBg='#FFF6DC'; }
 
+  ctx.font = 'bold 12px "Barlow Condensed", "Arial Narrow", sans-serif';
+  ctx.textAlign = 'left';
+  const tagW = ctx.measureText(eatText).width + 18;
   ctx.fillStyle = eatBg;
-  ctx.fillRect(20, H-52, ctx.measureText(eatText).width + 20, 24);
+  ctx.fillRect(16, H - 46, tagW, 22);
   ctx.fillStyle = eatColor;
-  ctx.font = 'bold 13px "Barlow Condensed", "Arial Narrow", sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText(eatText, 30, H-35);
+  ctx.fillText(eatText, 25, H - 30);
 
-  // Footer branding
-  ctx.fillStyle = '#444444';
-  ctx.fillRect(0, H-24, W, 24);
-  ctx.fillStyle = '#888888';
-  ctx.font = '11px "Barlow Condensed", "Arial Narrow", sans-serif';
+  // Footer branding bar
+  ctx.fillStyle = '#2a2a2a';
+  ctx.fillRect(0, H - 22, W, 22);
+  ctx.fillStyle = '#777777';
+  ctx.font = '10px "Barlow Condensed", "Arial Narrow", sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('🌭 THE FRANK REPORT', 14, H-8);
+  ctx.fillText('🌭 THE FRANK REPORT', 12, H - 7);
   ctx.textAlign = 'right';
   const ts = getTimestamp(d);
-  if (ts) ctx.fillText(ts.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}), W-14, H-8);
+  if (ts) ctx.fillText(ts.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}), W - 12, H - 7);
+}
 
-  // Photo loading (async, re-render if succeeds)
+function renderShareCard(d) {
+  const canvas = document.getElementById('share-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 520, H = 290;
+  canvas.width = W; canvas.height = H;
+
+  const PHOTO_W = 160; // fixed right column width
   const thumbUrl = driveThumb(d[C.PHOTO]);
+  const textW = thumbUrl ? W - PHOTO_W : W; // text column width
+
+  // Draw text layer first
+  drawCardText(ctx, d, W, H, textW);
+
   if (thumbUrl) {
+    // Draw a dark placeholder for the photo column while loading
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(textW, 5, PHOTO_W, H - 5);
+
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
-      // Place photo on right side
-      const ph = H - 30, pw = Math.round(ph * img.naturalWidth / img.naturalHeight);
-      const maxPw = 160;
-      const finalPw = Math.min(pw, maxPw);
-      const finalPh = Math.round(finalPw * img.naturalHeight / img.naturalWidth);
-      ctx.drawImage(img, W - finalPw - 10, 20, finalPw, Math.min(finalPh, H-50));
+      // Redraw background for photo column
+      ctx.fillStyle = '#111111';
+      ctx.fillRect(textW, 5, PHOTO_W, H - 27);
+
+      // Draw divider line between columns
+      ctx.strokeStyle = '#2a2a2a';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(textW, 5); ctx.lineTo(textW, H - 22); ctx.stroke();
+
+      // Cover-fit the photo into the right column
+      const colH = H - 27; // leave room for footer
+      const imgAspect = img.naturalWidth / img.naturalHeight;
+      const colAspect = PHOTO_W / colH;
+      let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
+      if (imgAspect > colAspect) {
+        // image wider than column — crop sides
+        sw = Math.round(img.naturalHeight * colAspect);
+        sx = Math.round((img.naturalWidth - sw) / 2);
+      } else {
+        // image taller than column — crop top/bottom
+        sh = Math.round(img.naturalWidth / colAspect);
+        sy = Math.round((img.naturalHeight - sh) / 2);
+      }
+      ctx.drawImage(img, sx, sy, sw, sh, textW, 5, PHOTO_W, colH);
+
+      // Redraw footer over the photo column too
+      ctx.fillStyle = '#2a2a2a';
+      ctx.fillRect(textW, H - 22, PHOTO_W, 22);
+
       document.getElementById('share-note').textContent = 'Share card ready. Tap download or copy.';
     };
     img.onerror = () => {
-      document.getElementById('share-note').textContent = 'Photo unavailable due to cross-origin restrictions — card ready without it.';
+      // Redraw text zone without photo column
+      drawCardText(ctx, d, W, H, W);
+      document.getElementById('share-note').textContent = 'Photo unavailable — card ready without it.';
     };
     img.src = `${IMG_PROXY}?url=${encodeURIComponent(thumbUrl)}`;
   } else {
