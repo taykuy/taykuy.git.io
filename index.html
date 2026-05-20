@@ -499,6 +499,7 @@ body {
 
 <script>
 const SUBMISSIONS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOI4ODSx0JTqCqFzgmKiUbXuiBAzqj95FmDc2MTcdgAOqVb2UXjwYijRUWKPaNB8GidmhkoqfknYWx/pub?output=csv';
+const IMG_PROXY = 'https://frank-report-proxy.taylor-kuykendall.workers.dev';
 
 const C = {
   TIMESTAMP:'Timestamp', SCOUT:'Name', PHOTO:'Photo', VENDOR:'Vendor/Home',
@@ -935,7 +936,7 @@ function renderShareCard(d) {
     img.onerror = () => {
       document.getElementById('share-note').textContent = 'Photo unavailable due to cross-origin restrictions — card ready without it.';
     };
-    img.src = thumbUrl;
+    img.src = `${IMG_PROXY}?url=${encodeURIComponent(thumbUrl)}`;
   } else {
     document.getElementById('share-note').textContent = 'Share card ready. Tap download or copy.';
   }
