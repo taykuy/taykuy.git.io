@@ -509,6 +509,40 @@ const C = {
   QUANTITY:'How many dogs did you put in you?',
 };
 
+
+/* ── STATE NORMALIZER ── */
+const STATE_MAP = {
+  'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California',
+  'CO':'Colorado','CT':'Connecticut','DE':'Delaware','FL':'Florida','GA':'Georgia',
+  'HI':'Hawaii','ID':'Idaho','IL':'Illinois','IN':'Indiana','IA':'Iowa',
+  'KS':'Kansas','KY':'Kentucky','LA':'Louisiana','ME':'Maine','MD':'Maryland',
+  'MA':'Massachusetts','MI':'Michigan','MN':'Minnesota','MS':'Mississippi','MO':'Missouri',
+  'MT':'Montana','NE':'Nebraska','NV':'Nevada','NH':'New Hampshire','NJ':'New Jersey',
+  'NM':'New Mexico','NY':'New York','NC':'North Carolina','ND':'North Dakota','OH':'Ohio',
+  'OK':'Oklahoma','OR':'Oregon','PA':'Pennsylvania','RI':'Rhode Island','SC':'South Carolina',
+  'SD':'South Dakota','TN':'Tennessee','TX':'Texas','UT':'Utah','VT':'Vermont',
+  'VA':'Virginia','WA':'Washington','WV':'West Virginia','WI':'Wisconsin','WY':'Wyoming',
+  'DC':'Washington D.C.','PR':'Puerto Rico','GU':'Guam','VI':'U.S. Virgin Islands',
+};
+// Reverse map: full name -> canonical full name (normalized casing)
+const STATE_NAME_MAP = {};
+Object.entries(STATE_MAP).forEach(([abbr, full]) => {
+  STATE_NAME_MAP[full.toUpperCase()] = full;
+});
+
+function normalizeState(raw) {
+  if (!raw) return null;
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+  const upper = trimmed.toUpperCase();
+  // Check if it's a known abbreviation
+  if (STATE_MAP[upper]) return STATE_MAP[upper];
+  // Check if it's a full state name (case-insensitive)
+  if (STATE_NAME_MAP[upper]) return STATE_NAME_MAP[upper];
+  // Return title-cased version of whatever was entered as fallback
+  return trimmed.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+}
+
 const MILESTONES = [10,25,50,75,100,150,200,250,500,750,1000,1500,2000];
 const MILESTONE_KEY = 'frankReportLastMilestone';
 const PAGE_SIZE = 5;
@@ -732,7 +766,7 @@ document.getElementById('filter-reset').addEventListener('click', resetFilters);
 /* ── FILTER LOGIC ── */
 function populateFilterOptions(subs) {
   const scouts = [...new Set(subs.map(d => d[C.SCOUT]).filter(Boolean))].sort();
-  const states = [...new Set(subs.map(d => d[C.STATE]).filter(Boolean))].sort();
+  const states = [...new Set(subs.map(d => normalizeState(d[C.STATE])).filter(Boolean))].sort();
   const sc = document.getElementById('f-scout');
   const st = document.getElementById('f-state');
   // preserve existing selections
@@ -753,7 +787,7 @@ function applyFilters() {
 
   let filtered = [...ALL_SUBS];
   if (scout) filtered = filtered.filter(d => d[C.SCOUT] === scout);
-  if (state) filtered = filtered.filter(d => d[C.STATE] === state);
+  if (state) filtered = filtered.filter(d => normalizeState(d[C.STATE]) === state);
   if (!isNaN(scoreMin)) filtered = filtered.filter(d => parseFloat(d[C.SCORE]) >= scoreMin);
   if (!isNaN(scoreMax)) filtered = filtered.filter(d => parseFloat(d[C.SCORE]) <= scoreMax);
   if (dateFrom) filtered = filtered.filter(d => { const t=getTimestamp(d); return t && t >= new Date(dateFrom); });
@@ -879,7 +913,7 @@ function drawCardText(ctx, d, W, H, textW) {
   // Glizzy Guzzler + location
   ctx.fillStyle = '#999999';
   ctx.font = '13px "Barlow Condensed", "Arial Narrow", sans-serif';
-  const meta = [d[C.SCOUT], d[C.CITY], d[C.STATE]].filter(Boolean).join(' · ');
+  const meta = [d[C.SCOUT], d[C.CITY], normalizeState(d[C.STATE])].filter(Boolean).join(' · ');
   let metaStr = meta;
   while (ctx.measureText(metaStr).width > textW - textStart - 10 && metaStr.length > 4) {
     metaStr = metaStr.slice(0, -1);
@@ -1023,7 +1057,7 @@ function buildSevenDaySummary(subs) {
   const week=subs.filter(d=>isWithinDays(d,7));if(!week.length)return null;
   const td=week.reduce((s,d)=>s+dogCount(d),0);
   const glizzys=new Set(week.map(d=>d[C.SCOUT]).filter(Boolean));
-  const states=new Set(week.map(d=>d[C.STATE]).filter(Boolean));
+  const states=new Set(week.map(d=>normalizeState(d[C.STATE])).filter(Boolean));
   const sc=week.map(d=>parseFloat(d[C.SCORE])).filter(n=>!isNaN(n));
   const avg=sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):null;
   const hi=sc.length?Math.max(...sc):null,lo=sc.length?Math.min(...sc):null;
@@ -1149,7 +1183,7 @@ function dogCardInner(d, newest, inModal) {
   return`${newest?'<div class="featured-flag">Latest submission</div>':''}
     ${thumb?`<img class="dog-photo" src="${thumb}" alt="${esc(d[C.VENDOR])}" loading="lazy" onerror="this.remove()">` :''}
     <div class="card-header"><div><div class="dog-name">${esc(d[C.VENDOR])}</div>
-    <div class="dog-meta">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div></div>
+    <div class="dog-meta">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(normalizeState(d[C.STATE])||'')}</div></div>
     <div class="score-bubble ${scoreClass(d[C.SCORE])}">${fmt(d[C.SCORE])}</div></div>
     ${review}<div class="dog-tags"><span class="tag ${eatCls}">${eatTxt}</span>${qtyTag}${describe}${shareBtn}</div>`;
 }
@@ -1280,7 +1314,7 @@ function render(subs){
   const avg=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):'—';
   const avgNum=parseFloat(avg);
   const avgClass=avgNum>=7?'green':avgNum>=5?'amber':'red';
-  const states=new Set(subs.map(d=>d[C.STATE]).filter(Boolean));
+  const states=new Set(subs.map(d=>normalizeState(d[C.STATE])).filter(Boolean));
   const wouldYes=subs.filter(d=>eatLabel(d[C.EAT_AGAIN])[0]==='tag-yes').length;
   const wouldPct=totalReports?Math.round(wouldYes/totalReports*100)+'%':'—';
 
@@ -1437,7 +1471,7 @@ function renderLeaderboard(glizzys){
 
 function renderHall(type,entries){
   const isFame=type==='fame';
-  return`<div class="hall hall-${type}"><div class="hall-title">${isFame?'Hall of fame &mdash; all-time greats':'Hall of shame &mdash; we will not forget'}</div>${entries.length?entries.map(d=>`<div class="hall-entry"><div><div class="hall-dog-name">${esc(d[C.VENDOR])}</div><div class="hall-dog-sub">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(d[C.STATE])}</div></div><div class="hall-score">${fmt(d[C.SCORE])}</div></div>`).join(''):`<div style="font-size:13px;color:#bbb;text-align:center;padding:14px">${isFame?'Submit some dogs first.':'Nothing bad enough yet. Give it time.'}</div>`}</div>`;
+  return`<div class="hall hall-${type}"><div class="hall-title">${isFame?'Hall of fame &mdash; all-time greats':'Hall of shame &mdash; we will not forget'}</div>${entries.length?entries.map(d=>`<div class="hall-entry"><div><div class="hall-dog-name">${esc(d[C.VENDOR])}</div><div class="hall-dog-sub">${esc(d[C.SCOUT])} &middot; ${esc(d[C.CITY])}, ${esc(normalizeState(d[C.STATE])||'')}</div></div><div class="hall-score">${fmt(d[C.SCORE])}</div></div>`).join(''):`<div style="font-size:13px;color:#bbb;text-align:center;padding:14px">${isFame?'Submit some dogs first.':'Nothing bad enough yet. Give it time.'}</div>`}</div>`;
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
