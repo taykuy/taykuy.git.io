@@ -648,6 +648,19 @@ body {
   <span class="streak-text" id="streak-text"></span>
 </div>
 
+<div id="stats-container"></div>
+
+<div class="review-ticker hidden" id="review-ticker">
+  <div class="review-ticker-track" id="review-ticker-track"></div>
+</div>
+
+<div class="news-ticker hidden" id="news-ticker">
+  <div class="news-ticker-label">&#127789; News</div>
+  <div class="news-ticker-track-wrap">
+    <div class="news-ticker-track" id="news-ticker-track"></div>
+  </div>
+</div>
+
 <div class="action-bar">
   <span class="action-bar-label">Quick actions</span>
   <button class="action-btn" id="random-dog-btn">&#127922; Random Dog</button>
@@ -700,17 +713,6 @@ body {
 <div class="seven-day hidden" id="seven-day">
   <div class="seven-day-label">&#128197; Last seven days in hot dogs</div>
   <div class="seven-day-text" id="seven-day-text"></div>
-</div>
-
-<div class="review-ticker hidden" id="review-ticker">
-  <div class="review-ticker-track" id="review-ticker-track"></div>
-</div>
-
-<div class="news-ticker hidden" id="news-ticker">
-  <div class="news-ticker-label">&#127789; News</div>
-  <div class="news-ticker-track-wrap">
-    <div class="news-ticker-track" id="news-ticker-track"></div>
-  </div>
 </div>
 
 <!-- MODAL (random dog / last dog) -->
@@ -1792,8 +1794,9 @@ function render(subs){
   }).join('');
   const hasMore=subs.length>PAGE_SIZE;
 
+  document.getElementById('stats-container').innerHTML = renderStats(totalDogs,avg,avgClass,states.size,wouldPct);
+
   document.getElementById('app').innerHTML=`
-    ${renderStats(totalDogs,avg,avgClass,states.size,wouldPct)}
     <div class="main-grid">
       <div>
         <div class="section-label">Submissions</div>
