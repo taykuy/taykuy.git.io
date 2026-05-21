@@ -110,7 +110,7 @@ body {
 /* ── SEVEN-DAY SUMMARY ── */
 .seven-day { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--relish); padding: 12px 16px; margin-bottom: 12px; }
 .seven-day.hidden { display: none; }
-.seven-day-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--relish); text-transform: uppercase; margin-bottom: 5px; }
+.seven-day-label { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 2px; color: var(--relish); text-transform: uppercase; margin-bottom: 5px; }
 .seven-day-text { font-family: 'Barlow', Georgia, serif; font-size: 15px; line-height: 1.55; color: #333; }
 .seven-day-text strong { color: var(--ink); font-weight: 600; }
 
@@ -648,6 +648,11 @@ body {
   <span class="streak-text" id="streak-text"></span>
 </div>
 
+<div class="seven-day hidden" id="seven-day">
+  <div class="seven-day-label">&#128197; Last seven days in hot dogs</div>
+  <div class="seven-day-text" id="seven-day-text"></div>
+</div>
+
 <div id="stats-container"></div>
 
 <div class="review-ticker hidden" id="review-ticker">
@@ -708,11 +713,6 @@ body {
     </select>
   </div>
   <button class="filter-reset" id="filter-reset">&#10005; Reset</button>
-</div>
-
-<div class="seven-day hidden" id="seven-day">
-  <div class="seven-day-label">&#128197; Last seven days in hot dogs</div>
-  <div class="seven-day-text" id="seven-day-text"></div>
 </div>
 
 <!-- MODAL (random dog / last dog) -->
@@ -1883,57 +1883,78 @@ async function loadNewsFeed() {
   const ticker  = document.getElementById('news-ticker');
   const track   = document.getElementById('news-ticker-track');
   if (!ticker || !track) return;
+  // Don't re-fetch if already populated
+  if (track.children.length > 0) return;
 
   const RSS_URL = 'https://news.google.com/rss/search?q=hot+dog+food&hl=en-US&gl=US&ceid=US:en';
-  const PROXY   = `https://api.allorigins.win/get?url=${encodeURIComponent(RSS_URL)}`;
+  const PROXIES = [
+    `https://api.allorigins.win/get?url=${encodeURIComponent(RSS_URL)}`,
+    `https://corsproxy.io/?${encodeURIComponent(RSS_URL)}`,
+  ];
 
-  try {
-    const r = await fetch(PROXY);
-    if (!r.ok) throw new Error('fetch failed');
-    const json = await r.json();
-    if (!json.contents) throw new Error('no contents');
+  let xml = null;
+  for (const proxy of PROXIES) {
+    try {
+      const r = await fetch(proxy);
+      if (!r.ok) continue;
+      let text;
+      // allorigins wraps in JSON; corsproxy returns raw
+      const ct = r.headers.get('content-type') || '';
+      if (ct.includes('application/json') || proxy.includes('allorigins')) {
+        const json = await r.json();
+        text = json.contents;
+      } else {
+        text = await r.text();
+      }
+      if (!text || !text.includes('<item>')) continue;
+      xml = new DOMParser().parseFromString(text, 'text/xml');
+      if (xml.querySelector('parsererror')) { xml = null; continue; }
+      break;
+    } catch(e) { continue; }
+  }
 
-    // Parse the RSS XML string
-    const parser = new DOMParser();
-    const xml    = parser.parseFromString(json.contents, 'text/xml');
-    const items  = Array.from(xml.querySelectorAll('item')).slice(0, 12);
-    if (!items.length) throw new Error('no items');
-
-    const parsed = items.map(item => {
-      const rawTitle = item.querySelector('title')?.textContent || '';
-      // Google News titles end with " - Source Name"; strip it
-      const title  = rawTitle.replace(/ - [^-]+$/, '').trim();
-      const link   = item.querySelector('link')?.textContent?.trim() || '#';
-      const source = item.querySelector('source')?.textContent?.trim() || '';
-      return { title, link, source };
-    }).filter(i => i.title);
-
-    if (!parsed.length) throw new Error('empty after filter');
-
-    // Build duplicated track content for seamless loop
-    const makeItems = () => parsed.map(i =>
-      `<a class="news-ticker-item" href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title)}${i.source ? `<span class="news-ticker-sep"> &#9654; </span><span style="opacity:0.6;font-weight:400">${esc(i.source)}</span>` : ''}</a><span class="news-ticker-sep"> &#8212;&#8212; </span>`
-    ).join('');
-
-    track.innerHTML = makeItems() + makeItems(); // duplicate for seamless loop
-    ticker.classList.remove('hidden');
-
-    // Update sidebar news widgets if they exist
-    document.querySelectorAll('.news-feed-body').forEach(el => {
-      el.innerHTML = parsed.slice(0,7).map(i =>
-        `<div class="news-item">
-          <a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title)}</a>
-          ${i.source ? `<div class="news-item-meta">${esc(i.source)}</div>` : ''}
-        </div>`
-      ).join('');
-    });
-
-  } catch(e) {
-    // Silent fail on ticker; show fallback in sidebar widgets
+  if (!xml) {
+    // All proxies failed — silent fail on ticker
     document.querySelectorAll('.news-feed-body').forEach(el => {
       el.innerHTML = `<div class="news-loading"><a href="https://news.google.com/search?q=hot+dog+food" target="_blank" rel="noopener" style="color:var(--ketchup)">Browse hot dog news on Google &rarr;</a></div>`;
     });
+    return;
   }
+
+  const items = Array.from(xml.querySelectorAll('item')).slice(0, 12);
+  const parsed = items.map(item => {
+    const rawTitle = item.querySelector('title')?.textContent || '';
+    const title = rawTitle.replace(/ - [^-]+$/, '').trim();
+    // <link> in RSS is a text node after the tag, not an element child
+    let link = '#';
+    const linkEl = item.querySelector('link');
+    if (linkEl) {
+      // Try textContent first, then nextSibling text node
+      link = (linkEl.textContent || '').trim() ||
+             (linkEl.nextSibling?.textContent || '').trim() ||
+             '#';
+    }
+    const source = item.querySelector('source')?.textContent?.trim() || '';
+    return { title, link, source };
+  }).filter(i => i.title && i.title.length > 2);
+
+  if (!parsed.length) return;
+
+  const makeItems = () => parsed.map(i =>
+    `<a class="news-ticker-item" href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title)}${i.source ? `<span class="news-ticker-sep"> &#9654; </span><span style="opacity:0.6;font-weight:400">${esc(i.source)}</span>` : ''}</a><span class="news-ticker-sep"> &mdash;&mdash; </span>`
+  ).join('');
+
+  track.innerHTML = makeItems() + makeItems();
+  ticker.classList.remove('hidden');
+
+  document.querySelectorAll('.news-feed-body').forEach(el => {
+    el.innerHTML = parsed.slice(0, 7).map(i =>
+      `<div class="news-item">
+        <a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title)}</a>
+        ${i.source ? `<div class="news-item-meta">${esc(i.source)}</div>` : ''}
+      </div>`
+    ).join('');
+  });
 }
 
 function renderLeaderboard(glizzys){
