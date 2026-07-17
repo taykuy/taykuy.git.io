@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10-Day Market Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2;
+    --ink:#26402C;        /* deep garden green */
+    --tomato:#C6402F;     /* ripe accent */
+    --peach:#E8A15C;
+    --peach-tint:#F6E4CE;
+    --muted:#6B7A63;      /* sage gray */
+    --rule:#D9D2C2;
+    --keep:#4E7A4E;       /* "keeps well" green */
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#e7e2d6;color:var(--ink);
+    font-family:"Inter",-apple-system,sans-serif;line-height:1.42;}
+  .sheet{
+    background:var(--paper);
+    max-width:1000px;margin:24px auto;padding:34px 40px 40px;
+    box-shadow:0 2px 24px rgba(0,0,0,.12);
+  }
+
+  /* ---- Masthead ---- */
+  .mast{display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:2.5px solid var(--ink);padding-bottom:14px;}
+  .brand{display:flex;align-items:center;gap:16px;}
+  .logo{width:70px;height:70px;flex-shrink:0;}
+  .mast h1{font-family:"Fraunces",serif;font-weight:900;font-size:38px;
+    line-height:.92;margin:0;letter-spacing:-.5px;}
+  .mast h1 em{font-style:italic;color:var(--tomato);}
+  .tagline{font-family:"Fraunces",serif;font-style:italic;font-size:13px;
+    color:var(--muted);margin-top:4px;letter-spacing:.2px;}
+  .mast .meta{text-align:right;font-size:11px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:1.3px;line-height:1.7;}
+  .mast .meta b{color:var(--ink);font-weight:600;}
+
+  .lede{font-family:"Fraunces",serif;font-size:14.5px;font-style:italic;
+    color:var(--muted);margin:12px 0 22px;max-width:78ch;}
+  .lede b{color:var(--tomato);font-style:normal;font-weight:600;}
+
+  /* ---- Two-column body ---- */
+  .cols{display:grid;grid-template-columns:1.35fr 1fr;gap:34px;}
+  @media(max-width:720px){.cols{grid-template-columns:1fr;}}
+
+  h2.sec{font-family:"Fraunces",serif;font-weight:600;font-size:13px;
+    text-transform:uppercase;letter-spacing:2px;color:var(--tomato);
+    margin:0 0 12px;padding-bottom:5px;border-bottom:1px solid var(--rule);}
+
+  /* ---- Day rows ---- */
+  .day{display:grid;grid-template-columns:26px 1fr;gap:12px;margin-bottom:11px;
+    page-break-inside:avoid;}
+  .num{font-family:"Fraunces",serif;font-weight:600;font-size:15px;
+    width:26px;height:26px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;color:#fff;flex-shrink:0;}
+  .day .body{padding-top:1px;}
+  .day .dow{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;
+    color:var(--muted);font-weight:600;}
+  .day .dish{font-size:13.5px;font-weight:500;margin:1px 0 2px;}
+  .day .dish b{font-weight:600;}
+  .day .note{font-size:11px;color:var(--muted);line-height:1.35;}
+  .day .prot{font-size:11px;font-weight:600;color:#9A4B24;margin-top:2px;
+    display:flex;align-items:baseline;gap:6px;}
+  .day .prot::before{content:"PROTEIN";font-size:8px;letter-spacing:.8px;
+    background:#EBD9C6;color:#8a4b2f;padding:1px 5px;border-radius:3px;
+    font-weight:600;flex-shrink:0;}
+  .day .prot.none{color:var(--muted);font-weight:500;font-style:italic;}
+  .day .prot.none::before{content:"MEAT-FREE";background:#E4EADD;color:var(--keep);}
+  .tag{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.6px;
+    text-transform:uppercase;padding:1px 6px;border-radius:3px;margin-left:4px;
+    vertical-align:1px;}
+  .tag.cook{background:var(--peach-tint);color:#9a5a1e;}
+  .tag.left{background:#E4EADD;color:var(--keep);}
+
+  /* freshness legend */
+  .legend{display:flex;align-items:center;gap:8px;font-size:10px;
+    color:var(--muted);margin:2px 0 16px;text-transform:uppercase;
+    letter-spacing:.8px;}
+  .grad{flex:1;height:6px;border-radius:3px;
+    background:linear-gradient(90deg,var(--tomato),var(--peach),var(--keep));}
+
+  /* ---- Shopping list ---- */
+  .market-head{background:var(--ink);color:var(--paper);
+    font-family:"Fraunces",serif;font-weight:600;font-size:12px;
+    letter-spacing:1.5px;text-transform:uppercase;padding:7px 12px;
+    border-radius:5px 5px 0 0;display:flex;align-items:center;gap:8px;}
+  .market-head .dot{width:8px;height:8px;border-radius:50%;background:var(--tomato);}
+  .market-box{border:1.5px solid var(--ink);border-top:none;
+    border-radius:0 0 5px 5px;padding:11px 13px;margin-bottom:20px;}
+
+  ul.list{list-style:none;margin:0;padding:0;}
+  ul.list li{font-size:12px;padding:3.5px 0 3.5px 20px;position:relative;
+    border-bottom:1px dotted var(--rule);}
+  ul.list li:last-child{border-bottom:none;}
+  ul.list li::before{content:"";position:absolute;left:2px;top:8px;
+    width:8px;height:8px;border:1.4px solid var(--muted);border-radius:2px;}
+  ul.list li .q{color:var(--tomato);font-weight:600;}
+  ul.list li .for{color:var(--muted);font-size:10.5px;}
+
+  h3.grp{font-family:"Inter",sans-serif;font-weight:600;font-size:11px;
+    text-transform:uppercase;letter-spacing:1.2px;color:var(--ink);
+    margin:16px 0 5px;}
+  h3.grp:first-child{margin-top:0;}
+  .grp-note{font-size:10.5px;font-style:italic;color:var(--muted);margin:0 0 6px;}
+
+  table.ref{width:100%;border-collapse:collapse;margin-top:2px;}
+  table.ref td{padding:4px 0;border-bottom:1px dotted var(--rule);vertical-align:baseline;
+    font-size:11.5px;}
+  table.ref tr:last-child td{border-bottom:none;}
+  .ref .rn{font-weight:500;padding-right:10px;}
+  .ref .rb{color:var(--muted);font-size:10.5px;font-style:italic;padding-right:10px;}
+  .ref .rp{color:var(--tomato);font-weight:600;font-size:10.5px;
+    text-align:right;white-space:nowrap;}
+
+  .have{font-size:10.5px;color:var(--muted);line-height:1.5;margin-top:14px;
+    padding-top:10px;border-top:1px solid var(--rule);}
+  .have b{color:var(--ink);font-weight:600;text-transform:uppercase;
+    letter-spacing:1px;font-size:9.5px;}
+
+  .foot{margin-top:24px;padding-top:12px;border-top:2px solid var(--ink);
+    display:flex;justify-content:space-between;font-size:10px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:1.2px;}
+
+  @media print{
+    html,body{background:#fff;}
+    .sheet{box-shadow:none;margin:0;max-width:none;padding:0 12px;}
+    .page2{page-break-before:always;}
+    @page{margin:14mm;}
+  }
+
+  .page2{margin-top:40px;}
+  .about-grid{columns:2;column-gap:28px;margin-top:20px;}
+  @media(max-width:720px){.about-grid{columns:1;}}
+  .dish-card{break-inside:avoid;-webkit-column-break-inside:avoid;
+    margin-bottom:15px;padding-bottom:13px;border-bottom:1px solid var(--rule);}
+  .dc-eyebrow{font-family:"Inter",sans-serif;font-size:9px;font-weight:600;
+    text-transform:uppercase;letter-spacing:1.3px;color:var(--tomato);margin-bottom:2px;}
+  .dc-name{font-family:"Fraunces",serif;font-weight:600;font-size:16px;
+    line-height:1.05;margin-bottom:6px;color:var(--ink);}
+  .dc-line{font-size:11px;line-height:1.42;margin:0 0 4px;color:#33463a;}
+  .dc-line b{color:var(--tomato);font-weight:600;font-size:9.5px;
+    text-transform:uppercase;letter-spacing:.6px;margin-right:4px;}
+  .dc-line em{font-style:italic;}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="mast">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="The Hungry Squirrel logo">
+        <circle cx="50" cy="50" r="47" fill="var(--peach-tint)" stroke="var(--ink)" stroke-width="2.5"/>
+        <path d="M40 83 C 17 80 16 49 33 39 C 41 34 50 38 52 47" fill="none" stroke="var(--ink)" stroke-width="13" stroke-linecap="round"/>
+        <path d="M48 85 C 34 85 32 66 39 56 C 43 49 55 49 59 57 C 65 67 62 85 48 85 Z" fill="var(--ink)"/>
+        <ellipse cx="49" cy="70" rx="6.5" ry="10" fill="var(--peach)"/>
+        <circle cx="60" cy="45" r="11.5" fill="var(--ink)"/>
+        <path d="M56 36 C 55 28 62 27 63 35 Z" fill="var(--ink)"/>
+        <circle cx="63" cy="43" r="2" fill="var(--paper)"/>
+        <circle cx="71.5" cy="47" r="2.4" fill="var(--tomato)"/>
+        <circle cx="58" cy="63" r="3.2" fill="var(--ink)"/>
+        <path d="M60 60 C 61 55 70 55 71 60 Z" fill="var(--ink)"/>
+        <circle cx="65.5" cy="63.5" r="5" fill="var(--tomato)"/>
+      </svg>
+      <div class="wordmark">
+        <h1>The Hungry<br><em>Squirrel</em></h1>
+      </div>
+    </div>
+    <div class="meta">
+      <div><b>Charlottesville, VA</b></div>
+      <div>Mid-July · Saturday start</div>
+      <div>Plan for 2 · leftovers built in</div>
+    </div>
+  </div>
+
+  <p class="lede">Ordered by shelf life: <b>the front of the week burns through the fastest buys</b> — peaches, ripe tomatoes, cucumbers, corn, and the aging squash — while cabbage, leeks, carrots and the freezer meals carry the back half.</p>
+
+  <div class="legend">
+    <span>Eat now</span><span class="grad"></span><span>Keeps</span>
+  </div>
+
+  <div class="cols">
+
+    <!-- LEFT: THE PLAN -->
+    <div>
+      <h2 class="sec">The Dinner Rotation</h2>
+
+      <div class="day">
+        <div class="num" style="background:var(--tomato);">1</div>
+        <div class="body">
+          <div class="dow">Saturday · market day</div>
+          <div class="dish"><b>Slow-roasted & fresh cherry tomato salad</b> with feta, basil & honey + <b>chopped baba ghanoush</b> with pita <span class="tag cook">cook</span></div>
+          <div class="note">A mezze night. Cherry & heirloom tomatoes bruise fastest — eat them the day you buy. Starts the eggplant; baba ghanoush keeps ~5 days → snacking lunches all week.</div>
+          <div class="prot none">Light &amp; meat-free on market day</div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="num" style="background:#CF5330;">2</div>
+        <div class="body">
+          <div class="dow">Sunday · big cook</div>
+          <div class="dish"><b>Venison Apache stew</b> (braised deer leg) + <b>peach & tomato salad</b> <span class="tag cook">cook</span></div>
+          <div class="note">Cook the raw venison first — it's time-sensitive in the fridge. Braising suits the lean leg; big batch → leftovers days 3–4, freeze the rest. Salad finishes the peaches & tomatoes.</div>
+          <div class="prot">Venison — cut the leg into chunks</div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="num" style="background:#D9722F;">3</div>
+        <div class="body">
+          <div class="dow">Monday</div>
+          <div class="dish">Venison stew, round two + <b>cucumbers, scallions, mint & dried chiles</b> <span class="tag left">leftover</span></div>
+          <div class="note">Stew's even better day two. Cucumbers still crisp around day 3.</div>
+          <div class="prot">Venison stew leftovers</div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="num" style="background:#DE8636;">4</div>
+        <div class="body">
+          <div class="dow">Tuesday</div>
+          <div class="dish"><b>Squash ribbons with tomatoes</b> + <b>roasted radishes</b> with brown butter, chile & honey <span class="tag cook">cook</span></div>
+          <div class="note">Clears the aging yellow squash and cherry tomatoes; radish roots still hold.</div>
+          <div class="prot">Salmon, roasted with lemon & dill (freezer)</div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="num" style="background:var(--peach);">5</div>
+        <div class="body">
+          <div class="dow">Wednesday</div>
+          <div class="dish"><b>Golden summer soup</b> — last squash, carrots, corn <span class="tag cook">cook</span></div>
+          <div class="note">Use the corn by mid-week before its sugars turn starchy. Big pot → lunches days 6–8.</div>
+          <div class="prot">Crisped bacon over the top (freezer)</div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="num" style="background:#8FA05A;">6</div>
+        <div class="body">
+          <div class="dow">Thursday</div>
+          <div class="dish"><b>Braised striper with cherry tomatoes & tahini (Chraime)</b>, with leftover soup alongside <span class="tag cook">cook</span></div>
+          <div class="note">Bright mid-week change-up; leans on the cherry tomatoes and tahini already in play.</div>
+          <div class="prot">Striper (freezer) — halibut recipe subs fine</div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="num" style="background:var(--keep);">7</div>
+        <div class="body">
+          <div class="dow">Friday</div>
+          <div class="dish"><b>Buttermilk-spiced cole slaw</b> + grilled spicy links <span class="tag cook">cook</span></div>
+          <div class="note">Cabbage is the hardiest thing you bought — parked here on purpose so it's made fresh late. Dressed slaw holds 3–4 days.</div>
+          <div class="prot">Spicy links — bacon-wrapped, Sonoran-style</div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="num" style="background:#3C6B3C;">8–10</div>
+        <div class="body">
+          <div class="dow">Weekend → Monday</div>
+          <div class="dish">Leftovers + cook the <b>vegetable lasagne</b> one night; freeze half <span class="tag left">leftover</span></div>
+          <div class="note">Save the lasagne for last — its leeks are the longest-keeping thing you bought. Rounds out the week and refills the freezer.</div>
+          <div class="prot none">Lasagne night — a veg finish</div>
+        </div>
+      </div>
+
+      <p class="grp-note" style="margin-top:6px;">Breakfasts are grab-and-go throughout; most lunches are leftovers (baba ghanoush days 1–4, soup days 6–8).</p>
+
+      <h2 class="sec" style="margin-top:20px;">Recipe Index</h2>
+      <table class="ref">
+        <tr><td class="rn">Cherry tomato salad w/ feta, basil &amp; honey</td><td class="rb">Eating Out Loud</td><td class="rp">p.&nbsp;101</td></tr>
+        <tr><td class="rn">Venison Apache stew (braised leg)</td><td class="rb">Foods of the SW Indian Nations</td><td class="rp">p.&nbsp;165</td></tr>
+        <tr><td class="rn">Braised striper &amp; cherry tomatoes (Chraime)</td><td class="rb">Eating Out Loud</td><td class="rp">p.&nbsp;194</td></tr>
+        <tr><td class="rn">Chopped baba ghanoush</td><td class="rb">Matty Matheson: Home Style Cookery</td><td class="rp">p.&nbsp;119</td></tr>
+        <tr><td class="rn">Vegetable lasagne béchamel</td><td class="rb">Moosewood Low-Fat Favorites</td><td class="rp">p.&nbsp;216</td></tr>
+        <tr><td class="rn">Peach &amp; tomato salad</td><td class="rb">South</td><td class="rp">p.&nbsp;86</td></tr>
+        <tr><td class="rn">Cucumbers, scallions, mint &amp; dried chiles</td><td class="rb">Six Seasons</td><td class="rp">p.&nbsp;201</td></tr>
+        <tr><td class="rn">Squash ribbons with tomatoes</td><td class="rb">Six Seasons</td><td class="rp">p.&nbsp;210</td></tr>
+        <tr><td class="rn">Roasted radishes, brown butter, chile &amp; honey</td><td class="rb">Six Seasons</td><td class="rp">p.&nbsp;116</td></tr>
+        <tr><td class="rn">Golden summer soup</td><td class="rb">Moosewood Daily Special</td><td class="rp">—</td></tr>
+        <tr><td class="rn">Buttermilk-spiced cole slaw</td><td class="rb">Praise the Lard</td><td class="rp">p.&nbsp;212</td></tr>
+      </table>
+    </div>
+
+    <!-- RIGHT: SHOPPING LIST -->
+    <div>
+      <h2 class="sec">Master Shopping List</h2>
+
+      <div class="market-head"><span class="dot"></span> Saturday market — buy first</div>
+      <div class="market-box">
+        <div class="grp-note">Peaking right now; grab these before anything else.</div>
+        <ul class="list">
+          <li><span class="q">~1 lb</span> peaches <span class="for">— peach-tomato salad (Day 2)</span></li>
+          <li><span class="q">3–4</span> heirloom tomatoes <span class="for">— both salads</span></li>
+          <li><span class="q">2 pints</span> cherry tomatoes <span class="for">— tomato salad + squash ribbons</span></li>
+          <li><span class="q">3</span> cucumbers <span class="for">— cucumber salad</span></li>
+          <li><span class="q">4 ears</span> corn on the cob <span class="for">— summer soup</span></li>
+          <li><span class="q">2 bunches</span> scallions <span class="for">— 3 dishes</span></li>
+          <li><span class="q">1</span> red onion · <span class="q">1</span> shallot</li>
+          <li><span class="q">2</span> fresh hot chiles <span class="for">— squash ribbons</span></li>
+          <li><span class="q">1 bunch</span> mint <span class="for">— 3 dishes</span></li>
+          <li><span class="q">1 jar</span> local honey <span class="for">— roasted radishes</span></li>
+          <li><span class="q">2</span> red bell peppers <span class="for">— venison stew</span></li>
+          <li><span class="q">3–4</span> green chiles (Hatch/poblano) <span class="for">— venison stew</span></li>
+          <li><span class="q">1 bunch</span> bitter greens <span class="for">— venison stew; sub kale</span></li>
+          <li><span class="q">1 pack</span> hot dog buns / bolillo rolls <span class="for">— Sonoran dogs; market baker if there's one</span></li>
+          <li><span class="q">1 block</span> feta <span class="for">— cherry tomato salad</span></li>
+          <li>local cheese <span class="for">— optional Parm / Jack sub</span></li>
+          <li><span class="q">1 bunch</span> watercress <span class="for">— iffy in heat; sub arugula</span></li>
+        </ul>
+      </div>
+
+      <h3 class="grp">Grocery / pantry</h3>
+      <p class="grp-note">Not local this time of year, or shelf staples.</p>
+      <ul class="list">
+        <li><span class="q">2</span> sweet potatoes <span class="for">— fall crop here, not the market</span></li>
+        <li><span class="q">1 head</span> broccoli <span class="for">— scarce midsummer; store</span></li>
+        <li><span class="q">3</span> lemons <span class="for">— no local citrus, ever</span></li>
+        <li><span class="q">1 pint</span> buttermilk <span class="for">— slaw + salad dressing</span></li>
+        <li><span class="q">small</span> heavy cream <span class="for">— peach-tomato dressing</span></li>
+        <li><span class="q">4 oz</span> Monterey Jack <span class="for">— soup</span></li>
+        <li><span class="q">wedge</span> Parmesan <span class="for">— lasagne</span></li>
+        <li><span class="q">1 box</span> lasagne pasta</li>
+        <li><span class="q">4–6</span> pita rounds <span class="for">— tomato salad + baba ghanoush</span></li>
+        <li><span class="q">1 can</span> hominy <span class="for">— venison stew</span></li>
+        <li><span class="q">1 qt</span> beef or veal stock <span class="for">— venison stew</span></li>
+        <li><span class="q">small jar</span> harissa <span class="for">— striper chraime</span></li>
+        <li><span class="q">1 bunch</span> dill <span class="for">— roasted salmon</span></li>
+        <li>tahini <span class="for">— check pantry; baba ghanoush + chraime</span></li>
+      </ul>
+
+      <p class="have"><b>Proteins on hand:</b> venison roast — raw, fridge · spicy links, fridge · bacon, salmon, striper, freezer. <span style="font-style:italic;">Optional fresh buy — chicken kebabs (Complete Med p.&nbsp;300) or skirt steak (Slow Fires p.&nbsp;217) — only if you want a grill night; the venison covers plenty.</span> <b style="display:block;margin-top:6px;">Already in your kitchen — skipped:</b> cabbage, carrots, leeks, radishes, eggplant, yellow squash, parsley, basil, red pepper flakes, butter, rice vinegar, canned tomatoes, mozzarella, sage, nutmeg, thyme, dry white wine, turmeric, fish sauce, roasted peanuts.</p>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <span>Tomatoes carry the front half — buy generously, blitz days 1–4</span>
+    <span>Serves 2 · scale to taste</span>
+  </div>
+
+</div>
+
+<!-- ============ PAGE 2 : ABOUT THE DISHES ============ -->
+<div class="sheet page2">
+
+  <div class="mast">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="The Hungry Squirrel logo">
+        <circle cx="50" cy="50" r="47" fill="var(--peach-tint)" stroke="var(--ink)" stroke-width="2.5"/>
+        <path d="M40 83 C 17 80 16 49 33 39 C 41 34 50 38 52 47" fill="none" stroke="var(--ink)" stroke-width="13" stroke-linecap="round"/>
+        <path d="M48 85 C 34 85 32 66 39 56 C 43 49 55 49 59 57 C 65 67 62 85 48 85 Z" fill="var(--ink)"/>
+        <ellipse cx="49" cy="70" rx="6.5" ry="10" fill="var(--peach)"/>
+        <circle cx="60" cy="45" r="11.5" fill="var(--ink)"/>
+        <path d="M56 36 C 55 28 62 27 63 35 Z" fill="var(--ink)"/>
+        <circle cx="63" cy="43" r="2" fill="var(--paper)"/>
+        <circle cx="71.5" cy="47" r="2.4" fill="var(--tomato)"/>
+        <circle cx="58" cy="63" r="3.2" fill="var(--ink)"/>
+        <path d="M60 60 C 61 55 70 55 71 60 Z" fill="var(--ink)"/>
+        <circle cx="65.5" cy="63.5" r="5" fill="var(--tomato)"/>
+      </svg>
+      <div class="wordmark">
+        <h1>About the <em>Dishes</em></h1>
+        <div class="tagline">Where they come from &amp; why they're good for you</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div><b>The Hungry Squirrel</b></div>
+      <div>Field notes · page 2</div>
+    </div>
+  </div>
+
+  <p class="lede">This week leans the way a Mediterranean-style diet does — <b>vegetables and fruit up front, lean proteins in support</b> (game, fish, a little poultry), olive oil over butter, and one gloriously indulgent cookout night to keep it human. Here's the story and the upside behind each plate.</p>
+
+  <div class="about-grid">
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Eating Out Loud · p.&nbsp;101</div>
+      <div class="dc-name">Cherry tomato salad, feta &amp; honey</div>
+      <p class="dc-line"><b>Flavor</b> Half the tomatoes slow-roasted to jammy sweetness, half left raw and bright — honey and salty feta bridge the two.</p>
+      <p class="dc-line"><b>Roots</b> A modern Israeli mezze idea. The tomato is a New World transplant that only reached the eastern Mediterranean a few centuries ago, yet now defines its summer table.</p>
+      <p class="dc-line"><b>Good for you</b> Tomatoes are the headline source of lycopene, an antioxidant that becomes <em>more</em> absorbable when cooked — so the roasted half pulls double duty.</p>
+      <p class="dc-line"><b>Trivia</b> Cooking concentrates their natural glutamates — that's the savory "umami" hit.</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Matty Matheson · p.&nbsp;119</div>
+      <div class="dc-name">Chopped baba ghanoush</div>
+      <p class="dc-line"><b>Flavor</b> Smoke-charred eggplant, nutty tahini, garlic, lemon.</p>
+      <p class="dc-line"><b>Roots</b> A Levantine staple (Lebanon, Syria, Jordan, Palestine). The Arabic name translates playfully to something like "pampered father," with old folklore of a daughter making soft food for a toothless dad. Tahini is what separates true baba ghanoush from its cousin mutabbal.</p>
+      <p class="dc-line"><b>Good for you</b> Naturally vegan and gluten-free, and generally lighter than hummus; eggplant brings fiber and skin-borne antioxidants.</p>
+      <p class="dc-line"><b>In the plan</b> Made big on Day 1 — it keeps about five days and becomes the week's grab-and-go lunch with pita.</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">South · p.&nbsp;86</div>
+      <div class="dc-name">Peach &amp; tomato salad</div>
+      <p class="dc-line"><b>Flavor</b> Ripe peach and heirloom tomato — both sweet and acidic — under a tangy buttermilk-cream dressing.</p>
+      <p class="dc-line"><b>Roots</b> A Southern high-summer plate; peaches and tomatoes crest together here in July, and you're squarely in Virginia peach country.</p>
+      <p class="dc-line"><b>Good for you</b> Peaches add vitamin C and potassium; the touch of dairy fat helps you absorb the fruit's fat-soluble antioxidants.</p>
+      <p class="dc-line"><b>Trivia</b> Peaches and tomatoes share aroma compounds — part of why they taste so right together.</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Six Seasons · p.&nbsp;201</div>
+      <div class="dc-name">Cucumbers, scallions, mint &amp; chiles</div>
+      <p class="dc-line"><b>Flavor</b> Cool and crisp, herbal, with a chile bite and a vinegar snap.</p>
+      <p class="dc-line"><b>Roots</b> Cucumber-and-vinegar salads circle the globe; this one leans Southeast-Asian in spirit.</p>
+      <p class="dc-line"><b>Good for you</b> Cucumber is about 95% water — hydrating and barely-there on calories; mint eases digestion.</p>
+      <p class="dc-line"><b>In the plan</b> Day 3 palate-cleanser against the rich venison, timed while the cukes are still crisp. (Botanically, cucumbers are berries.)</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Six Seasons · p.&nbsp;210</div>
+      <div class="dc-name">Squash ribbons with tomatoes</div>
+      <p class="dc-line"><b>Flavor</b> Raw ribboned summer squash, cherry tomatoes, peanuts and herbs in a spicy fish-sauce dressing — fresh, crunchy, savory.</p>
+      <p class="dc-line"><b>Roots</b> A Southeast-Asian-inflected treatment; shaving squash raw is a modern vegetable-forward move.</p>
+      <p class="dc-line"><b>Good for you</b> Summer squash is light and high-water with vitamin C and B6; the peanuts add protein and crunch.</p>
+      <p class="dc-line"><b>Trivia</b> Summer squash is picked immature — skin, seeds and all are edible.</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Six Seasons · p.&nbsp;116</div>
+      <div class="dc-name">Roasted radishes, brown butter &amp; honey</div>
+      <p class="dc-line"><b>Flavor</b> Roasting flips radishes from peppery-sharp to sweet and mellow; brown butter, chile and honey finish them.</p>
+      <p class="dc-line"><b>Roots</b> Usually eaten raw in the West — cooking them is an old French move that modern cooks revived.</p>
+      <p class="dc-line"><b>Good for you</b> A brassica, like cabbage and broccoli: very low-calorie, some vitamin C and fiber — and the leafy tops are edible too.</p>
+      <p class="dc-line"><b>Trivia</b> One of the fastest crops going: some varieties run seed-to-harvest in three to four weeks.</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Moosewood Daily Special</div>
+      <div class="dc-name">Golden summer soup</div>
+      <p class="dc-line"><b>Flavor</b> Mellow and brothy, gently sweet from squash, carrot and corn with a little melting cheese.</p>
+      <p class="dc-line"><b>Roots</b> A Moosewood standard — the Ithaca vegetarian institution that shaped American meatless cooking from the 1970s on.</p>
+      <p class="dc-line"><b>Good for you</b> Carrots bring beta-carotene (vitamin A); a light pot that the crisped bacon or a can of beans turns into a fuller meal.</p>
+      <p class="dc-line"><b>In the plan</b> Day 5, timed to use the corn before its sugars turn starchy — sweet corn is best within a day or two of picking.</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Praise the Lard · p.&nbsp;212</div>
+      <div class="dc-name">Buttermilk-spiced cole slaw</div>
+      <p class="dc-line"><b>Flavor</b> Crunchy cabbage and carrot in a tangy, spiced buttermilk dressing, from BBQ legend Mike Mills.</p>
+      <p class="dc-line"><b>Roots</b> "Coleslaw" comes from the Dutch <em>koolsla</em> — "cabbage salad"; the buttermilk style is Southern barbecue canon.</p>
+      <p class="dc-line"><b>Good for you</b> Cabbage is a cruciferous source of vitamins C and K; buttermilk keeps it tangy and lighter than mayo-heavy slaws.</p>
+      <p class="dc-line"><b>In the plan</b> Day 7 cookout side — cabbage is the hardiest thing you bought, so it's held for late. Dressed slaw actually improves after a few hours.</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Moosewood Low-Fat · p.&nbsp;216</div>
+      <div class="dc-name">Vegetable lasagne béchamel</div>
+      <p class="dc-line"><b>Flavor</b> Creamy white-sauce layers with leeks, carrots and broccoli — comforting and mild.</p>
+      <p class="dc-line"><b>Roots</b> Lasagne is among the oldest pasta shapes; the béchamel-layered northern-Italian style (rather than tomato-and-ricotta) is the classic Emilia-Romagna approach.</p>
+      <p class="dc-line"><b>Good for you</b> A lighter Moosewood version; leeks (an allium) add prebiotic fiber, and it's a hearty meat-free anchor.</p>
+      <p class="dc-line"><b>In the plan</b> Cooked last (Days 8–10) because its leeks keep longest — and it freezes for future weeks. Béchamel is one of the French "mother sauces."</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Foods of the SW Indian Nations · p.&nbsp;165</div>
+      <div class="dc-name">Venison Apache stew</div>
+      <p class="dc-line"><b>Flavor</b> A deep, savory braise of lean venison with chiles, hominy and greens.</p>
+      <p class="dc-line"><b>Roots</b> Built on the "Three Sisters" (corn, beans, squash) that anchored Southwestern Indigenous diets for millennia. The hominy is nixtamalized corn — kernels cooked in an alkaline bath of lime or wood ash, a technique thousands of years old.</p>
+      <p class="dc-line"><b>Good for you</b> Venison is very lean and iron-rich, with far less fat than beef; braising tenderizes the lean leg. Nixtamalization unlocks the corn's niacin — the reason corn-based diets avoided the deficiency disease pellagra.</p>
+      <p class="dc-line"><b>In the plan</b> The protein backbone: a Sunday big-cook that carries several days of leftovers.</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Eating Out Loud · p.&nbsp;194</div>
+      <div class="dc-name">Braised striper (Chraime)</div>
+      <p class="dc-line"><b>Flavor</b> Fish braised in a bold, garlicky, spicy tomato-and-pepper sauce, brightened with lemon.</p>
+      <p class="dc-line"><b>Roots</b> A North African Jewish dish — especially Libyan, Moroccan and Tunisian — whose name comes from the Arabic for "hot." Traditionally a Friday-night Shabbat starter (also Rosh Hashanah and Passover), often called the Sephardic counterpart to Ashkenazi gefilte fish. The fish is meant to be whatever's freshest — so your striper is right in the spirit.</p>
+      <p class="dc-line"><b>Good for you</b> Lean, high-protein white fish; the tomato-pepper sauce piles on vitamin C and lycopene.</p>
+      <p class="dc-line"><b>In the plan</b> Day 6 — a light, fast midweek protein that reuses the cherry tomatoes and tahini already on hand.</p>
+    </div>
+
+    <div class="dish-card">
+      <div class="dc-eyebrow">Day 7 cookout · spicy links</div>
+      <div class="dc-name">Sonoran-style bacon-wrapped dogs</div>
+      <p class="dc-line"><b>Flavor</b> A bacon-wrapped link in a soft bolillo roll, piled with beans, tomato, onion, mayo and roasted chile — smoky, rich, messy.</p>
+      <p class="dc-line"><b>Roots</b> Born in Hermosillo, Sonora (some trace it to the 1940s, popularized in the late 1980s), then carried north into Tucson's street-cart scene — one Tucson spot's version won a James Beard award.</p>
+      <p class="dc-line"><b>Good for you</b> The honest indulgence of the week — which is exactly why the crisp, tangy slaw rides shotgun to balance it.</p>
+      <p class="dc-line"><b>Trivia</b> The vendors are called <em>dogueros</em>; the dog itself, a <em>dogo</em>.</p>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <span>The Hungry Squirrel · seasonal eating, Charlottesville</span>
+    <span>Sources researched July 2026</span>
+  </div>
+
+</div>
+</body>
+</html>
