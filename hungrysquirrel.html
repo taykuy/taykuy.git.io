@@ -111,6 +111,31 @@
     padding:8px 13px;cursor:pointer;letter-spacing:.2px;}
   #emailBtn:hover{background:#1c3020;}
   .email-count{font-size:10.5px;color:var(--muted);}
+  .linkbtn{margin-left:auto;background:none;border:none;color:var(--muted);
+    font-family:"Inter",sans-serif;font-size:10.5px;text-decoration:underline;
+    cursor:pointer;padding:2px;}
+  .linkbtn:hover{color:var(--tomato);}
+
+  .add-bar{display:flex;gap:6px;margin-top:8px;}
+  #addInput{flex:1;font-family:"Inter",sans-serif;font-size:11.5px;
+    padding:6px 8px;border:1px solid var(--rule);border-radius:5px;
+    color:var(--ink);background:#fff;}
+  #addInput:focus{outline:none;border-color:var(--tomato);}
+  #addBtn{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:600;
+    color:var(--ink);background:var(--peach-tint);border:1px solid var(--peach);
+    border-radius:5px;padding:6px 12px;cursor:pointer;}
+  #addBtn:hover{background:var(--peach);}
+  ul.list li .rm{position:absolute;right:2px;top:3px;border:none;background:none;
+    color:var(--muted);cursor:pointer;font-size:13px;line-height:1;padding:2px;}
+  ul.list li .rm:hover{color:var(--tomato);}
+
+  /* tonight auto-highlight */
+  .day.today{background:#FBEFE0;border-radius:8px;
+    box-shadow:0 0 0 1.5px var(--peach);padding:6px 8px;margin-left:-8px;}
+  .day.today .num{box-shadow:0 0 0 2px var(--tomato);}
+  .today-flag{display:inline-block;font-family:"Inter",sans-serif;font-size:8px;
+    font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--paper);
+    background:var(--tomato);padding:1px 6px;border-radius:3px;margin-bottom:3px;}
 
   h3.grp{font-family:"Inter",sans-serif;font-weight:600;font-size:11px;
     text-transform:uppercase;letter-spacing:1.2px;color:var(--ink);
@@ -140,7 +165,7 @@
     html,body{background:#fff;}
     .sheet{box-shadow:none;margin:0;max-width:none;padding:0 12px;}
     .page2{page-break-before:always;}
-    .email-bar{display:none;}
+    .email-bar, .add-bar{display:none;}
     ul.list li .chk{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     @page{margin:14mm;}
   }
@@ -201,7 +226,7 @@
     <div>
       <h2 class="sec">The Dinner Rotation</h2>
 
-      <div class="day">
+      <div class="day" data-day-start="1" data-day-end="1">
         <div class="num" style="background:var(--tomato);">1</div>
         <div class="body">
           <div class="dow">Saturday · market day</div>
@@ -211,7 +236,7 @@
         </div>
       </div>
 
-      <div class="day">
+      <div class="day" data-day-start="2" data-day-end="2">
         <div class="num" style="background:#CF5330;">2</div>
         <div class="body">
           <div class="dow">Sunday · big cook</div>
@@ -221,7 +246,7 @@
         </div>
       </div>
 
-      <div class="day">
+      <div class="day" data-day-start="3" data-day-end="3">
         <div class="num" style="background:#D9722F;">3</div>
         <div class="body">
           <div class="dow">Monday</div>
@@ -231,7 +256,7 @@
         </div>
       </div>
 
-      <div class="day">
+      <div class="day" data-day-start="4" data-day-end="4">
         <div class="num" style="background:#DE8636;">4</div>
         <div class="body">
           <div class="dow">Tuesday</div>
@@ -241,7 +266,7 @@
         </div>
       </div>
 
-      <div class="day">
+      <div class="day" data-day-start="5" data-day-end="5">
         <div class="num" style="background:var(--peach);">5</div>
         <div class="body">
           <div class="dow">Wednesday</div>
@@ -251,7 +276,7 @@
         </div>
       </div>
 
-      <div class="day">
+      <div class="day" data-day-start="6" data-day-end="6">
         <div class="num" style="background:#8FA05A;">6</div>
         <div class="body">
           <div class="dow">Thursday</div>
@@ -261,7 +286,7 @@
         </div>
       </div>
 
-      <div class="day">
+      <div class="day" data-day-start="7" data-day-end="7">
         <div class="num" style="background:var(--keep);">7</div>
         <div class="body">
           <div class="dow">Friday</div>
@@ -271,7 +296,7 @@
         </div>
       </div>
 
-      <div class="day">
+      <div class="day" data-day-start="8" data-day-end="10">
         <div class="num" style="background:#3C6B3C;">8–10</div>
         <div class="body">
           <div class="dow">Weekend → Monday</div>
@@ -297,6 +322,15 @@
         <tr><td class="rn">Golden summer soup</td><td class="rb">Moosewood Daily Special</td><td class="rp">—</td></tr>
         <tr><td class="rn">Buttermilk-spiced cole slaw</td><td class="rb">Praise the Lard</td><td class="rp">p.&nbsp;212</td></tr>
       </table>
+
+      <h2 class="sec" style="margin-top:20px;">Thaw-Ahead Reminders</h2>
+      <p class="grp-note">Pull from the freezer the night before. Ticks are saved on this device.</p>
+      <ul class="list thaw">
+        <li data-thaw>Salmon <span class="for">— thaw for Day 4 (Tue)</span></li>
+        <li data-thaw>Bacon <span class="for">— thaw for Day 5 (Wed)</span></li>
+        <li data-thaw>Striper <span class="for">— thaw for Day 6 (Thu)</span></li>
+      </ul>
+      <p class="grp-note" style="margin-top:6px;"><b>Venison:</b> it's raw in the fridge, not frozen — cook it Day 2 (or portion &amp; freeze the extra now, then move a portion to the fridge to thaw the night before you want it).</p>
     </div>
 
     <!-- RIGHT: SHOPPING LIST -->
@@ -346,9 +380,17 @@
         <li>tahini <span class="for">— check pantry; baba ghanoush + chraime</span></li>
       </ul>
 
+      <h3 class="grp">Your own items</h3>
+      <ul class="list" id="addedList"></ul>
+      <div class="add-bar">
+        <input type="text" id="addInput" placeholder="Add an item — e.g. paper towels…" autocomplete="off">
+        <button type="button" id="addBtn">Add</button>
+      </div>
+
       <div class="email-bar">
         <button type="button" id="emailBtn">✉ Email checked items to Taylor</button>
-        <span id="emailCount" class="email-count">0 checked</span>
+        <span id="emailCount" class="email-count">0 items checked</span>
+        <button type="button" id="clearBtn" class="linkbtn">Clear</button>
       </div>
 
       <p class="have"><b>Proteins on hand:</b> venison roast — raw, fridge · spicy links, fridge · bacon, salmon, striper, freezer. <span style="font-style:italic;">Optional fresh buy — chicken kebabs (Complete Med p.&nbsp;300) or skirt steak (Slow Fires p.&nbsp;217) — only if you want a grill night; the venison covers plenty.</span> <b style="display:block;margin-top:6px;">Already in your kitchen — skipped:</b> cabbage, carrots, leeks, radishes, eggplant, yellow squash, parsley, basil, red pepper flakes, butter, rice vinegar, canned tomatoes, mozzarella, sage, nutmeg, thyme, dry white wine, turmeric, fish sauce, roasted peanuts.</p>
@@ -515,44 +557,110 @@
 <script>
 (function(){
   var RECIPIENT = "taylor.kuykendall@gmail.com";
-  var items = Array.prototype.slice.call(
-    document.querySelectorAll('#shopping ul.list > li'));
 
-  function labelText(li){
+  // ---- Plan start date (the Saturday the plan begins). Edit if the plan shifts. ----
+  var PLAN_START = "2026-07-18";
+
+  // ---- tiny safe localStorage wrapper (degrades gracefully if blocked) ----
+  var store = {
+    get: function(k, def){ try { var v = localStorage.getItem(k);
+      return v == null ? def : JSON.parse(v); } catch(e){ return def; } },
+    set: function(k, val){ try { localStorage.setItem(k, JSON.stringify(val)); } catch(e){} }
+  };
+  var CHECK_KEY = "hs_checks_v1";   // { pkey: true } for built-in items
+  var ADDED_KEY = "hs_added_v1";    // [ { text, checked } ] custom items
+
+  function slug(s){ return s.replace(/\s+/g,' ').trim().toLowerCase(); }
+  function itemText(li){
     var clone = li.cloneNode(true);
-    // drop the checkbox and the muted "for" note from the emailed text
-    Array.prototype.forEach.call(clone.querySelectorAll('.chk, .for'),
+    Array.prototype.forEach.call(clone.querySelectorAll('.chk, .for, .rm'),
       function(n){ n.parentNode.removeChild(n); });
     return clone.textContent.replace(/\s+/g,' ').trim().replace(/\s*·\s*$/,'');
   }
 
-  var countEl = document.getElementById('emailCount');
-  function refresh(){
-    var n = 0;
-    items.forEach(function(li){
-      var cb = li.querySelector('.chk');
-      if(cb && cb.checked){ n++; li.classList.add('checked'); }
-      else { li.classList.remove('checked'); }
-    });
-    countEl.textContent = n + (n === 1 ? ' item checked' : ' items checked');
-  }
+  var checkState = store.get(CHECK_KEY, {}) || {};
 
-  items.forEach(function(li){
+  // ---- give every shopping + thaw item a checkbox, restore its saved state ----
+  var builtIns = Array.prototype.slice.call(
+    document.querySelectorAll('#shopping ul.list > li, ul.list.thaw > li'));
+
+  function addCheckbox(li, pkey){
     var cb = document.createElement('input');
     cb.type = 'checkbox';
     cb.className = 'chk';
+    if (checkState[pkey]) cb.checked = true;
     li.insertBefore(cb, li.firstChild);
-    cb.addEventListener('change', refresh);
-  });
+    li.classList.toggle('checked', cb.checked);
+    cb.addEventListener('change', function(){
+      checkState[pkey] = cb.checked;
+      if (!cb.checked) delete checkState[pkey];
+      store.set(CHECK_KEY, checkState);
+      li.classList.toggle('checked', cb.checked);
+      refreshCount();
+    });
+  }
+  builtIns.forEach(function(li){ addCheckbox(li, 'b:' + slug(itemText(li))); });
 
+  // ---- count only reflects SHOPPING items (not thaw reminders) ----
+  var countEl = document.getElementById('emailCount');
+  function shoppingLis(){
+    return Array.prototype.slice.call(
+      document.querySelectorAll('#shopping ul.list > li'));
+  }
+  function refreshCount(){
+    var n = shoppingLis().filter(function(li){
+      var c = li.querySelector('.chk'); return c && c.checked; }).length;
+    countEl.textContent = n + (n === 1 ? ' item checked' : ' items checked');
+  }
+
+  // ---- custom "your own items" (persisted) ----
+  var addedList = document.getElementById('addedList');
+  var added = store.get(ADDED_KEY, []) || [];
+  function saveAdded(){ store.set(ADDED_KEY, added); }
+
+  function renderAdded(){
+    addedList.innerHTML = '';
+    added.forEach(function(rec, idx){
+      var li = document.createElement('li');
+      var span = document.createElement('span');
+      span.textContent = rec.text;
+      li.appendChild(span);
+      var rm = document.createElement('button');
+      rm.className = 'rm'; rm.type = 'button'; rm.title = 'Remove'; rm.textContent = '×';
+      rm.addEventListener('click', function(){
+        added.splice(idx, 1); saveAdded(); renderAdded(); refreshCount();
+      });
+      li.appendChild(rm);
+      // checkbox wired to this record
+      var cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.className = 'chk'; cb.checked = !!rec.checked;
+      li.insertBefore(cb, li.firstChild);
+      li.classList.toggle('checked', cb.checked);
+      cb.addEventListener('change', function(){
+        rec.checked = cb.checked; saveAdded();
+        li.classList.toggle('checked', cb.checked); refreshCount();
+      });
+      addedList.appendChild(li);
+    });
+  }
+  renderAdded();
+
+  var addInput = document.getElementById('addInput');
+  function addItem(){
+    var t = addInput.value.replace(/\s+/g,' ').trim();
+    if (!t) return;
+    added.push({ text: t, checked: false });
+    saveAdded(); renderAdded(); addInput.value = ''; addInput.focus(); refreshCount();
+  }
+  document.getElementById('addBtn').addEventListener('click', addItem);
+  addInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') addItem(); });
+
+  // ---- email checked shopping items (built-in + custom) ----
   document.getElementById('emailBtn').addEventListener('click', function(){
-    var picked = items
+    var picked = shoppingLis()
       .filter(function(li){ var c = li.querySelector('.chk'); return c && c.checked; })
-      .map(labelText);
-    if(!picked.length){
-      alert('Tick a few items first, then send.');
-      return;
-    }
+      .map(itemText);
+    if (!picked.length){ alert('Tick a few items first, then send.'); return; }
     var subject = 'Hungry Squirrel shopping list (' + picked.length + ' items)';
     var body = 'Shopping list:\n\n' + picked.map(function(t){ return '- ' + t; }).join('\n');
     window.location.href = 'mailto:' + RECIPIENT
@@ -560,7 +668,44 @@
       + '&body=' + encodeURIComponent(body);
   });
 
-  refresh();
+  // ---- clear: uncheck everything + optionally remove custom items ----
+  document.getElementById('clearBtn').addEventListener('click', function(){
+    if (!confirm('Clear all checkmarks? (Your added items stay unless you confirm removing them next.)')) return;
+    checkState = {}; store.set(CHECK_KEY, checkState);
+    Array.prototype.forEach.call(document.querySelectorAll('.chk'), function(cb){
+      cb.checked = false;
+      var li = cb.closest('li'); if (li) li.classList.remove('checked');
+    });
+    added.forEach(function(r){ r.checked = false; });
+    if (added.length && confirm('Also remove your ' + added.length + ' added item(s)?')){
+      added = []; saveAdded(); renderAdded();
+    } else { saveAdded(); }
+    refreshCount();
+  });
+
+  // ---- tonight auto-highlight ----
+  (function(){
+    var start = new Date(PLAN_START + 'T00:00:00');
+    var now = new Date(); now.setHours(0,0,0,0);
+    var dayNum = Math.floor((now - start) / 86400000) + 1; // Day 1 = start date
+    if (dayNum < 1 || dayNum > 10) return;
+    var rows = document.querySelectorAll('.day[data-day-start]');
+    Array.prototype.forEach.call(rows, function(row){
+      var a = +row.getAttribute('data-day-start'), b = +row.getAttribute('data-day-end');
+      if (dayNum >= a && dayNum <= b){
+        row.classList.add('today');
+        var dow = row.querySelector('.dow');
+        if (dow && !dow.querySelector('.today-flag')){
+          var flag = document.createElement('span');
+          flag.className = 'today-flag'; flag.textContent = 'Tonight';
+          dow.insertBefore(flag, dow.firstChild);
+          dow.insertBefore(document.createTextNode(' '), flag.nextSibling);
+        }
+      }
+    });
+  })();
+
+  refreshCount();
 })();
 </script>
 </body>
