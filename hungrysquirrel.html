@@ -677,7 +677,7 @@
       var li = cb.closest('li'); if (li) li.classList.remove('checked');
     });
     added.forEach(function(r){ r.checked = false; });
-    if (added.length && confirm('Also remove your ' + added.length + ' added item(s)?')){
+    if (added.length && confirm('Also remove your ' + added.length + ' added item(s)?')){ 
       added = []; saveAdded(); renderAdded();
     } else { saveAdded(); }
     refreshCount();
