@@ -9,51 +9,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#FBF8F2;
-    --ink:#26402C;        /* deep garden green */
-    --tomato:#C6402F;     /* ripe accent */
-    --peach:#E8A15C;
-    --peach-tint:#F6E4CE;
-    --muted:#6B7A63;      /* sage gray */
-    --rule:#D9D2C2;
-    --keep:#4E7A4E;       /* "keeps well" green */
+    --paper:#FBF8F2; --ink:#26402C; --tomato:#C6402F; --peach:#E8A15C;
+    --peach-tint:#F6E4CE; --muted:#6B7A63; --rule:#D9D2C2; --keep:#4E7A4E;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;background:#e7e2d6;color:var(--ink);
     font-family:"Inter",-apple-system,sans-serif;line-height:1.42;}
-  .sheet{
-    background:var(--paper);
-    max-width:1000px;margin:24px auto;padding:34px 40px 40px;
-    box-shadow:0 2px 24px rgba(0,0,0,.12);
-  }
+  .sheet{background:var(--paper);max-width:1000px;margin:24px auto;
+    padding:34px 40px 40px;box-shadow:0 2px 24px rgba(0,0,0,.12);}
 
-  /* ---- Masthead ---- */
   .mast{display:flex;justify-content:space-between;align-items:flex-end;
     border-bottom:2.5px solid var(--ink);padding-bottom:14px;}
   .brand{display:flex;align-items:center;gap:16px;}
-  .logo{width:70px;height:70px;flex-shrink:0;}
+  .logo{width:72px;height:72px;flex-shrink:0;}
   .mast h1{font-family:"Fraunces",serif;font-weight:900;font-size:38px;
     line-height:.92;margin:0;letter-spacing:-.5px;}
   .mast h1 em{font-style:italic;color:var(--tomato);}
   .tagline{font-family:"Fraunces",serif;font-style:italic;font-size:13px;
-    color:var(--muted);margin-top:4px;letter-spacing:.2px;}
-  .mast .meta{text-align:right;font-size:11px;color:var(--muted);
+    color:var(--muted);margin-top:4px;}
+  .meta{text-align:right;font-size:11px;color:var(--muted);
     text-transform:uppercase;letter-spacing:1.3px;line-height:1.7;}
-  .mast .meta b{color:var(--ink);font-weight:600;}
+  .meta b{color:var(--ink);font-weight:600;}
 
   .lede{font-family:"Fraunces",serif;font-size:14.5px;font-style:italic;
     color:var(--muted);margin:12px 0 22px;max-width:78ch;}
   .lede b{color:var(--tomato);font-style:normal;font-weight:600;}
 
-  /* ---- Two-column body ---- */
+  .legend{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted);
+    margin:2px 0 16px;text-transform:uppercase;letter-spacing:.8px;}
+  .grad{flex:1;height:6px;border-radius:3px;
+    background:linear-gradient(90deg,var(--tomato),var(--peach),var(--keep));}
+
   .cols{display:grid;grid-template-columns:1.35fr 1fr;gap:34px;}
-  @media(max-width:720px){.cols{grid-template-columns:1fr;}}
 
   h2.sec{font-family:"Fraunces",serif;font-weight:600;font-size:13px;
     text-transform:uppercase;letter-spacing:2px;color:var(--tomato);
     margin:0 0 12px;padding-bottom:5px;border-bottom:1px solid var(--rule);}
 
-  /* ---- Day rows ---- */
   .day{display:grid;grid-template-columns:26px 1fr;gap:12px;margin-bottom:11px;
     page-break-inside:avoid;}
   .num{font-family:"Fraunces",serif;font-weight:600;font-size:15px;
@@ -72,117 +64,138 @@
     font-weight:600;flex-shrink:0;}
   .day .prot.none{color:var(--muted);font-weight:500;font-style:italic;}
   .day .prot.none::before{content:"MEAT-FREE";background:#E4EADD;color:var(--keep);}
+
   .tag{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.6px;
-    text-transform:uppercase;padding:1px 6px;border-radius:3px;margin-left:4px;
-    vertical-align:1px;}
+    text-transform:uppercase;padding:1px 6px;border-radius:3px;margin-left:4px;vertical-align:1px;}
   .tag.cook{background:var(--peach-tint);color:#9a5a1e;}
   .tag.left{background:#E4EADD;color:var(--keep);}
 
-  /* freshness legend */
-  .legend{display:flex;align-items:center;gap:8px;font-size:10px;
-    color:var(--muted);margin:2px 0 16px;text-transform:uppercase;
-    letter-spacing:.8px;}
-  .grad{flex:1;height:6px;border-radius:3px;
-    background:linear-gradient(90deg,var(--tomato),var(--peach),var(--keep));}
+  /* recipe-source tooltip on dish names */
+  .recipe{border-bottom:1px dotted var(--tomato);cursor:help;position:relative;}
+  .recipe::after{content:attr(data-src);position:absolute;left:0;bottom:100%;margin-bottom:6px;
+    white-space:nowrap;background:var(--ink);color:var(--paper);font-family:"Inter",sans-serif;
+    font-style:normal;font-weight:500;font-size:10.5px;letter-spacing:.3px;padding:5px 9px;
+    border-radius:4px;opacity:0;visibility:hidden;transform:translateY(3px);
+    transition:opacity .12s,transform .12s;z-index:30;pointer-events:none;
+    box-shadow:0 4px 14px rgba(38,64,44,.28);}
+  .recipe::before{content:"";position:absolute;left:14px;bottom:100%;margin-bottom:1px;
+    border:5px solid transparent;border-top-color:var(--ink);opacity:0;visibility:hidden;
+    transition:opacity .12s;z-index:31;}
+  .recipe:hover::after,.recipe:focus::after,.recipe.open::after,
+  .recipe:hover::before,.recipe:focus::before,.recipe.open::before{opacity:1;visibility:visible;transform:translateY(0);}
 
-  /* ---- Shopping list ---- */
-  .market-head{background:var(--ink);color:var(--paper);
-    font-family:"Fraunces",serif;font-weight:600;font-size:12px;
-    letter-spacing:1.5px;text-transform:uppercase;padding:7px 12px;
-    border-radius:5px 5px 0 0;display:flex;align-items:center;gap:8px;}
-  .market-head .dot{width:8px;height:8px;border-radius:50%;background:var(--tomato);}
-  .market-box{border:1.5px solid var(--ink);border-top:none;
-    border-radius:0 0 5px 5px;padding:11px 13px;margin-bottom:20px;}
-
-  ul.list{list-style:none;margin:0;padding:0;}
-  ul.list li{font-size:12px;padding:3.5px 0 3.5px 24px;position:relative;
-    border-bottom:1px dotted var(--rule);}
-  ul.list li:last-child{border-bottom:none;}
-  ul.list li .chk{position:absolute;left:2px;top:5px;width:13px;height:13px;
-    margin:0;accent-color:var(--tomato);cursor:pointer;}
-  ul.list li.checked{opacity:.5;text-decoration:line-through;
-    text-decoration-color:var(--muted);}
-  ul.list li .q{color:var(--tomato);font-weight:600;}
-  ul.list li .for{color:var(--muted);font-size:10.5px;}
-
-  .email-bar{display:flex;align-items:center;gap:10px;margin-top:14px;}
-  #emailBtn{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:600;
-    color:var(--paper);background:var(--ink);border:none;border-radius:5px;
-    padding:8px 13px;cursor:pointer;letter-spacing:.2px;}
-  #emailBtn:hover{background:#1c3020;}
-  .email-count{font-size:10.5px;color:var(--muted);}
-  .linkbtn{margin-left:auto;background:none;border:none;color:var(--muted);
-    font-family:"Inter",sans-serif;font-size:10.5px;text-decoration:underline;
-    cursor:pointer;padding:2px;}
-  .linkbtn:hover{color:var(--tomato);}
-
-  .add-bar{display:flex;gap:6px;margin-top:8px;}
-  #addInput{flex:1;font-family:"Inter",sans-serif;font-size:11.5px;
-    padding:6px 8px;border:1px solid var(--rule);border-radius:5px;
-    color:var(--ink);background:#fff;}
-  #addInput:focus{outline:none;border-color:var(--tomato);}
-  #addBtn{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:600;
-    color:var(--ink);background:var(--peach-tint);border:1px solid var(--peach);
-    border-radius:5px;padding:6px 12px;cursor:pointer;}
-  #addBtn:hover{background:var(--peach);}
-  ul.list li .rm{position:absolute;right:2px;top:3px;border:none;background:none;
-    color:var(--muted);cursor:pointer;font-size:13px;line-height:1;padding:2px;}
-  ul.list li .rm:hover{color:var(--tomato);}
-
-  /* tonight auto-highlight */
-  .day.today{background:#FBEFE0;border-radius:8px;
-    box-shadow:0 0 0 1.5px var(--peach);padding:6px 8px;margin-left:-8px;}
+  .day.today{background:#FBEFE0;border-radius:8px;box-shadow:0 0 0 1.5px var(--peach);
+    padding:6px 8px;margin-left:-8px;}
   .day.today .num{box-shadow:0 0 0 2px var(--tomato);}
   .today-flag{display:inline-block;font-family:"Inter",sans-serif;font-size:8px;
     font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--paper);
     background:var(--tomato);padding:1px 6px;border-radius:3px;margin-bottom:3px;}
 
-  h3.grp{font-family:"Inter",sans-serif;font-weight:600;font-size:11px;
-    text-transform:uppercase;letter-spacing:1.2px;color:var(--ink);
-    margin:16px 0 5px;}
-  h3.grp:first-child{margin-top:0;}
+  ul.list{list-style:none;margin:0;padding:0;}
+  ul.list li{font-size:12px;padding:3.5px 0 3.5px 24px;position:relative;
+    border-bottom:1px dotted var(--rule);}
+  ul.list li:last-child{border-bottom:none;}
+  ul.list li .chk{position:absolute;left:2px;top:5px;width:14px;height:14px;
+    margin:0;accent-color:var(--tomato);cursor:pointer;}
+  ul.list li.checked{opacity:.5;text-decoration:line-through;text-decoration-color:var(--muted);}
+  ul.list li .q{color:var(--tomato);font-weight:600;}
+  ul.list li .for{color:var(--muted);font-size:10.5px;}
+
+  .market-head{background:var(--ink);color:var(--paper);font-family:"Fraunces",serif;
+    font-weight:600;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
+    padding:7px 12px;border-radius:5px 5px 0 0;display:flex;align-items:center;gap:8px;}
+  .market-head .dot{width:8px;height:8px;border-radius:50%;background:var(--tomato);}
+  .market-box{border:1.5px solid var(--ink);border-top:none;border-radius:0 0 5px 5px;
+    padding:11px 13px;margin-bottom:20px;}
+
+  .grp{font-family:"Inter",sans-serif;font-weight:600;font-size:11px;text-transform:uppercase;
+    letter-spacing:1.2px;color:var(--ink);margin:16px 0 5px;}
+  .grp:first-child{margin-top:0;}
   .grp-note{font-size:10.5px;font-style:italic;color:var(--muted);margin:0 0 6px;}
 
-  table.ref{width:100%;border-collapse:collapse;margin-top:2px;}
-  table.ref td{padding:4px 0;border-bottom:1px dotted var(--rule);vertical-align:baseline;
-    font-size:11.5px;}
-  table.ref tr:last-child td{border-bottom:none;}
-  .ref .rn{font-weight:500;padding-right:10px;}
-  .ref .rb{color:var(--muted);font-size:10.5px;font-style:italic;padding-right:10px;}
-  .ref .rp{color:var(--tomato);font-weight:600;font-size:10.5px;
-    text-align:right;white-space:nowrap;}
+  .servings-bar{display:flex;align-items:center;gap:6px;margin:2px 0 12px;flex-wrap:wrap;}
+  .servings-label{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;
+    color:var(--muted);font-weight:600;margin-right:2px;}
+  .serv-btn{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:600;color:var(--ink);
+    background:#fff;border:1px solid var(--rule);border-radius:5px;width:26px;height:24px;cursor:pointer;padding:0;}
+  .serv-btn:hover{border-color:var(--peach);}
+  .serv-btn.is-active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+  .kitchen-toggle{background:none;border:none;padding:0;cursor:pointer;
+    font-family:"Inter",sans-serif;font-size:10.5px;color:var(--ink);text-align:left;}
+  .kitchen-toggle .chev{display:inline-block;transition:transform .15s;color:var(--muted);}
+  .kitchen-toggle[aria-expanded="true"] .chev{transform:rotate(90deg);}
+  .kitchen-toggle b{font-weight:600;text-transform:uppercase;letter-spacing:1px;font-size:9.5px;}
+  .kitchen-hint{color:var(--muted);font-style:italic;}
+  .kitchen-body{display:block;margin-top:5px;}
+
+  .add-bar{display:flex;gap:6px;margin-top:8px;}
+  #addInput{flex:1;font-family:"Inter",sans-serif;font-size:11.5px;padding:6px 8px;
+    border:1px solid var(--rule);border-radius:5px;color:var(--ink);background:#fff;}
+  #addInput:focus{outline:none;border-color:var(--tomato);}
+  #addBtn{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:600;color:var(--ink);
+    background:var(--peach-tint);border:1px solid var(--peach);border-radius:5px;padding:6px 12px;cursor:pointer;}
+  #addBtn:hover{background:var(--peach);}
+  ul.list li .rm{position:absolute;right:2px;top:3px;border:none;background:none;
+    color:var(--muted);cursor:pointer;font-size:13px;line-height:1;padding:2px;}
+  ul.list li .rm:hover{color:var(--tomato);}
+
+  .email-bar{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;}
+  #emailBtn{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:600;color:var(--paper);
+    background:var(--ink);border:none;border-radius:5px;padding:8px 13px;cursor:pointer;letter-spacing:.2px;}
+  #emailBtn:hover{background:#1c3020;}
+  .email-count{font-size:10.5px;color:var(--muted);}
+  .linkbtn{margin-left:auto;background:none;border:none;color:var(--muted);font-family:"Inter",sans-serif;
+    font-size:10.5px;text-decoration:underline;cursor:pointer;padding:2px;}
+  .linkbtn:hover{color:var(--tomato);}
 
   .have{font-size:10.5px;color:var(--muted);line-height:1.5;margin-top:14px;
     padding-top:10px;border-top:1px solid var(--rule);}
-  .have b{color:var(--ink);font-weight:600;text-transform:uppercase;
-    letter-spacing:1px;font-size:9.5px;}
+  .have b{color:var(--ink);font-weight:600;text-transform:uppercase;letter-spacing:1px;font-size:9.5px;}
 
-  .foot{margin-top:24px;padding-top:12px;border-top:2px solid var(--ink);
-    display:flex;justify-content:space-between;font-size:10px;color:var(--muted);
-    text-transform:uppercase;letter-spacing:1.2px;}
-
-  @media print{
-    html,body{background:#fff;}
-    .sheet{box-shadow:none;margin:0;max-width:none;padding:0 12px;}
-    .page2{page-break-before:always;}
-    .email-bar, .add-bar{display:none;}
-    ul.list li .chk{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-    @page{margin:14mm;}
-  }
+  .foot{margin-top:24px;padding-top:12px;border-top:2px solid var(--ink);display:flex;
+    justify-content:space-between;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;gap:12px;}
 
   .page2{margin-top:40px;}
   .about-grid{columns:2;column-gap:28px;margin-top:20px;}
-  @media(max-width:720px){.about-grid{columns:1;}}
-  .dish-card{break-inside:avoid;-webkit-column-break-inside:avoid;
-    margin-bottom:15px;padding-bottom:13px;border-bottom:1px solid var(--rule);}
-  .dc-eyebrow{font-family:"Inter",sans-serif;font-size:9px;font-weight:600;
-    text-transform:uppercase;letter-spacing:1.3px;color:var(--tomato);margin-bottom:2px;}
-  .dc-name{font-family:"Fraunces",serif;font-weight:600;font-size:16px;
-    line-height:1.05;margin-bottom:6px;color:var(--ink);}
+  .dish-card{break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:15px;
+    padding-bottom:13px;border-bottom:1px solid var(--rule);}
+  .dc-eyebrow{font-family:"Inter",sans-serif;font-size:9px;font-weight:600;text-transform:uppercase;
+    letter-spacing:1.3px;color:var(--tomato);margin-bottom:2px;}
+  .dc-name{font-family:"Fraunces",serif;font-weight:600;font-size:16px;line-height:1.05;
+    margin-bottom:6px;color:var(--ink);}
   .dc-line{font-size:11px;line-height:1.42;margin:0 0 4px;color:#33463a;}
-  .dc-line b{color:var(--tomato);font-weight:600;font-size:9.5px;
+  .dc-line b{color:var(--tomato);font-weight:600;font-size:9.5px;font-family:"Inter",sans-serif;
     text-transform:uppercase;letter-spacing:.6px;margin-right:4px;}
   .dc-line em{font-style:italic;}
+
+  @media(max-width:760px){ .cols{grid-template-columns:1fr;gap:26px;} .about-grid{columns:1;} }
+  @media(max-width:560px){
+    .sheet{padding:22px 18px;margin:10px auto;}
+    .mast h1{font-size:32px;}
+    .day .dish{font-size:14.5px;} .day .note{font-size:12px;}
+    ul.list li{font-size:13.5px;padding:6px 0 6px 26px;}
+    ul.list li .chk{width:16px;height:16px;top:7px;} ul.list li .for{font-size:12px;}
+    .serv-btn{width:32px;height:30px;font-size:14px;}
+    .recipe::after{white-space:normal;max-width:210px;line-height:1.3;}
+    .foot{flex-direction:column;gap:4px;}
+  }
+
+  @media print{
+    html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .sheet{box-shadow:none;margin:0;max-width:none;padding:0 12px;}
+    .page2{page-break-before:always;}
+    .email-bar, .add-bar, .servings-bar{display:none;}
+    ul.list li .chk{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .day, .dish-card, .market-box, .about-grid .dish-card{page-break-inside:avoid;break-inside:avoid;}
+    h2.sec, .market-head{page-break-after:avoid;}
+    .mast{page-break-after:avoid;}
+    .recipe{border-bottom:none;} .recipe::after,.recipe::before{display:none;}
+    .kitchen-toggle .chev, .kitchen-hint{display:none;}
+    .kitchen-body{display:inline !important;}
+    .kitchen-toggle{cursor:auto;}
+    @page{margin:14mm;}
+  }
 </style>
 </head>
 <body>
@@ -192,16 +205,22 @@
     <div class="brand">
       <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="The Hungry Squirrel logo">
         <circle cx="50" cy="50" r="47" fill="var(--peach-tint)" stroke="var(--ink)" stroke-width="2.5"/>
-        <path d="M40 83 C 17 80 16 49 33 39 C 41 34 50 38 52 47" fill="none" stroke="var(--ink)" stroke-width="13" stroke-linecap="round"/>
-        <path d="M48 85 C 34 85 32 66 39 56 C 43 49 55 49 59 57 C 65 67 62 85 48 85 Z" fill="var(--ink)"/>
-        <ellipse cx="49" cy="70" rx="6.5" ry="10" fill="var(--peach)"/>
-        <circle cx="60" cy="45" r="11.5" fill="var(--ink)"/>
-        <path d="M56 36 C 55 28 62 27 63 35 Z" fill="var(--ink)"/>
-        <circle cx="63" cy="43" r="2" fill="var(--paper)"/>
-        <circle cx="71.5" cy="47" r="2.4" fill="var(--tomato)"/>
-        <circle cx="58" cy="63" r="3.2" fill="var(--ink)"/>
-        <path d="M60 60 C 61 55 70 55 71 60 Z" fill="var(--ink)"/>
-        <circle cx="65.5" cy="63.5" r="5" fill="var(--tomato)"/>
+        <path d="M44 81 C 25 80 12 64 14 46 C 16 28 28 16 43 14 C 37 25 30 30 30 45 C 30 60 39 68 48 74 Z" fill="var(--ink)"/>
+        <path d="M40 21 C 34 29 31 39 33 51" fill="none" stroke="var(--keep)" stroke-width="1.8" stroke-linecap="round"/>
+        <ellipse cx="46" cy="84" rx="8.5" ry="4" fill="var(--ink)"/>
+        <path d="M52 86 C 38 86 34 69 40 58 C 43 51 50 48 55 49 C 60 42 70 43 73 51 C 76 59 71 66 64 65 C 67 74 65 86 52 86 Z" fill="var(--ink)"/>
+        <path d="M58 33 C 62 28 69 28 73 34 C 76 38 77 44 75 48 C 74 50 71 51 68 51 C 62 53 57 50 55 45 C 53 39 54 36 58 33 Z" fill="var(--ink)"/>
+        <path d="M59 31 C 56 22 62 17 66 22 C 68 26 65 31 62 33 Z" fill="var(--ink)"/>
+        <path d="M61 29 C 60 25 63 23 64 26 C 64 28 63 30 61 30 Z" fill="var(--peach)"/>
+        <circle cx="66" cy="40" r="2.1" fill="var(--paper)"/>
+        <circle cx="75" cy="46" r="1.7" fill="var(--tomato)"/>
+        <circle cx="57" cy="63" r="3" fill="var(--ink)"/>
+        <circle cx="64" cy="70" r="3" fill="var(--ink)"/>
+        <ellipse cx="63" cy="66" rx="5.4" ry="5" fill="var(--tomato)"/>
+        <path d="M56.5 62.5 C 57.5 56.5 68.5 56.5 69.5 62.5 C 67.5 65 58.5 65 56.5 62.5 Z" fill="var(--ink)"/>
+        <line x1="60.5" y1="58" x2="61.5" y2="63" stroke="var(--peach)" stroke-width="0.9" stroke-linecap="round"/>
+        <line x1="65" y1="58" x2="65.5" y2="63" stroke="var(--peach)" stroke-width="0.9" stroke-linecap="round"/>
+        <line x1="63" y1="57" x2="63" y2="53.5" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round"/>
       </svg>
       <div class="wordmark">
         <h1>The Hungry<br><em>Squirrel</em></h1>
@@ -210,7 +229,7 @@
     <div class="meta">
       <div><b>Charlottesville, VA</b></div>
       <div>Mid-July · Saturday start</div>
-      <div>Plan for 2 · leftovers built in</div>
+      <div id="planForLine">Plan for 2 · leftovers built in</div>
     </div>
   </div>
 
@@ -229,156 +248,101 @@
       <div class="day" data-day-start="1" data-day-end="1">
         <div class="num" style="background:var(--tomato);">1</div>
         <div class="body">
-          <div class="dow">Saturday · market day</div>
-          <div class="dish"><b>Slow-roasted & fresh cherry tomato salad</b> with feta, basil & honey + <b>chopped baba ghanoush</b> with pita <span class="tag cook">cook</span></div>
-          <div class="note">A mezze night. Cherry & heirloom tomatoes bruise fastest — eat them the day you buy. Starts the eggplant; baba ghanoush keeps ~5 days → snacking lunches all week.</div>
-          <div class="prot none">Light &amp; meat-free on market day</div>
+          <div class="dow">Sunday · today · big cook</div>
+          <div class="dish"><b class="recipe" tabindex="0" data-src="Foods of the SW Indian Nations · p. 165">Venison Apache stew</b> (braised deer leg) + <b class="recipe" tabindex="0" data-src="South · p. 86">peach & tomato salad</b> <span class="tag cook">cook</span></div>
+          <div class="note">Cook the raw venison first — it's time-sensitive in the fridge. Braising suits the lean leg; big batch → leftovers days 2–3, freeze the rest. Salad finishes the peaches & tomatoes.</div>
+          <div class="prot">Venison — cut the leg into chunks</div>
         </div>
       </div>
 
       <div class="day" data-day-start="2" data-day-end="2">
         <div class="num" style="background:#CF5330;">2</div>
         <div class="body">
-          <div class="dow">Sunday · big cook</div>
-          <div class="dish"><b>Venison Apache stew</b> (braised deer leg) + <b>peach & tomato salad</b> <span class="tag cook">cook</span></div>
-          <div class="note">Cook the raw venison first — it's time-sensitive in the fridge. Braising suits the lean leg; big batch → leftovers days 3–4, freeze the rest. Salad finishes the peaches & tomatoes.</div>
-          <div class="prot">Venison — cut the leg into chunks</div>
+          <div class="dow">Monday</div>
+          <div class="dish">Venison stew, round two + <b class="recipe" tabindex="0" data-src="Six Seasons · p. 201">cucumbers, scallions, mint & dried chiles</b> <span class="tag left">leftover</span></div>
+          <div class="note">Stew's even better day two. Cucumbers still crisp.</div>
+          <div class="prot">Venison stew leftovers</div>
         </div>
       </div>
 
       <div class="day" data-day-start="3" data-day-end="3">
         <div class="num" style="background:#D9722F;">3</div>
         <div class="body">
-          <div class="dow">Monday</div>
-          <div class="dish">Venison stew, round two + <b>cucumbers, scallions, mint & dried chiles</b> <span class="tag left">leftover</span></div>
-          <div class="note">Stew's even better day two. Cucumbers still crisp around day 3.</div>
-          <div class="prot">Venison stew leftovers</div>
+          <div class="dow">Tuesday</div>
+          <div class="dish"><b class="recipe" tabindex="0" data-src="Six Seasons · p. 210">Squash ribbons with tomatoes</b> + <b class="recipe" tabindex="0" data-src="Six Seasons · p. 116">roasted radishes</b> with brown butter, chile & honey <span class="tag cook">cook</span></div>
+          <div class="note">Clears the aging yellow squash and cherry tomatoes; radish roots still hold.</div>
+          <div class="prot">Salmon, roasted with lemon & dill (freezer)</div>
         </div>
       </div>
 
       <div class="day" data-day-start="4" data-day-end="4">
         <div class="num" style="background:#DE8636;">4</div>
         <div class="body">
-          <div class="dow">Tuesday</div>
-          <div class="dish"><b>Squash ribbons with tomatoes</b> + <b>roasted radishes</b> with brown butter, chile & honey <span class="tag cook">cook</span></div>
-          <div class="note">Clears the aging yellow squash and cherry tomatoes; radish roots still hold.</div>
-          <div class="prot">Salmon, roasted with lemon & dill (freezer)</div>
+          <div class="dow">Wednesday</div>
+          <div class="dish"><b class="recipe" tabindex="0" data-src="Moosewood Daily Special">Golden summer soup</b> — last squash, carrots, corn <span class="tag cook">cook</span></div>
+          <div class="note">Use the corn by mid-week before its sugars turn starchy. Big pot → lunches days 5–7.</div>
+          <div class="prot">Crisped bacon over the top (freezer)</div>
         </div>
       </div>
 
       <div class="day" data-day-start="5" data-day-end="5">
         <div class="num" style="background:var(--peach);">5</div>
         <div class="body">
-          <div class="dow">Wednesday</div>
-          <div class="dish"><b>Golden summer soup</b> — last squash, carrots, corn <span class="tag cook">cook</span></div>
-          <div class="note">Use the corn by mid-week before its sugars turn starchy. Big pot → lunches days 6–8.</div>
-          <div class="prot">Crisped bacon over the top (freezer)</div>
+          <div class="dow">Thursday</div>
+          <div class="dish"><b class="recipe" tabindex="0" data-src="Eating Out Loud · p. 194">Braised striper with cherry tomatoes & tahini (Chraime)</b>, with leftover soup alongside <span class="tag cook">cook</span></div>
+          <div class="note">Bright mid-week change-up; leans on the cherry tomatoes and tahini already in play.</div>
+          <div class="prot">Striper (freezer) — halibut recipe subs fine</div>
         </div>
       </div>
 
       <div class="day" data-day-start="6" data-day-end="6">
         <div class="num" style="background:#8FA05A;">6</div>
         <div class="body">
-          <div class="dow">Thursday</div>
-          <div class="dish"><b>Braised striper with cherry tomatoes & tahini (Chraime)</b>, with leftover soup alongside <span class="tag cook">cook</span></div>
-          <div class="note">Bright mid-week change-up; leans on the cherry tomatoes and tahini already in play.</div>
-          <div class="prot">Striper (freezer) — halibut recipe subs fine</div>
-        </div>
-      </div>
-
-      <div class="day" data-day-start="7" data-day-end="7">
-        <div class="num" style="background:var(--keep);">7</div>
-        <div class="body">
           <div class="dow">Friday</div>
-          <div class="dish"><b>Buttermilk-spiced cole slaw</b> + grilled spicy links <span class="tag cook">cook</span></div>
+          <div class="dish"><b class="recipe" tabindex="0" data-src="Praise the Lard · p. 212">Buttermilk-spiced cole slaw</b> + grilled spicy links <span class="tag cook">cook</span></div>
           <div class="note">Cabbage is the hardiest thing you bought — parked here on purpose so it's made fresh late. Dressed slaw holds 3–4 days.</div>
           <div class="prot">Spicy links — bacon-wrapped, Sonoran-style</div>
         </div>
       </div>
 
-      <div class="day" data-day-start="8" data-day-end="10">
-        <div class="num" style="background:#3C6B3C;">8+</div>
+      <div class="day" data-day-start="7" data-day-end="9">
+        <div class="num" style="background:var(--keep);">7+</div>
         <div class="body">
-          <div class="dow">Weekend → Monday</div>
-          <div class="dish">Leftovers + cook the <b>vegetable lasagne</b> one night; freeze half <span class="tag left">leftover</span></div>
+          <div class="dow">Next weekend →</div>
+          <div class="dish">Leftovers + cook the <b class="recipe" tabindex="0" data-src="Moosewood Low-Fat Favorites · p. 216">vegetable lasagne</b> one night; freeze half <span class="tag left">leftover</span></div>
           <div class="note">Save the lasagne for last — its leeks are the longest-keeping thing you bought. Rounds out the week and refills the freezer.</div>
           <div class="prot none">Lasagne night — a veg finish</div>
         </div>
       </div>
 
-      <p class="grp-note" style="margin-top:6px;">Breakfasts are grab-and-go throughout; most lunches are leftovers (baba ghanoush days 1–4, soup days 6–8).</p>
+      <p class="grp-note" style="margin-top:6px;">Breakfasts are grab-and-go throughout; most lunches are leftovers (venison stew days 2–3, soup days 5–7).</p>
 
-      <h2 class="sec" style="margin-top:20px;">Recipe Index</h2>
-      <table class="ref">
-        <tr><td class="rn">Cherry tomato salad w/ feta, basil &amp; honey</td><td class="rb">Eating Out Loud</td><td class="rp">p.&nbsp;101</td></tr>
-        <tr><td class="rn">Venison Apache stew (braised leg)</td><td class="rb">Foods of the SW Indian Nations</td><td class="rp">p.&nbsp;165</td></tr>
-        <tr><td class="rn">Braised striper &amp; cherry tomatoes (Chraime)</td><td class="rb">Eating Out Loud</td><td class="rp">p.&nbsp;194</td></tr>
-        <tr><td class="rn">Chopped baba ghanoush</td><td class="rb">Matty Matheson: Home Style Cookery</td><td class="rp">p.&nbsp;119</td></tr>
-        <tr><td class="rn">Vegetable lasagne béchamel</td><td class="rb">Moosewood Low-Fat Favorites</td><td class="rp">p.&nbsp;216</td></tr>
-        <tr><td class="rn">Peach &amp; tomato salad</td><td class="rb">South</td><td class="rp">p.&nbsp;86</td></tr>
-        <tr><td class="rn">Cucumbers, scallions, mint &amp; dried chiles</td><td class="rb">Six Seasons</td><td class="rp">p.&nbsp;201</td></tr>
-        <tr><td class="rn">Squash ribbons with tomatoes</td><td class="rb">Six Seasons</td><td class="rp">p.&nbsp;210</td></tr>
-        <tr><td class="rn">Roasted radishes, brown butter, chile &amp; honey</td><td class="rb">Six Seasons</td><td class="rp">p.&nbsp;116</td></tr>
-        <tr><td class="rn">Golden summer soup</td><td class="rb">Moosewood Daily Special</td><td class="rp">—</td></tr>
-        <tr><td class="rn">Buttermilk-spiced cole slaw</td><td class="rb">Praise the Lard</td><td class="rp">p.&nbsp;212</td></tr>
-      </table>
-
-      <h2 class="sec" style="margin-top:20px;">Thaw-Ahead Reminders</h2>
-      <p class="grp-note">Pull from the freezer the night before. Ticks are saved on this device.</p>
-      <ul class="list thaw">
-        <li data-thaw>Salmon <span class="for">— thaw for Day 4 (Tue)</span></li>
-        <li data-thaw>Bacon <span class="for">— thaw for Day 5 (Wed)</span></li>
-        <li data-thaw>Striper <span class="for">— thaw for Day 6 (Thu)</span></li>
-      </ul>
-      <p class="grp-note" style="margin-top:6px;"><b>Venison:</b> it's raw in the fridge, not frozen — cook it Day 2 (or portion &amp; freeze the extra now, then move a portion to the fridge to thaw the night before you want it).</p>
-    </div>
+      </div>
 
     <!-- RIGHT: SHOPPING LIST -->
     <div id="shopping">
       <h2 class="sec">Master Shopping List</h2>
 
-      <div class="market-head"><span class="dot"></span> Saturday market — buy first</div>
+      <div class="servings-bar" id="servingsBar">
+        <span class="servings-label">Servings</span>
+        <button type="button" data-serv="2" class="serv-btn is-active">2</button>
+        <button type="button" data-serv="3" class="serv-btn">3</button>
+        <button type="button" data-serv="4" class="serv-btn">4</button>
+        <button type="button" data-serv="6" class="serv-btn">6</button>
+      </div>
+
+      <div class="market-head"><span class="dot"></span> Still to buy</div>
       <div class="market-box">
-        <div class="grp-note">Peaking right now; grab these before anything else.</div>
+        <div class="grp-note">Everything else on the plan arrived in the Wegmans order — this is all that's short.</div>
         <ul class="list">
-          <li><span class="q">~1 lb</span> peaches <span class="for">— peach-tomato salad (Day 2)</span></li>
-          <li><span class="q">3–4</span> heirloom tomatoes <span class="for">— both salads</span></li>
-          <li><span class="q">2 pints</span> cherry tomatoes <span class="for">— tomato salad + squash ribbons</span></li>
-          <li><span class="q">3</span> cucumbers <span class="for">— cucumber salad</span></li>
-          <li><span class="q">4 ears</span> corn on the cob <span class="for">— summer soup</span></li>
-          <li><span class="q">2 bunches</span> scallions <span class="for">— 3 dishes</span></li>
-          <li><span class="q">1</span> red onion · <span class="q">1</span> shallot</li>
-          <li><span class="q">2</span> fresh hot chiles <span class="for">— squash ribbons</span></li>
-          <li><span class="q">1 bunch</span> mint <span class="for">— 3 dishes</span></li>
-          <li><span class="q">1 jar</span> local honey <span class="for">— roasted radishes</span></li>
-          <li><span class="q">2</span> red bell peppers <span class="for">— venison stew</span></li>
-          <li><span class="q">3–4</span> green chiles (Hatch/poblano) <span class="for">— venison stew</span></li>
-          <li><span class="q">1 bunch</span> bitter greens <span class="for">— venison stew; sub kale</span></li>
-          <li><span class="q">1 pack</span> hot dog buns / bolillo rolls <span class="for">— Sonoran dogs; market baker if there's one</span></li>
-          <li><span class="q">1 block</span> feta <span class="for">— cherry tomato salad</span></li>
-          <li>local cheese <span class="for">— optional Parm / Jack sub</span></li>
-          <li><span class="q">1 bunch</span> watercress <span class="for">— iffy in heat; sub arugula</span></li>
+          <li><span class="q">4–5</span> more heirloom/slicing tomatoes <span class="for">— 1 beefsteak arrived; salads + extra for eating</span></li>
+          <li><span class="q">2 pints</span> more cherry tomatoes <span class="for">— 1 pt arrived; squash ribbons + snacking</span></li>
+          <li><span class="q">1 bunch</span> more scallions <span class="for">— 1 arrived; used in 3 dishes</span></li>
+          <li><span class="q">1</span> shallot <span class="for">— peach-tomato salad</span></li>
         </ul>
       </div>
 
-      <h3 class="grp">Grocery / pantry</h3>
-      <p class="grp-note">Not local this time of year, or shelf staples.</p>
-      <ul class="list">
-        <li><span class="q">2</span> sweet potatoes <span class="for">— fall crop here, not the market</span></li>
-        <li><span class="q">1 head</span> broccoli <span class="for">— scarce midsummer; store</span></li>
-        <li><span class="q">3</span> lemons <span class="for">— no local citrus, ever</span></li>
-        <li><span class="q">1 pint</span> buttermilk <span class="for">— slaw + salad dressing</span></li>
-        <li><span class="q">small</span> heavy cream <span class="for">— peach-tomato dressing</span></li>
-        <li><span class="q">4 oz</span> Monterey Jack <span class="for">— soup</span></li>
-        <li><span class="q">wedge</span> Parmesan <span class="for">— lasagne</span></li>
-        <li><span class="q">1 box</span> lasagne pasta</li>
-        <li><span class="q">4–6</span> pita rounds <span class="for">— tomato salad + baba ghanoush</span></li>
-        <li><span class="q">1 can</span> hominy <span class="for">— venison stew</span></li>
-        <li><span class="q">1 qt</span> beef or veal stock <span class="for">— venison stew</span></li>
-        <li><span class="q">small jar</span> harissa <span class="for">— striper chraime</span></li>
-        <li><span class="q">1 bunch</span> dill <span class="for">— roasted salmon</span></li>
-        <li>tahini <span class="for">— check pantry; baba ghanoush + chraime</span></li>
-      </ul>
+      <p class="grp-note" style="margin-top:-10px;">Tonight's braise is covered — hominy, beef stock, peppers, chiles and greens all arrived.</p>
 
       <h3 class="grp">Your own items</h3>
       <ul class="list" id="addedList"></ul>
@@ -393,14 +357,18 @@
         <button type="button" id="clearBtn" class="linkbtn">Clear</button>
       </div>
 
-      <p class="have"><b>Proteins on hand:</b> venison roast — raw, fridge · spicy links, fridge · bacon, salmon, striper, freezer. <span style="font-style:italic;">Optional fresh buy — chicken kebabs (Complete Med p.&nbsp;300) or skirt steak (Slow Fires p.&nbsp;217) — only if you want a grill night; the venison covers plenty.</span> <b style="display:block;margin-top:6px;">Already in your kitchen — skipped:</b> cabbage, carrots, leeks, radishes, eggplant, yellow squash, parsley, basil, red pepper flakes, butter, rice vinegar, canned tomatoes, mozzarella, sage, nutmeg, thyme, dry white wine, turmeric, fish sauce, roasted peanuts.</p>
+      <p class="have"><b>Proteins on hand:</b> venison roast — raw, fridge · spicy links, fridge · bacon, salmon, striper, freezer. <span style="font-style:italic;">Optional fresh buy — chicken kebabs (Complete Med p.&nbsp;300) or skirt steak (Slow Fires p.&nbsp;217) — only if you want a grill night; the venison covers plenty.</span></p>
+      <p class="have kitchen">
+        <button type="button" class="kitchen-toggle" id="kitchenToggle" aria-expanded="false"><span class="chev">▸</span> <b>Already in your kitchen — skipped</b> <span class="kitchen-hint">(tap to show)</span></button>
+        <span class="kitchen-body" hidden><b style="display:block;margin-bottom:3px;">From the garden &amp; pantry</b>cabbage, carrots, leeks, radishes, eggplant, yellow squash, parsley, basil, red pepper flakes, butter, rice vinegar, canned tomatoes, mozzarella, sage, nutmeg, thyme, dry white wine, turmeric, fish sauce, roasted peanuts.<b style="display:block;margin:7px 0 3px;">Delivered this trip</b>peaches (2 lb), beefsteak tomato, cherry tomatoes (1 pt), cucumbers, sweet corn (4), scallions (1), red onions (2 lb), red sweet peppers (2), poblanos (2), Anaheim, red Fresnos (4), mint, baby arugula, fresh dill, lemons (bag), honey, feta, Monterey Jack, Parmesan, buttermilk, heavy cream, broccoli florets, yams (2), lasagna sheets, pita (6), tahini, hominy (white + golden), beef stock, harissa, hot dog buns, pretzel sausage buns.</span>
+      </p>
     </div>
 
   </div>
 
   <div class="foot">
     <span>Tomatoes carry the front half — buy generously, blitz days 1–4</span>
-    <span>Serves 2 · scale to taste</span>
+    <span id="servesFoot">Serves 2 · scale to taste</span>
   </div>
 
 </div>
@@ -412,16 +380,22 @@
     <div class="brand">
       <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="The Hungry Squirrel logo">
         <circle cx="50" cy="50" r="47" fill="var(--peach-tint)" stroke="var(--ink)" stroke-width="2.5"/>
-        <path d="M40 83 C 17 80 16 49 33 39 C 41 34 50 38 52 47" fill="none" stroke="var(--ink)" stroke-width="13" stroke-linecap="round"/>
-        <path d="M48 85 C 34 85 32 66 39 56 C 43 49 55 49 59 57 C 65 67 62 85 48 85 Z" fill="var(--ink)"/>
-        <ellipse cx="49" cy="70" rx="6.5" ry="10" fill="var(--peach)"/>
-        <circle cx="60" cy="45" r="11.5" fill="var(--ink)"/>
-        <path d="M56 36 C 55 28 62 27 63 35 Z" fill="var(--ink)"/>
-        <circle cx="63" cy="43" r="2" fill="var(--paper)"/>
-        <circle cx="71.5" cy="47" r="2.4" fill="var(--tomato)"/>
-        <circle cx="58" cy="63" r="3.2" fill="var(--ink)"/>
-        <path d="M60 60 C 61 55 70 55 71 60 Z" fill="var(--ink)"/>
-        <circle cx="65.5" cy="63.5" r="5" fill="var(--tomato)"/>
+        <path d="M44 81 C 25 80 12 64 14 46 C 16 28 28 16 43 14 C 37 25 30 30 30 45 C 30 60 39 68 48 74 Z" fill="var(--ink)"/>
+        <path d="M40 21 C 34 29 31 39 33 51" fill="none" stroke="var(--keep)" stroke-width="1.8" stroke-linecap="round"/>
+        <ellipse cx="46" cy="84" rx="8.5" ry="4" fill="var(--ink)"/>
+        <path d="M52 86 C 38 86 34 69 40 58 C 43 51 50 48 55 49 C 60 42 70 43 73 51 C 76 59 71 66 64 65 C 67 74 65 86 52 86 Z" fill="var(--ink)"/>
+        <path d="M58 33 C 62 28 69 28 73 34 C 76 38 77 44 75 48 C 74 50 71 51 68 51 C 62 53 57 50 55 45 C 53 39 54 36 58 33 Z" fill="var(--ink)"/>
+        <path d="M59 31 C 56 22 62 17 66 22 C 68 26 65 31 62 33 Z" fill="var(--ink)"/>
+        <path d="M61 29 C 60 25 63 23 64 26 C 64 28 63 30 61 30 Z" fill="var(--peach)"/>
+        <circle cx="66" cy="40" r="2.1" fill="var(--paper)"/>
+        <circle cx="75" cy="46" r="1.7" fill="var(--tomato)"/>
+        <circle cx="57" cy="63" r="3" fill="var(--ink)"/>
+        <circle cx="64" cy="70" r="3" fill="var(--ink)"/>
+        <ellipse cx="63" cy="66" rx="5.4" ry="5" fill="var(--tomato)"/>
+        <path d="M56.5 62.5 C 57.5 56.5 68.5 56.5 69.5 62.5 C 67.5 65 58.5 65 56.5 62.5 Z" fill="var(--ink)"/>
+        <line x1="60.5" y1="58" x2="61.5" y2="63" stroke="var(--peach)" stroke-width="0.9" stroke-linecap="round"/>
+        <line x1="65" y1="58" x2="65.5" y2="63" stroke="var(--peach)" stroke-width="0.9" stroke-linecap="round"/>
+        <line x1="63" y1="57" x2="63" y2="53.5" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round"/>
       </svg>
       <div class="wordmark">
         <h1>About the <em>Dishes</em></h1>
@@ -437,24 +411,6 @@
   <p class="lede">This week leans the way a Mediterranean-style diet does — <b>vegetables and fruit up front, lean proteins in support</b> (game, fish, a little poultry), olive oil over butter, and one gloriously indulgent cookout night to keep it human. Here's the story and the upside behind each plate.</p>
 
   <div class="about-grid">
-
-    <div class="dish-card">
-      <div class="dc-eyebrow">Eating Out Loud · p.&nbsp;101</div>
-      <div class="dc-name">Cherry tomato salad, feta &amp; honey</div>
-      <p class="dc-line"><b>Flavor</b> Half the tomatoes slow-roasted to jammy sweetness, half left raw and bright — honey and salty feta bridge the two.</p>
-      <p class="dc-line"><b>Roots</b> A modern Israeli mezze idea. The tomato is a New World transplant that only reached the eastern Mediterranean a few centuries ago, yet now defines its summer table.</p>
-      <p class="dc-line"><b>Good for you</b> Tomatoes are the headline source of lycopene, an antioxidant that becomes <em>more</em> absorbable when cooked — so the roasted half pulls double duty.</p>
-      <p class="dc-line"><b>Trivia</b> Cooking concentrates their natural glutamates — that's the savory "umami" hit.</p>
-    </div>
-
-    <div class="dish-card">
-      <div class="dc-eyebrow">Matty Matheson · p.&nbsp;119</div>
-      <div class="dc-name">Chopped baba ghanoush</div>
-      <p class="dc-line"><b>Flavor</b> Smoke-charred eggplant, nutty tahini, garlic, lemon.</p>
-      <p class="dc-line"><b>Roots</b> A Levantine staple (Lebanon, Syria, Jordan, Palestine). The Arabic name translates playfully to something like "pampered father," with old folklore of a daughter making soft food for a toothless dad. Tahini is what separates true baba ghanoush from its cousin mutabbal.</p>
-      <p class="dc-line"><b>Good for you</b> Naturally vegan and gluten-free, and generally lighter than hummus; eggplant brings fiber and skin-borne antioxidants.</p>
-      <p class="dc-line"><b>In the plan</b> Made big on Day 1 — it keeps about five days and becomes the week's grab-and-go lunch with pita.</p>
-    </div>
 
     <div class="dish-card">
       <div class="dc-eyebrow">South · p.&nbsp;86</div>
@@ -559,7 +515,7 @@
   var RECIPIENT = "taylor.kuykendall@gmail.com";
 
   // ---- Plan start date (the Saturday the plan begins). Edit if the plan shifts. ----
-  var PLAN_START = "2026-07-18";
+  var PLAN_START = "2026-07-19";
 
   // ---- tiny safe localStorage wrapper (degrades gracefully if blocked) ----
   var store = {
@@ -582,7 +538,7 @@
 
   // ---- give every shopping + thaw item a checkbox, restore its saved state ----
   var builtIns = Array.prototype.slice.call(
-    document.querySelectorAll('#shopping ul.list > li, ul.list.thaw > li'));
+    document.querySelectorAll('#shopping ul.list > li'));
 
   function addCheckbox(li, pkey){
     var cb = document.createElement('input');
@@ -677,18 +633,73 @@
       var li = cb.closest('li'); if (li) li.classList.remove('checked');
     });
     added.forEach(function(r){ r.checked = false; });
-    if (added.length && confirm('Also remove your ' + added.length + ' added item(s)?')){ 
+    if (added.length && confirm('Also remove your ' + added.length + ' added item(s)?')){
       added = []; saveAdded(); renderAdded();
     } else { saveAdded(); }
     refreshCount();
   });
+
+  // ---- "already in your kitchen" collapsible ----
+  (function(){
+    var t = document.getElementById('kitchenToggle');
+    if (!t) return;
+    var body = t.parentNode.querySelector('.kitchen-body');
+    var hint = t.querySelector('.kitchen-hint');
+    t.addEventListener('click', function(){
+      var hidden = body.hasAttribute('hidden');
+      if (hidden){ body.removeAttribute('hidden'); t.setAttribute('aria-expanded','true'); if(hint) hint.textContent='(tap to hide)'; }
+      else { body.setAttribute('hidden',''); t.setAttribute('aria-expanded','false'); if(hint) hint.textContent='(tap to show)'; }
+    });
+  })();
+
+  // ---- servings scaler (rescales numeric shopping quantities in place) ----
+  (function(){
+    var SERV_KEY = 'hs_serv_v1', BASE = 2;
+    var qs = Array.prototype.slice.call(document.querySelectorAll('#shopping .q'));
+    qs.forEach(function(q){ q.setAttribute('data-base', q.textContent); });
+
+    function fmtNum(x){
+      x = Math.round(x * 4) / 4;                 // snap to nearest quarter
+      var whole = Math.floor(x), frac = x - whole;
+      var map = {0:'', 0.25:'¼', 0.5:'½', 0.75:'¾'};
+      var f = map[frac];
+      if (f === undefined) return String(x);
+      if (whole === 0) return f || '0';
+      return whole + f;
+    }
+    function scaleText(text, factor){
+      // "~1 lb", "3–4", "2 pints", "wedge" (unchanged), "4 ears"
+      var m = text.match(/^(~?)(\d+(?:\.\d+)?)(?:\s*[–-]\s*(\d+(?:\.\d+)?))?(.*)$/);
+      if (!m) return text;                        // non-numeric amount: leave as-is
+      var out = m[1] + fmtNum(parseFloat(m[2]) * factor);
+      if (m[3] != null) out += '–' + fmtNum(parseFloat(m[3]) * factor);
+      return out + m[4];
+    }
+    var planLine = document.getElementById('planForLine');
+    var servesFoot = document.getElementById('servesFoot');
+    function apply(serv){
+      var factor = serv / BASE;
+      qs.forEach(function(q){ q.textContent = scaleText(q.getAttribute('data-base'), factor); });
+      Array.prototype.forEach.call(document.querySelectorAll('.serv-btn'), function(b){
+        b.classList.toggle('is-active', +b.getAttribute('data-serv') === serv);
+      });
+      if (planLine) planLine.textContent = 'Plan for ' + serv + ' · leftovers built in';
+      if (servesFoot) servesFoot.textContent = 'Serves ' + serv + ' · scale to taste';
+      store.set(SERV_KEY, serv);
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.serv-btn'), function(b){
+      b.addEventListener('click', function(){ apply(+b.getAttribute('data-serv')); });
+    });
+    var saved = store.get(SERV_KEY, BASE);
+    if (saved && saved !== BASE) apply(saved);
+  })();
 
   // ---- tonight auto-highlight ----
   (function(){
     var start = new Date(PLAN_START + 'T00:00:00');
     var now = new Date(); now.setHours(0,0,0,0);
     var dayNum = Math.floor((now - start) / 86400000) + 1; // Day 1 = start date
-    if (dayNum < 1 || dayNum > 10) return;
+    if (dayNum < 1 || dayNum > 9) return;
     var rows = document.querySelectorAll('.day[data-day-start]');
     Array.prototype.forEach.call(rows, function(row){
       var a = +row.getAttribute('data-day-start'), b = +row.getAttribute('data-day-end');
@@ -702,6 +713,22 @@
           dow.insertBefore(document.createTextNode(' '), flag.nextSibling);
         }
       }
+    });
+  })();
+
+  // ---- recipe-source tooltips: tap toggles on touch; tap elsewhere closes ----
+  (function(){
+    var tips = Array.prototype.slice.call(document.querySelectorAll('.recipe'));
+    tips.forEach(function(r){
+      r.addEventListener('click', function(e){
+        var open = r.classList.contains('open');
+        tips.forEach(function(o){ o.classList.remove('open'); });
+        if(!open) r.classList.add('open');
+        e.stopPropagation();
+      });
+    });
+    document.addEventListener('click', function(){
+      tips.forEach(function(o){ o.classList.remove('open'); });
     });
   })();
 
