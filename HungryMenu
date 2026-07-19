@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hungry Squirrel — This Week's Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2; --ink:#26402C; --tomato:#C6402F; --peach:#E8A15C;
+    --peach-tint:#F6E4CE; --muted:#6B7A63; --rule:#D9D2C2; --keep:#4E7A4E;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#e7e2d6;color:var(--ink);
+    font-family:"Inter",-apple-system,sans-serif;line-height:1.5;}
+  .sheet{background:var(--paper);max-width:720px;margin:24px auto;
+    padding:44px 52px 46px;box-shadow:0 2px 24px rgba(0,0,0,.12);}
+
+  /* cover */
+  .cover{text-align:center;border-bottom:1px solid var(--rule);padding-bottom:22px;}
+  .logo{width:88px;height:88px;}
+  .cover h1{font-family:"Fraunces",serif;font-weight:900;font-size:40px;
+    line-height:1;margin:8px 0 0;letter-spacing:-.5px;}
+  .cover h1 em{font-style:italic;color:var(--tomato);}
+  .cover .invite{font-family:"Fraunces",serif;font-style:italic;font-size:16px;
+    color:var(--muted);margin:8px 0 0;}
+  .cover .place{font-family:"Inter",sans-serif;font-size:10.5px;text-transform:uppercase;
+    letter-spacing:2px;color:var(--muted);margin-top:10px;}
+
+  .lede{font-family:"Fraunces",serif;font-style:italic;font-size:16px;text-align:center;
+    color:#3a4a3f;max-width:52ch;margin:26px auto 8px;line-height:1.5;}
+
+  /* a menu day */
+  .menu-day{padding:26px 0 8px;border-top:1px solid var(--rule);}
+  .menu-day:first-of-type{border-top:none;}
+  .md-when{font-family:"Inter",sans-serif;font-size:10.5px;text-transform:uppercase;
+    letter-spacing:2.5px;color:var(--tomato);font-weight:600;text-align:center;}
+  .md-title{font-family:"Fraunces",serif;font-weight:600;font-size:24px;
+    text-align:center;margin:4px 0 18px;color:var(--ink);}
+
+  .course{margin:0 0 16px;}
+  .course-name{font-family:"Fraunces",serif;font-weight:500;font-size:18px;
+    color:var(--ink);text-align:center;line-height:1.25;}
+  .course-desc{font-family:"Fraunces",serif;font-style:italic;font-size:14.5px;
+    color:#46564b;text-align:center;max-width:54ch;margin:5px auto 8px;line-height:1.5;}
+  .course-meta{font-size:12px;color:#5a6a5e;text-align:center;margin:6px auto 0;
+    max-width:52ch;line-height:1.45;}
+  .course-meta b{font-family:"Inter",sans-serif;font-weight:600;font-size:8.5px;
+    text-transform:uppercase;letter-spacing:1.2px;color:var(--keep);margin-right:5px;}
+
+  .md-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+  .btn{font-family:"Inter",sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;
+    border-radius:6px;padding:9px 16px;letter-spacing:.2px;}
+  .btn.join{background:var(--ink);color:var(--paper);border:1px solid var(--ink);}
+  .btn.join:hover{background:#1c3020;}
+  .btn.bring{background:transparent;color:var(--ink);border:1px solid var(--peach);}
+  .btn.bring:hover{background:var(--peach-tint);} 
+
+  .pairing{max-width:56ch;margin:14px auto 4px;background:var(--peach-tint);
+    border:1px solid var(--peach);border-radius:8px;padding:14px 18px;}
+  .pairing p{margin:0 0 7px;font-size:13px;color:#43513f;text-align:center;line-height:1.5;
+    font-family:"Fraunces",serif;font-style:italic;}
+  .pairing p:last-child{margin-bottom:0;}
+  .pairing b{font-family:"Inter",sans-serif;font-weight:600;font-size:9px;font-style:normal;
+    text-transform:uppercase;letter-spacing:1.4px;color:var(--tomato);
+    display:block;margin-bottom:1px;}
+  .pairing .note{font-size:10.5px;color:var(--muted);font-style:normal;font-family:"Inter",sans-serif;}
+
+  .foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);text-align:center;
+    font-family:"Inter",sans-serif;font-size:10px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:2px;}
+  .foot .allergen{text-transform:none;letter-spacing:0;font-style:italic;
+    font-family:"Fraunces",serif;font-size:12px;margin-top:8px;color:var(--muted);}
+
+  @media(max-width:560px){
+    .sheet{padding:26px 22px;margin:10px auto;}
+    .cover h1{font-size:32px;} .md-title{font-size:22px;}
+    .course-name{font-size:17px;} .course-desc{font-size:14.5px;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ===== COVER (invariant crest; edit title/place) ===== -->
+  <div class="cover">
+    <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="The Hungry Squirrel">
+      <circle cx="50" cy="50" r="47" fill="var(--peach-tint)" stroke="var(--ink)" stroke-width="2.5"/>
+      <path d="M44 81 C 25 80 12 64 14 46 C 16 28 28 16 43 14 C 37 25 30 30 30 45 C 30 60 39 68 48 74 Z" fill="var(--ink)"/>
+      <path d="M40 21 C 34 29 31 39 33 51" fill="none" stroke="var(--keep)" stroke-width="1.8" stroke-linecap="round"/>
+      <ellipse cx="46" cy="84" rx="8.5" ry="4" fill="var(--ink)"/>
+      <path d="M52 86 C 38 86 34 69 40 58 C 43 51 50 48 55 49 C 60 42 70 43 73 51 C 76 59 71 66 64 65 C 67 74 65 86 52 86 Z" fill="var(--ink)"/>
+      <path d="M58 33 C 62 28 69 28 73 34 C 76 38 77 44 75 48 C 74 50 71 51 68 51 C 62 53 57 50 55 45 C 53 39 54 36 58 33 Z" fill="var(--ink)"/>
+      <path d="M59 31 C 56 22 62 17 66 22 C 68 26 65 31 62 33 Z" fill="var(--ink)"/>
+      <path d="M61 29 C 60 25 63 23 64 26 C 64 28 63 30 61 30 Z" fill="var(--peach)"/>
+      <circle cx="66" cy="40" r="2.1" fill="var(--paper)"/>
+      <circle cx="75" cy="46" r="1.7" fill="var(--tomato)"/>
+      <circle cx="57" cy="63" r="3" fill="var(--ink)"/>
+      <circle cx="64" cy="70" r="3" fill="var(--ink)"/>
+      <ellipse cx="63" cy="66" rx="5.4" ry="5" fill="var(--tomato)"/>
+      <path d="M56.5 62.5 C 57.5 56.5 68.5 56.5 69.5 62.5 C 67.5 65 58.5 65 56.5 62.5 Z" fill="var(--ink)"/>
+      <line x1="60.5" y1="58" x2="61.5" y2="63" stroke="var(--peach)" stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="65" y1="58" x2="65.5" y2="63" stroke="var(--peach)" stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="63" y1="57" x2="63" y2="53.5" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <h1>The Hungry <em>Squirrel</em></h1>
+    <p class="invite">You're invited to our table</p>
+    <p class="place">Charlottesville · This Week's Suppers</p>
+  </div>
+
+  <p class="lede">A rolling little supper club. Any evening that tempts you, let us know —
+  there's usually room for one more chair.</p>
+
+  <!-- ===== MENU DAYS ===== -->
+
+  <article class="menu-day" data-offset="0">
+    <div class="md-when" data-dow="Sunday">Sunday</div>
+    <h2 class="md-title">Braise Night</h2>
+    <div class="course">
+      <div class="course-name">Venison Apache stew</div>
+      <p class="course-desc">A slow-braised venison stew with chiles, hominy and greens — deep, warming, and better for the wait.</p>
+      <p class="course-meta">The hominy is corn transformed by nixtamalization, a technique thousands of years old: dried kernels simmered in an alkaline bath of lime or wood ash until their skins slip and their chemistry shifts. It isn't only tradition — the process unlocks the grain's niacin, which is why cultures built on corn sidestepped the deficiency disease that struck places that borrowed maize without the method. The stew rests on the "Three Sisters" — corn, beans and squash — the interplanted trio at the heart of Southwestern kitchens for millennia.</p>
+    </div>
+    <div class="course">
+      <div class="course-name">Peach &amp; tomato salad, buttermilk dressing</div>
+      <p class="course-desc">Ripe peach and heirloom tomato, both sweet and tart, over a tangy buttermilk-cream dressing to cut the richness.</p>
+      <p class="course-meta">Peach and tomato are a summer natural: they share aromatic compounds, so the palate reads them as kin, and a little acidity and dairy fat pull their sweetness into focus. It's a pairing that only lands for the few weeks a year both are heavy and ripe at once.</p>
+    </div>
+    <div class="md-actions">
+      <button class="btn join" data-menu="Braise Night — venison stew &amp; peach-tomato salad">Join us this evening</button>
+      <button class="btn bring">What can I bring?</button>
+    </div>
+    <div class="pairing" hidden>
+      <p><b>A bottle</b> A bold, brambly red — Syrah, Malbec, or a Zinfandel — to stand up to the game and chile.</p>
+      <p><b>Something sweet</b> A spiced stone-fruit crisp, or dark-chocolate brownies with a whisper of chili.</p>
+    </div>
+  </article>
+
+  <article class="menu-day" data-offset="1">
+    <div class="md-when" data-dow="Monday">Monday</div>
+    <h2 class="md-title">Second-Night Stew</h2>
+    <div class="course">
+      <div class="course-name">Venison stew, deepened overnight</div>
+      <p class="course-desc">The braise on night two — flavors married and mellowed — with a cool cucumber, scallion and mint salad alongside.</p>
+      <p class="course-meta">A day's rest is a braise's quiet secret: as it cools and sits, fat and gelatin redistribute and the sharp edges of spice and allium round off, so nothing is added yet everything tastes more composed. The cucumber beside it is, botanically, a berry — and about ninety-five percent water, which is exactly why it reads so cooling against the deep, spiced stew.</p>
+    </div>
+    <div class="md-actions">
+      <button class="btn join" data-menu="Second-Night Stew — venison &amp; cucumber salad">Join us this evening</button>
+      <button class="btn bring">What can I bring?</button>
+    </div>
+    <div class="pairing" hidden>
+      <p><b>A bottle</b> The same easy red as Sunday — Grenache or a GSM blend loves this dish.</p>
+      <p><b>Something sweet</b> Bright and cooling: lime or mixed-berry sorbet.</p>
+    </div>
+  </article>
+
+  <article class="menu-day" data-offset="2">
+    <div class="md-when" data-dow="Tuesday">Tuesday</div>
+    <h2 class="md-title">From the Garden &amp; the Sea</h2>
+    <div class="course">
+      <div class="course-name">Roasted salmon, lemon &amp; dill</div>
+      <p class="course-desc">A rich fillet roasted simply, with lemon and dill.</p>
+      <p class="course-meta">Salmon's richness comes from the fat that fuels its long migrations — the same omega-3s that make it so prized at the table. Dill and lemon are the classic northern foil: grassy, bright and sharp enough to lift the oiliness rather than wrestle with it.</p>
+    </div>
+    <div class="course">
+      <div class="course-name">Shaved squash ribbons &amp; roasted radishes</div>
+      <p class="course-desc">Raw summer squash in a bright, herby dressing, and radishes turned sweet and mellow in brown butter and honey.</p>
+      <p class="course-meta">Summer squash is picked deliberately immature, which is why the whole thing — skin, seeds and all — stays tender; shaved raw into ribbons it keeps its crisp, grassy snap. The radishes travel the opposite road: roasting tames their peppery bite — a mustard-family kick that evolved to fend off pests — into something gentle and nearly sweet, and brown butter meets it halfway.</p>
+    </div>
+    <div class="md-actions">
+      <button class="btn join" data-menu="From the Garden &amp; the Sea — salmon, squash ribbons &amp; radishes">Join us this evening</button>
+      <button class="btn bring">What can I bring?</button>
+    </div>
+    <div class="pairing" hidden>
+      <p><b>A bottle</b> A light Pinot Noir or a rounded, unoaked Chardonnay — both flatter salmon.</p>
+      <p><b>Something sweet</b> A lemon tart, or a berry pavlova.</p>
+    </div>
+  </article>
+
+  <article class="menu-day" data-offset="3">
+    <div class="md-when" data-dow="Wednesday">Wednesday</div>
+    <h2 class="md-title">Golden Hour</h2>
+    <div class="course">
+      <div class="course-name">Golden summer soup</div>
+      <p class="course-desc">A mellow, brothy pot of squash, carrot and sweet corn, finished with crisp bacon.</p>
+      <p class="course-meta">This is a soup that lives and dies by its corn: once picked, sweet corn's sugars start turning to starch within a day or two, so the window for that bright, milky sweetness is short and worth chasing. The recipe comes from the Moosewood kitchen — the Ithaca collective whose cookbooks quietly taught a generation of American home cooks that vegetables could carry a whole meal.</p>
+    </div>
+    <div class="md-actions">
+      <button class="btn join" data-menu="Golden Hour — summer soup">Join us this evening</button>
+      <button class="btn bring">What can I bring?</button>
+    </div>
+    <div class="pairing" hidden>
+      <p><b>A bottle</b> An unoaked white or an off-dry Riesling — a little sweetness echoes the corn.</p>
+      <p><b>Something sweet</b> Sweet-corn ice cream, or a simple buttery pound cake.</p>
+    </div>
+  </article>
+
+  <article class="menu-day" data-offset="4">
+    <div class="md-when" data-dow="Thursday">Thursday</div>
+    <h2 class="md-title">A Bright Fish Braise</h2>
+    <div class="course">
+      <div class="course-name">Striper chraime</div>
+      <p class="course-desc">Striper braised in a bold, garlicky, gently spicy tomato-and-pepper sauce, brightened with lemon.</p>
+      <p class="course-meta">Chraime is a North African Jewish dish — Libyan, Tunisian, Moroccan — and its name comes straight from the Arabic for "hot." It's traditionally a Friday-night and holiday plate, the Sephardic counterpart to Ashkenazi gefilte fish, and it's forgiving by design: the sauce was built to carry whatever firm fish a household had, so it takes well to almost any kind.</p>
+    </div>
+    <div class="md-actions">
+      <button class="btn join" data-menu="A Bright Fish Braise — striper chraime">Join us this evening</button>
+      <button class="btn bring">What can I bring?</button>
+    </div>
+    <div class="pairing" hidden>
+      <p><b>A bottle</b> A chilled light red (Grenache) or a bold, dry rosé to ride the spice.</p>
+      <p><b>Something sweet</b> Orange-blossom semolina cake, or a clean citrus sorbet.</p>
+    </div>
+  </article>
+
+  <article class="menu-day" data-offset="5">
+    <div class="md-when" data-dow="Friday">Friday</div>
+    <h2 class="md-title">A Sonoran Supper</h2>
+    <div class="course">
+      <div class="course-name">Sonoran-style bacon-wrapped dogs &amp; buttermilk slaw</div>
+      <p class="course-desc">Bacon-wrapped links tucked into soft rolls, piled with beans, tomato and onion, with a crisp, tangy slaw.</p>
+      <p class="course-meta">The Sonoran dog is border food with a real hometown: Hermosillo, the capital of Sonora, where late-night cart vendors — dogueros — wrapped franks in bacon and buried them in toppings before the style crossed north to become a signature of Tucson. The bacon was the move that turned an imported novelty into something unmistakably regional; the full build, con todo, sits far closer to a taco cart's idea of a hot dog than a ballpark's.</p>
+    </div>
+    <div class="md-actions">
+      <button class="btn join" data-menu="A Sonoran Supper — Sonoran dogs &amp; slaw">Join us this evening</button>
+      <button class="btn bring">What can I bring?</button>
+    </div>
+    <div class="pairing" hidden>
+      <p><b>A bottle</b> A cold lager, or a juicy, chillable Beaujolais.</p>
+      <p><b>Something sweet</b> Lime paletas, or warm cinnamon churros.</p>
+    </div>
+  </article>
+
+  <article class="menu-day" data-offset="6">
+    <div class="md-when" data-dow="Weekend">The Weekend Table</div>
+    <h2 class="md-title">Cook's-Choice Supper</h2>
+    <div class="course">
+      <div class="course-name">Garden vegetable lasagne</div>
+      <p class="course-desc">A creamy béchamel lasagne layered with leeks, carrot and broccoli — the easy, comforting close to the week.</p>
+      <p class="course-meta">This is lasagne in the northern Italian manner — bound with béchamel, one of the French "mother sauces," rather than the tomato-and-ricotta most Americans picture. The shape itself is among the oldest pasta on record, its name traced back through Latin to a Greek word for a flat cooking pot; the ridged sheets are essentially unchanged after centuries.</p>
+    </div>
+    <div class="md-actions">
+      <button class="btn join" data-menu="The Weekend Table — garden lasagne">Join us this evening</button>
+      <button class="btn bring">What can I bring?</button>
+    </div>
+    <div class="pairing" hidden>
+      <p><b>A bottle</b> A medium Italian red — Chianti or a bright Barbera.</p>
+      <p><b>Something sweet</b> Tiramisu, or a scoop of lemon gelato.</p>
+    </div>
+  </article>
+
+  <div class="foot">
+    With love, from the Hungry Squirrel kitchen
+    <div class="allergen">A note for our table: one of us has a cashew allergy, so our kitchen is cashew-free — please keep that in mind if you bring a sweet.</div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var HOST = "taylor.kuykendall@gmail.com";
+  var MENU_START = "2026-07-19";   // Day 1 (Saturday). Edit if the week shifts.
+
+  // fill each day with its date, from MENU_START + offset
+  var days = Array.prototype.slice.call(document.querySelectorAll('.menu-day'));
+  var start = new Date(MENU_START + 'T00:00:00');
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  days.forEach(function(day){
+    var off = parseInt(day.getAttribute('data-offset'), 10) || 0;
+    var d = new Date(start.getTime() + off * 86400000);
+    if (!isNaN(d)){
+      var when = day.querySelector('.md-when');
+      var dow = when.getAttribute('data-dow') || when.textContent;
+      var dateStr = MONTHS[d.getMonth()] + ' ' + d.getDate();
+      when.textContent = dow + ' · ' + dateStr;
+      day.setAttribute('data-date', dow + ', ' + dateStr);
+    }
+  });
+
+  // "Join us" -> pre-addressed RSVP email
+  days.forEach(function(day){
+    var join = day.querySelector('.btn.join');
+    join.addEventListener('click', function(){
+      var when = day.getAttribute('data-date') || day.querySelector('.md-when').textContent;
+      var menu = join.getAttribute('data-menu') || 'dinner';
+      var subject = 'Joining for dinner — ' + when;
+      var body = 'Hi Taylor,\n\nI saw the menu for ' + when + ' (' + menu + ') and I\'d love to join. '
+        + 'Is there room at the table?\n\nThank you!\n';
+      window.location.href = 'mailto:' + HOST
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body);
+    });
+    // "What can I bring?" -> toggle the pairing panel
+    var bring = day.querySelector('.btn.bring');
+    var panel = day.querySelector('.pairing');
+    bring.addEventListener('click', function(){
+      var open = !panel.hasAttribute('hidden');
+      if (open){ panel.setAttribute('hidden',''); bring.textContent = 'What can I bring?'; }
+      else { panel.removeAttribute('hidden'); bring.textContent = 'Hide suggestions'; }
+    });
+  });
+})();
+</script>
+</body>
+</html>
