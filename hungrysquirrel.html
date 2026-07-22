@@ -196,6 +196,21 @@
     .kitchen-toggle{cursor:auto;}
     @page{margin:14mm;}
   }
+
+  /* per-recipe steppers + day highlight + ingredient tooltip (v2) */
+  .rserv{display:inline-flex;align-items:center;gap:2px;margin:0 3px 0 6px;vertical-align:2px;
+    border:1px solid var(--rule);border-radius:20px;padding:0 3px;background:#fff;line-height:1;}
+  .rs-btn{border:none;background:none;color:var(--tomato);font-weight:700;font-size:12px;
+    line-height:1;width:15px;height:16px;cursor:pointer;padding:0;border-radius:50%;}
+  .rs-btn:hover{background:var(--peach-tint);}
+  .rs-val{font-family:"Inter",sans-serif;font-size:10px;font-weight:700;color:var(--ink);
+    min-width:9px;text-align:center;}
+  .rserv-demo{border:1px solid var(--rule);border-radius:20px;padding:0 5px;white-space:nowrap;color:var(--ink);}
+  #shopping .q.qflash{background:var(--peach);border-radius:3px;}
+  ul.list li.hl{background:var(--peach-tint);box-shadow:inset 3px 0 0 var(--tomato);
+    border-radius:3px;transition:background .12s;}
+  .recipe::after{white-space:normal;width:max-content;max-width:250px;line-height:1.38;}
+  @media print{ .rserv{display:none;} #servHint{display:none;} }
 </style>
 </head>
 <body>
@@ -249,7 +264,7 @@
         <div class="num" style="background:var(--tomato);">1</div>
         <div class="body">
           <div class="dow">Wednesday · today</div>
-          <div class="dish"><b class="recipe" tabindex="0" data-src="Turkuaz Kitchen · p. 183">Beet "red pasta"</b> + <b class="recipe" tabindex="0" data-src="Six Seasons · p. 311">wilted kale</b> <span class="tag cook">cook</span></div>
+          <div class="dish"><b class="recipe" tabindex="0" data-recipe="beetpasta" data-src="Turkuaz Kitchen · p. 183  —  cooked beets, eggs, flour">Beet "red pasta"</b> + <b class="recipe" tabindex="0" data-recipe="wiltedkale" data-src="Six Seasons · p. 311  —  lacinato kale, golden raisins, chile flakes, bread, ricotta, walnuts">wilted kale</b> <span class="tag cook">cook</span></div>
           <div class="note">Pick up CSA beets and kale today or tomorrow. The beets get cooked, puréed and worked into a magenta egg dough — fresh pasta, made from a root. Sausage browned and tossed through with the kale.</div>
           <div class="prot">Italian sausage — crumbled in with the kale</div>
         </div>
@@ -259,7 +274,7 @@
         <div class="num" style="background:#DE8636;">2</div>
         <div class="body">
           <div class="dow">Thursday</div>
-          <div class="dish"><b class="recipe" tabindex="0" data-src="Eating Out Loud · p. 194">Braised striper with cherry tomatoes & tahini (Chraime)</b>, with leftover soup alongside <span class="tag cook">cook</span></div>
+          <div class="dish"><b class="recipe" tabindex="0" data-recipe="chraime" data-src="Eating Out Loud · p. 194  —  cherry tomatoes, onion, red peppers, harissa, paprika, turmeric, white wine, striper, tahini, garlic, herbs">Braised striper with cherry tomatoes & tahini (Chraime)</b>, with leftover soup alongside <span class="tag cook">cook</span></div>
           <div class="note">Bright mid-week change-up; leans on the cherry tomatoes and tahini already in play.</div>
           <div class="prot">Striper (freezer) — halibut recipe subs fine</div>
         </div>
@@ -269,7 +284,7 @@
         <div class="num" style="background:var(--peach);">3</div>
         <div class="body">
           <div class="dow">Friday</div>
-          <div class="dish"><b class="recipe" tabindex="0" data-src="Praise the Lard · p. 212">Buttermilk-spiced cole slaw</b> + grilled spicy links <span class="tag cook">cook</span></div>
+          <div class="dish"><b class="recipe" tabindex="0" data-recipe="slaw" data-src="Praise the Lard · p. 212  —  green & purple cabbage, carrots, buttermilk, rice vinegar, white pepper">Buttermilk-spiced cole slaw</b> + grilled spicy links <span class="tag cook">cook</span></div>
           <div class="note">Cabbage is the hardiest thing you bought — parked here on purpose so it's made fresh late. Dressed slaw holds 3–4 days.</div>
           <div class="prot">Spicy links — bacon-wrapped, Sonoran-style</div>
         </div>
@@ -279,7 +294,7 @@
         <div class="num" style="background:var(--keep);">4–6</div>
         <div class="body">
           <div class="dow">Next weekend →</div>
-          <div class="dish">Leftovers + cook the <b class="recipe" tabindex="0" data-src="Moosewood Low-Fat Favorites · p. 216">vegetable lasagne</b> one night, and <b class="recipe" tabindex="0" data-src="Six Seasons · p. 239">rigatoni &amp; eggplant alla Norma</b>; Saturday, <b class="recipe" tabindex="0" data-src="Cooking for Geeks · no-knead country loaf">bake a rustic country loaf</b> <span class="tag cook">bake</span></div>
+          <div class="dish">Leftovers + cook the <b class="recipe" tabindex="0" data-recipe="lasagne" data-src="Moosewood Low-Fat Favorites · p. 216  —  leeks, carrots, broccoli, canned tomatoes, basil, thyme, nutmeg, white wine, lasagne, Parmesan, mozzarella">vegetable lasagne</b> one night, and <b class="recipe" tabindex="0" data-recipe="allanorma" data-src="Six Seasons · p. 239  —  eggplant, Italian sausage, cherry tomatoes, oregano, chile flakes, rigatoni, pecorino, ricotta salata">rigatoni &amp; eggplant alla Norma</b>; Saturday, <b class="recipe" tabindex="0" data-recipe="countryloaf" data-src="Cooking for Geeks · no-knead country loaf  —  bread flour, whole-wheat flour, instant yeast, salt, water">bake a rustic country loaf</b> <span class="tag cook">bake</span></div>
           <div class="note">The lasagne keeps for last — its leeks store longest. Alla Norma uses the eggplant that's been waiting, plus a half-pound of the sausage you're buying and a pint of cherry tomatoes. The country loaf is the weekend’s baking project — its stale heel feeds Day 9’s panzanella instead of a bought loaf.</div>
           <div class="prot none">Lasagne night — a veg finish</div>
         </div>
@@ -289,7 +304,7 @@
         <div class="num" style="background:#3C6B3C;">7</div>
         <div class="body">
           <div class="dow">Next Tuesday · CSA night</div>
-          <div class="dish"><b class="recipe" tabindex="0" data-src="Complete Mediterranean · p. 211">Broiled eggplant with basil</b> + <b class="recipe" tabindex="0" data-src="Moosewood Daily Special">roasted green tomato &amp; feta salad</b> <span class="tag cook">cook</span></div>
+          <div class="dish"><b class="recipe" tabindex="0" data-recipe="broiledeggplant" data-src="Complete Mediterranean · p. 211  —  eggplant, basil, olive oil">Broiled eggplant with basil</b> + <b class="recipe" tabindex="0" data-recipe="greentomato" data-src="Moosewood Daily Special  —  green tomatoes, onion, basil, feta, lemon, mint, olives">roasted green tomato &amp; feta salad</b> <span class="tag cook">cook</span></div>
           <div class="note">Straight from the share: eggplant and green tomatoes, with PYO basil and mint. Feta's already in the fridge.</div>
           <div class="prot">Chicken thighs — the one protein worth buying</div>
         </div>
@@ -299,7 +314,7 @@
         <div class="num" style="background:#35603A;">8</div>
         <div class="body">
           <div class="dow">Next Wednesday</div>
-          <div class="dish"><b class="recipe" tabindex="0" data-src="Moosewood Daily Special">Golden summer soup</b> — squash, carrots, corn <span class="tag cook">cook</span></div>
+          <div class="dish"><b class="recipe" tabindex="0" data-recipe="goldensoup" data-src="Moosewood Daily Special  —  onion, carrots, turmeric, lemon, sage, Monterey Jack, sweet potato, yellow squash, corn">Golden summer soup</b> — squash, carrots, corn <span class="tag cook">cook</span></div>
           <div class="note">Cut this week's corn off the cobs and freeze it now — it won't keep otherwise, and frozen corn works fine here. Fresh summer squash comes in next week's share. Big pot → lunches.</div>
           <div class="prot">Crisped bacon over the top (freezer)</div>
         </div>
@@ -309,7 +324,7 @@
         <div class="num" style="background:#2E5433;">9</div>
         <div class="body">
           <div class="dow">Next Thursday</div>
-          <div class="dish"><b class="recipe" tabindex="0" data-src="Six Seasons · p. 312">Kale sauce with farfalle</b> + <b class="recipe" tabindex="0" data-src="Six Seasons · p. 244">roasted pepper panzanella</b> <span class="tag cook">cook</span></div>
+          <div class="dish"><b class="recipe" tabindex="0" data-recipe="kalesauce" data-src="Six Seasons · p. 312  —  kale, farfalle, Parmigiano">Kale sauce with farfalle</b> + <b class="recipe" tabindex="0" data-recipe="panzanella" data-src="Six Seasons · p. 244  —  red peppers, red onion, chile flakes, oregano, savory, mint, mozzarella, country bread">roasted pepper panzanella</b> <span class="tag cook">cook</span></div>
           <div class="note">Three ingredients doing a lot of work: kale cooked down into a silky sauce, pasta, Parmesan. Farfalle instead of ribbons — the sauce catches in the pleats. Closes out the share's greens.</div>
           <div class="prot none">A vegetarian finish</div>
         </div>
@@ -319,7 +334,7 @@
         <div class="num" style="background:#27492C;">10</div>
         <div class="body">
           <div class="dow">Next Friday · pantry night</div>
-          <div class="dish"><b class="recipe" tabindex="0" data-src="Complete Mediterranean · p. 52">French lentil soup</b> <span class="tag cook">cook</span></div>
+          <div class="dish"><b class="recipe" tabindex="0" data-recipe="lentilsoup" data-src="Complete Mediterranean · p. 52  —  bacon, onion, carrots, thyme, canned tomatoes, bay, Puy lentils, white wine, chicken broth, balsamic, parsley">French lentil soup</b> <span class="tag cook">cook</span></div>
           <div class="note">Puts the lentils to work with almost nothing new: bacon, onion, carrot, thyme, canned tomatoes and a splash of white wine — all on hand. celery (already on hand) goes in too. Big pot → lunches into the following week.</div>
           <div class="prot">Bacon (freezer) — the whole flavor base</div>
         </div>
@@ -329,7 +344,7 @@
         <div class="num" style="background:#213E27;">11</div>
         <div class="body">
           <div class="dow">Next Saturday · a bake</div>
-          <div class="dish"><b class="recipe" tabindex="0" data-src="Turkuaz Kitchen · p. 161">Zucchini &amp; feta biscuits</b>, with lentil soup from Friday <span class="tag cook">cook</span></div>
+          <div class="dish"><b class="recipe" tabindex="0" data-recipe="biscuits" data-src="Turkuaz Kitchen · p. 161  —  cream cheese, zucchini, flour, buttermilk, feta, sharp cheddar, dill, eggs">Zucchini &amp; feta biscuits</b>, with lentil soup from Friday <span class="tag cook">cook</span></div>
           <div class="note">Grated CSA summer squash folded into a cheddar-feta-dill biscuit. Warm, savory, and the perfect thing beside a bowl of Friday's lentil soup.</div>
           <div class="prot none">A bake + leftover soup</div>
         </div>
@@ -343,27 +358,21 @@
     <div id="shopping">
       <h2 class="sec">Master Shopping List</h2>
 
-      <div class="servings-bar" id="servingsBar">
-        <span class="servings-label">Servings</span>
-        <button type="button" data-serv="2" class="serv-btn is-active">2</button>
-        <button type="button" data-serv="3" class="serv-btn">3</button>
-        <button type="button" data-serv="4" class="serv-btn">4</button>
-        <button type="button" data-serv="6" class="serv-btn">6</button>
-      </div>
+      <p class="grp-note" id="servHint" style="margin:2px 0 12px;line-height:1.4;">Servings adjust <b>per&nbsp;recipe</b> — use the <span class="rserv-demo">–&nbsp;2&nbsp;+</span> stepper by each dish and the list totals update live. <span style="color:var(--muted);">Hover a day to see what it needs.</span></p>
 
       <div class="market-head"><span class="dot"></span> At the CSA — free with your share</div>
       <div class="market-box">
         <div class="grp-note">In-town pickups: Tue 4–6:30 Trinity · Wed 3–7 Pen Park · Thu 4:30–7 Sojourners.</div>
         <ul class="list">
-          <li>Eggplant <span class="for">— bumper crop; broiled eggplant + pasta alla Norma</span></li>
-          <li>Green tomatoes <span class="for">— roasted green tomato &amp; feta salad</span></li>
-          <li>Beets <span class="for">— salt-roasted</span></li>
-          <li>Kale (red or green) <span class="for">— wilted kale + kale sauce pasta</span></li>
-          <li>Scallions <span class="for">— covers what was short</span></li>
-          <li>Summer squash <span class="for">— "purple power" pre-pack; also the biscuits</span></li>
-          <li>Sweet peppers <span class="for">— green, purple, banana; roasted for the panzanella</span></li>
-          <li>Daikon radishes <span class="for">— optional; quick pickles</span></li>
-            <li>Carrots <span class="for">— optional storage crop</span></li>
+          <li data-days="5 7">Eggplant <span class="for">— bumper crop; broiled eggplant + pasta alla Norma</span></li>
+          <li data-days="7">Green tomatoes <span class="for">— roasted green tomato &amp; feta salad</span></li>
+          <li data-days="1">Beets <span class="for">— salt-roasted</span></li>
+          <li data-days="1 9">Kale (red or green) <span class="for">— wilted kale + kale sauce pasta</span></li>
+          <li data-days="">Scallions <span class="for">— covers what was short</span></li>
+          <li data-days="8 11">Summer squash <span class="for">— "purple power" pre-pack; also the biscuits</span></li>
+          <li data-days="9">Sweet peppers <span class="for">— green, purple, banana; roasted for the panzanella</span></li>
+          <li data-days="">Daikon radishes <span class="for">— optional; quick pickles</span></li>
+            <li data-days="3 5 8 10">Carrots <span class="for">— optional storage crop</span></li>
         </ul>
 
       </div>
@@ -371,16 +380,16 @@
       <h3 class="grp">Actually buy</h3>
       <p class="grp-note">The share covers the vegetables; this is the rest.</p>
       <ul class="list">
-        <li><span class="q">1 lb</span> Italian sausage <span class="for">— beet pasta + ½ lb for alla Norma</span></li>
-        <li><span class="q">3 pints</span> cherry tomatoes <span class="for">— chraime + alla Norma</span></li>
-        <li><span class="q">2 blocks</span> feta <span class="for">— out; green tomato salad + squash biscuits</span></li>
-        <li><span class="q">1 pack</span> chicken thighs <span class="for">— Day 7, then leftovers Day 8</span></li>
-        <li><span class="q">1 dozen</span> eggs <span class="for">— order pullet eggs at CSA pickup</span></li>
-        <li><span class="q">1 box</span> rigatoni <span class="for">— pasta alla Norma</span></li>
-        <li><span class="q">1</span> ricotta salata + Pecorino Romano <span class="for">— alla Norma (Parmesan subs for the Pecorino if needed)</span></li>
-        <li><span class="q">2 lb</span> bread flour · <span class="q">1 lb</span> whole-wheat flour <span class="for">— Saturday’s country loaf</span></li>
-        <li><span class="q">1 jar</span> instant yeast <span class="for">— the loaf; keeps for months</span></li>
-        <li><span class="q">1</span> whole milk <span class="for">— on hand for the week</span></li>
+        <li data-days="1 5"><span class="q" data-parts="beetpasta:0.5|allanorma:0.5" data-unit=" lb">1 lb</span> Italian sausage <span class="for">— beet pasta + ½ lb for alla Norma</span></li>
+        <li data-days="2 5"><span class="q" data-parts="chraime:1.5|allanorma:1.5" data-unit=" pints">3 pints</span> cherry tomatoes <span class="for">— chraime + alla Norma</span></li>
+        <li data-days="7 11"><span class="q" data-parts="greentomato:1|biscuits:1" data-unit=" blocks">2 blocks</span> feta <span class="for">— out; green tomato salad + squash biscuits</span></li>
+        <li data-days="7 8"><span class="q" data-parts="broiledeggplant:1" data-unit=" pack">1 pack</span> chicken thighs <span class="for">— Day 7, then leftovers Day 8</span></li>
+        <li data-days="1 11"><span class="q" data-parts="beetpasta:0.5|biscuits:0.5" data-unit=" dozen">1 dozen</span> eggs <span class="for">— order pullet eggs at CSA pickup</span></li>
+        <li data-days="5"><span class="q" data-parts="allanorma:1" data-unit=" box">1 box</span> rigatoni <span class="for">— pasta alla Norma</span></li>
+        <li data-days="5"><span class="q" data-parts="allanorma:1" data-unit="">1</span> ricotta salata + Pecorino Romano <span class="for">— alla Norma (Parmesan subs for the Pecorino if needed)</span></li>
+        <li data-days="4"><span class="q" data-parts="countryloaf:2" data-unit=" lb">2 lb</span> bread flour · <span class="q" data-parts="countryloaf:1" data-unit=" lb">1 lb</span> whole-wheat flour <span class="for">— Saturday’s country loaf</span></li>
+        <li data-days="4"><span class="q" data-parts="countryloaf:1" data-unit=" jar">1 jar</span> instant yeast <span class="for">— the loaf; keeps for months</span></li>
+        <li data-days=""><span class="q">1</span> whole milk <span class="for">— on hand for the week</span></li>
       </ul>
 
       <h3 class="grp">Your own items</h3>
@@ -736,46 +745,66 @@
     });
   })();
 
-  // ---- servings scaler (rescales numeric shopping quantities in place) ----
+  // ---- per-recipe servings, shopping auto-total, day-hover highlight (v2) ----
   (function(){
-    var SERV_KEY = 'hs_serv_v1', BASE = 2;
-    var qs = Array.prototype.slice.call(document.querySelectorAll('#shopping .q'));
-    qs.forEach(function(q){ q.setAttribute('data-base', q.textContent); });
+    var SERV_KEY='hs_rserv_v1', BASE=2;
+    var recipes=Array.prototype.slice.call(document.querySelectorAll('.recipe[data-recipe]'));
+    var serv=store.get(SERV_KEY,{})||{};
+    recipes.forEach(function(r){ var id=r.getAttribute('data-recipe'); if(!serv[id]) serv[id]=BASE; });
 
-    function fmtNum(x){
-      x = Math.round(x * 4) / 4;                 // snap to nearest quarter
-      var whole = Math.floor(x), frac = x - whole;
-      var map = {0:'', 0.25:'¼', 0.5:'½', 0.75:'¾'};
-      var f = map[frac];
-      if (f === undefined) return String(x);
-      if (whole === 0) return f || '0';
-      return whole + f;
+    var DISCRETE={' box':1,' pack':1,' dozen':1,' jar':1,' blocks':1,' loaf':1};
+    function fmtNum(x,unit){
+      if(DISCRETE[unit]){ return Math.max(1,Math.round(x))+unit; }
+      x=Math.round(x*4)/4; var whole=Math.floor(x), frac=x-whole;
+      var map={0:'',0.25:'\u00BC',0.5:'\u00BD',0.75:'\u00BE'}, f=map[frac];
+      if(f===undefined) return (Math.round(x*10)/10)+unit;
+      var num = whole===0 ? (f||'0') : whole+f;
+      return num+unit;
     }
-    function scaleText(text, factor){
-      // "~1 lb", "3–4", "2 pints", "wedge" (unchanged), "4 ears"
-      var m = text.match(/^(~?)(\d+(?:\.\d+)?)(?:\s*[–-]\s*(\d+(?:\.\d+)?))?(.*)$/);
-      if (!m) return text;                        // non-numeric amount: leave as-is
-      var out = m[1] + fmtNum(parseFloat(m[2]) * factor);
-      if (m[3] != null) out += '–' + fmtNum(parseFloat(m[3]) * factor);
-      return out + m[4];
-    }
-    var planLine = document.getElementById('planForLine');
-    var servesFoot = document.getElementById('servesFoot');
-    function apply(serv){
-      var factor = serv / BASE;
-      qs.forEach(function(q){ q.textContent = scaleText(q.getAttribute('data-base'), factor); });
-      Array.prototype.forEach.call(document.querySelectorAll('.serv-btn'), function(b){
-        b.classList.toggle('is-active', +b.getAttribute('data-serv') === serv);
+    var qEls=Array.prototype.slice.call(document.querySelectorAll('#shopping .q[data-parts]'));
+    function recompute(){
+      qEls.forEach(function(q){
+        var unit=q.getAttribute('data-unit')||'', total=0;
+        q.getAttribute('data-parts').split('|').forEach(function(p){
+          var kv=p.split(':'); total += parseFloat(kv[1])*((serv[kv[0]]||BASE)/BASE);
+        });
+        q.textContent=fmtNum(total,unit);
       });
-      if (planLine) planLine.textContent = 'Plan for ' + serv + ' · leftovers built in';
-      if (servesFoot) servesFoot.textContent = 'Serves ' + serv + ' · scale to taste';
-      store.set(SERV_KEY, serv);
     }
-    Array.prototype.forEach.call(document.querySelectorAll('.serv-btn'), function(b){
-      b.addEventListener('click', function(){ apply(+b.getAttribute('data-serv')); });
+    function flash(id){
+      qEls.forEach(function(q){
+        if((q.getAttribute('data-parts')||'').indexOf(id+':')>-1){
+          q.classList.add('qflash'); setTimeout(function(){q.classList.remove('qflash');},450);
+        }
+      });
+    }
+    recipes.forEach(function(r){
+      var id=r.getAttribute('data-recipe');
+      var wrap=document.createElement('span'); wrap.className='rserv'; wrap.title='Servings for this recipe';
+      var dec=document.createElement('button'); dec.type='button'; dec.className='rs-btn'; dec.textContent='\u2013';
+      var val=document.createElement('span'); val.className='rs-val'; val.textContent=serv[id];
+      var inc=document.createElement('button'); inc.type='button'; inc.className='rs-btn'; inc.textContent='+';
+      function set(v){ v=Math.max(1,Math.min(12,v)); serv[id]=v; val.textContent=v; store.set(SERV_KEY,serv); recompute(); flash(id); }
+      dec.addEventListener('click',function(e){e.stopPropagation(); set(serv[id]-1);});
+      inc.addEventListener('click',function(e){e.stopPropagation(); set(serv[id]+1);});
+      wrap.appendChild(dec); wrap.appendChild(val); wrap.appendChild(inc);
+      r.insertAdjacentElement('afterend', wrap);
     });
-    var saved = store.get(SERV_KEY, BASE);
-    if (saved && saved !== BASE) apply(saved);
+    recompute();
+
+    var lis=Array.prototype.slice.call(document.querySelectorAll('#shopping ul.list > li[data-days]'));
+    function hl(a,b){
+      lis.forEach(function(li){
+        var ds=(li.getAttribute('data-days')||'').split(/\s+/).filter(Boolean).map(Number);
+        li.classList.toggle('hl', ds.some(function(n){return n>=a&&n<=b;}));
+      });
+    }
+    function clr(){ lis.forEach(function(li){li.classList.remove('hl');}); }
+    Array.prototype.forEach.call(document.querySelectorAll('.day[data-day-start]'),function(row){
+      var a=+row.getAttribute('data-day-start'), b=+row.getAttribute('data-day-end');
+      row.addEventListener('mouseenter',function(){hl(a,b);});
+      row.addEventListener('mouseleave',clr);
+    });
   })();
 
   // ---- tonight auto-highlight ----
