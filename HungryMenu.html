@@ -115,29 +115,6 @@
 
   <!-- ===== MENU DAYS ===== -->
 
-  <article class="menu-day" data-offset="0">
-    <div class="md-when" data-dow="Tuesday">Tuesday</div>
-    <h2 class="md-title">From the Garden</h2>
-    <div class="course">
-      <div class="course-name">Grilled Italian sausage</div>
-      <p class="course-desc">Sausages browned until the skins blister and split, a simple, savory anchor for the plate.</p>
-      <p class="course-meta">Fresh sausage is one of cooking's oldest acts of thrift — seasoning and preserving trimmings by packing them into a casing — and nearly every cuisine has its own. What reads as "Italian" here is really the herb hand: fennel seed above all, with garlic and sometimes a little chile, the seasoning that separates it from a German or a breakfast link.</p>
-    </div>
-    <div class="course">
-      <div class="course-name">Shaved squash ribbons &amp; roasted radishes</div>
-      <p class="course-desc">Raw summer squash in a bright, herby dressing, and radishes turned sweet and mellow in brown butter and honey.</p>
-      <p class="course-meta">Summer squash is picked deliberately immature, which is why the whole thing — skin, seeds and all — stays tender; shaved raw into ribbons it keeps its crisp, grassy snap. The radishes travel the opposite road: roasting tames their peppery bite — a mustard-family kick that evolved to fend off pests — into something gentle and nearly sweet, and brown butter meets it halfway.</p>
-    </div>
-    <div class="md-actions">
-      <button class="btn join" data-menu="From the Garden — sausage, squash ribbons &amp; radishes">Join us this evening</button>
-      <button class="btn bring">What can I bring?</button>
-    </div>
-    <div class="pairing" hidden>
-      <p><b>A bottle</b> A juicy, chillable red — Barbera or a lighter Sangiovese — or a dry rosé.</p>
-      <p><b>Something sweet</b> A lemon tart, or a berry crostata.</p>
-    </div>
-  </article>
-
   <article class="menu-day" data-offset="1">
     <div class="md-when" data-dow="Wednesday">Wednesday</div>
     <h2 class="md-title">Roots &amp; Greens</h2>
@@ -194,14 +171,19 @@
 
   <article class="menu-day" data-offset="4">
     <div class="md-when" data-dow="Weekend">The Weekend Table</div>
-    <h2 class="md-title">Cook's-Choice Supper</h2>
+    <h2 class="md-title">Cook's-Choice Supper &amp; a Bake</h2>
     <div class="course">
       <div class="course-name">Garden vegetable lasagne</div>
       <p class="course-desc">A creamy béchamel lasagne layered with leeks, carrot and broccoli — the easy, comforting close to the week.</p>
       <p class="course-meta">This is lasagne in the northern Italian manner — bound with béchamel, one of the French "mother sauces," rather than the tomato-and-ricotta most Americans picture. The shape itself is among the oldest pasta on record, its name traced back through Latin to a Greek word for a flat cooking pot; the ridged sheets are essentially unchanged after centuries.</p>
     </div>
+    <div class="course">
+      <div class="course-name">A rustic country loaf</div>
+      <p class="course-desc">A crackly-crusted, open-crumb boule baked fresh Saturday morning — bread flour, a little whole wheat, and a long, slow rise.</p>
+      <p class="course-meta">This is the no-knead method a New York Times column made famous in 2006: time does the work of kneading, and a screaming-hot covered pot stands in for a baker's steam-injected oven, so a home kitchen turns out a bakery-style crust. Mixed the night before and baked in the morning, it carries the weekend — and its stale heel comes back Thursday as the torn croutons for the panzanella, so nothing goes to waste.</p>
+    </div>
     <div class="md-actions">
-      <button class="btn join" data-menu="The Weekend Table — garden lasagne">Join us this evening</button>
+      <button class="btn join" data-menu="The Weekend Table — garden lasagne &amp; a fresh country loaf">Join us this evening</button>
       <button class="btn bring">What can I bring?</button>
     </div>
     <div class="pairing" hidden>
@@ -261,7 +243,7 @@
     </div>
         <div class="course">
       <div class="course-name">Roasted pepper panzanella</div>
-      <p class="course-desc">Blistered sweet peppers and torn bread soaked in their own juices, oil and vinegar, with red onion, mint and torn mozzarella.</p>
+      <p class="course-desc">Blistered sweet peppers and torn bread — the stale heel of the weekend's country loaf — soaked in their own juices, oil and vinegar, with red onion, mint and torn mozzarella.</p>
       <p class="course-meta">Panzanella is Tuscan thrift at its best — a whole salad built to rescue stale bread, turning what would be waste into the point of the plate. The trick is timing: the bread wants long enough in the dressing to drink it up and soften, but pulled before it slumps into mush. The peppers are roasted until their skins blister and slip, trading raw snap for something sweet, silky and a little smoky.</p>
     </div>
     <div class="md-actions">
@@ -320,7 +302,7 @@
 <script>
 (function(){
   var HOST = "taylor.kuykendall@gmail.com";
-  var MENU_START = "2026-07-21";   // Day 1 (Saturday). Edit if the week shifts.
+  var MENU_START = "2026-07-21";   // Reference start (Tue); offsets are days from here. Edit if the week shifts.
 
   // fill each day with its date, from MENU_START + offset
   var days = Array.prototype.slice.call(document.querySelectorAll('.menu-day'));
